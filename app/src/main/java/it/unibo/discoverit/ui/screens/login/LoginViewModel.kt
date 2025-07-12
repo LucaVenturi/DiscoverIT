@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 
 enum class LoginPhase {
     SUCCESS,
-    ERROR,
     LOADING,
     IDLE
 }
@@ -57,7 +56,7 @@ class LoginViewModel(
                 } catch (e: Exception) {
                     _loginState.update {
                         it.copy(
-                            currentPhase = LoginPhase.ERROR,
+                            currentPhase = LoginPhase.IDLE,
                             errorMsg = e.message ?: "Login failed"
                         )
                     }

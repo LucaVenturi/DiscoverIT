@@ -60,8 +60,7 @@ fun LoginScreen(
     // Naviga alla Home dopo il login riuscito
     LaunchedEffect(loginState.currentPhase) {
         if (loginState.currentPhase == LoginPhase.SUCCESS) {
-            // Aggiungi un piccolo delay per garantire che lo stato sia propagato
-            kotlinx.coroutines.delay(100) // Opzionale, ma utile in alcuni casi
+            //kotlinx.coroutines.delay(100) // Opzionale, piccolo delay per garantire che lo stato sia propagato
             onLoginSuccess()
         }
     }
