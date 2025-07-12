@@ -78,7 +78,7 @@ val appModule = module {
     single { AchievementRepository(get(), get()) }
 
     // ViewModel
-    viewModel { UserViewModel(get()) }
+    single { UserViewModel(get()) }
     viewModel { LoginViewModel(get(), get())}
     viewModel { RegistrationViewModel(get()) }
     viewModel { HomeViewModel(get(), get()) }
