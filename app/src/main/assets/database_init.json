@@ -1,0 +1,246 @@
+{
+  "categories": [
+    {
+      "categoryId": 1,
+      "name": "Monumenti storici"
+    },
+    {
+      "categoryId": 2,
+      "name": "Castelli e torri"
+    },
+    {
+      "categoryId": 3,
+      "name": "Musei"
+    },
+    {
+      "categoryId": 4,
+      "name": "Parchi e giardini"
+    },
+    {
+      "categoryId": 5,
+      "name": "Punti panoramici"
+    },
+    {
+      "categoryId": 6,
+      "name": "Chiese"
+    },
+    {
+      "categoryId": 7,
+      "name": "Piazze e mercati"
+    }
+  ],
+  "pointsOfInterest": [
+    {
+      "poiId": 1,
+      "name": "Fontana di Nettuno",
+      "description": "Iconica fontana del XVI secolo con sculture di Giambologna",
+      "latitude": 44.4949,
+      "longitude": 11.3426,
+      "imagePath": "nettuno.jpg",
+      "address": {
+        "street": "Piazza del Nettuno",
+        "civicNumber": null,
+        "province": "Bologna"
+      },
+      "categoryId": 1
+    },
+    {
+      "poiId": 2,
+      "name": "Torre degli Asinelli",
+      "description": "Torre medievale alta 97 metri, simbolo della città",
+      "latitude": 44.4944,
+      "longitude": 11.3465,
+      "imagePath": "asinelli.jpg",
+      "address": {
+        "street": "Piazza di Porta Ravegnana",
+        "civicNumber": null,
+        "province": "Bologna"
+      },
+      "categoryId": 2
+    },
+    {
+      "poiId": 3,
+      "name": "MAMbo - Museo d'Arte Moderna",
+      "description": "Museo di arte contemporanea con collezioni permanenti e mostre temporanee",
+      "latitude": 44.5018,
+      "longitude": 11.3403,
+      "imagePath": "mambo.jpg",
+      "address": {
+        "street": "Via Don Minzoni",
+        "civicNumber": "14",
+        "province": "Bologna"
+      },
+      "categoryId": 3
+    },
+    {
+      "poiId": 4,
+      "name": "Giardini Margherita",
+      "description": "Il più grande parco pubblico di Bologna, ideale per passeggiate e relax",
+      "latitude": 44.4836,
+      "longitude": 11.3479,
+      "imagePath": "margherita.jpg",
+      "address": {
+        "street": "Via Federico Zanardi",
+        "civicNumber": null,
+        "province": "Bologna"
+      },
+      "categoryId": 4
+    },
+    {
+      "poiId": 5,
+      "name": "Santuario di San Luca",
+      "description": "Santuario con portico più lungo del mondo (3.8 km) e vista panoramica",
+      "latitude": 44.4805,
+      "longitude": 11.3044,
+      "imagePath": "sanluca.jpg",
+      "address": {
+        "street": "Via di San Luca",
+        "civicNumber": "36",
+        "province": "Bologna"
+      },
+      "categoryId": 5
+    },
+    {
+      "poiId": 6,
+      "name": "Basilica di San Petronio",
+      "description": "Maestosa basilica gotica nella Piazza Maggiore, incompiuta",
+      "latitude": 44.4936,
+      "longitude": 11.3428,
+      "imagePath": "sanpetronio.jpg",
+      "address": {
+        "street": "Piazza Maggiore",
+        "civicNumber": null,
+        "province": "Bologna"
+      },
+      "categoryId": 6
+    },
+    {
+      "poiId": 7,
+      "name": "Mercato delle Erbe",
+      "description": "Mercato coperto storico con bancarelle di prodotti tipici e locali",
+      "latitude": 44.4972,
+      "longitude": 11.3439,
+      "imagePath": "mercatodelleerbe.jpg",
+      "address": {
+        "street": "Via Ugo Bassi",
+        "civicNumber": "25",
+        "province": "Bologna"
+      },
+      "categoryId": 7
+    },
+    {
+      "poiId": 8,
+      "name": "Palazzo Re Enzo",
+      "description": "Palazzo medievale che ospitò re Enzo di Sardegna per 23 anni",
+      "latitude": 44.4947,
+      "longitude": 11.3432,
+      "imagePath": "reenzo.jpg",
+      "address": {
+        "street": "Piazza del Nettuno",
+        "civicNumber": null,
+        "province": "Bologna"
+      },
+      "categoryId": 1
+    },
+    {
+      "poiId": 9,
+      "name": "Pinacoteca Nazionale",
+      "description": "Museo con collezioni di pittura emiliana dal XIII al XVIII secolo",
+      "latitude": 44.4941,
+      "longitude": 11.3492,
+      "imagePath": "pinacoteca.jpg",
+      "address": {
+        "street": "Via delle Belle Arti",
+        "civicNumber": "56",
+        "province": "Bologna"
+      },
+      "categoryId": 3
+    },
+    {
+      "poiId": 10,
+      "name": "Parco della Montagnola",
+      "description": "Parco storico con scalinata monumentale e area relax centrale",
+      "latitude": 44.4993,
+      "longitude": 11.3512,
+      "imagePath": "montagnola.jpg",
+      "address": {
+        "street": "Via Irnerio",
+        "civicNumber": "2/3",
+        "province": "Bologna"
+      },
+      "categoryId": 4
+    },
+    {
+      "poiId": 11,
+      "name": "Torre Prendiparte",
+      "description": "Torre medievale del XII secolo, seconda per altezza dopo le Due Torri",
+      "latitude": 44.4962,
+      "longitude": 11.3489,
+      "imagePath": "prendiparte.jpg",
+      "address": {
+        "street": "Piazzetta Prendiparte",
+        "civicNumber": null,
+        "province": "Bologna"
+      },
+      "categoryId": 2
+    }
+  ],
+  "achievements": [
+    {
+      "achievementId": 1,
+      "name": "Esploratore Novizio",
+      "description": "Visita 5 punti di interesse",
+      "targetCount": 5,
+      "targetCategory": null
+    },
+    {
+      "achievementId": 2,
+      "name": "Amante dell'Arte",
+      "description": "Visita 3 musei",
+      "targetCount": 3,
+      "targetCategory": 3
+    }
+  ],
+  "users": [
+    {
+      "userId": 1,
+      "username": "test",
+      "hashedPassword": "$2a$10$N9qo8uLOickgx2ZMRZoMy.MQDq5phQ5So2QPSne2gLQCWpIV9mQFi",
+      "profilePicPath": "default_profile.jpg"
+    },
+    {
+      "userId": 2,
+      "username": "marco_esploratore",
+      "hashedPassword": "$2a$10$hashedpasswordexample",
+      "profilePicPath": "profile2.jpg"
+    }
+  ],
+  "visits": [
+    {
+      "userId": 1,
+      "poiId": 1,
+      "visitDate": 1672531200000
+    },
+    {
+      "userId": 1,
+      "poiId": 3,
+      "visitDate": 1672617600000
+    }
+  ],
+  "friendships": [
+    {
+      "userId": 1,
+      "friendId": 2,
+      "friendshipDate": 1672617600000
+    }
+  ],
+  "userAchievementProgress": [
+    {
+      "userId": 1,
+      "achievementId": 1,
+      "progress": 2,
+      "isCompleted": false,
+      "completionDate": null
+    }
+  ]
+}
