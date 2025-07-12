@@ -112,11 +112,15 @@ fun DiscoverItNavGraph(navController: NavHostController) {
             val registrationViewModel: RegistrationViewModel = koinViewModel()
 
             RegistrationScreen(
-                navController = navController,
                 state = registrationViewModel.state.collectAsState().value,
                 actions = registrationViewModel.actions,
-                onRegistrationSuccess = {
+                onNavigateToLogin = {
                     navController.navigate(Destination.Login) {
+                        popUpTo(Destination.Register) { inclusive = true }
+                    }
+                },
+                onRegistrationSuccess = {
+                    navController.navigate(Destination.Home) {
                         popUpTo(Destination.Register) { inclusive = true }
                     }
                 }

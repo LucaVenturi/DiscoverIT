@@ -80,7 +80,7 @@ val appModule = module {
     // ViewModel
     single { UserViewModel(get()) }
     viewModel { LoginViewModel(get(), get())}
-    viewModel { RegistrationViewModel(get()) }
+    viewModel { RegistrationViewModel(get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
     viewModel { CategoryDetailsViewModel(get()) }
     viewModel { POIDetailsViewModel(get(), get()) }

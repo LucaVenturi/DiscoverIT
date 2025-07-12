@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,14 +35,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import it.unibo.discoverit.ui.composables.MyTopAppBar
 
 @Composable
 fun RegistrationScreen(
-    navController: NavHostController,
     state: RegistrationState,
     actions: RegistrationActions,
+    onNavigateToLogin: () -> Unit,
     onRegistrationSuccess: () -> Unit
 ) {
     Scaffold(
@@ -52,8 +51,15 @@ fun RegistrationScreen(
         RegistrationContent(
             innerPadding = innerPadding,
             state = state,
-            actions = actions
+            actions = actions,
+            onNavigateToLogin = onNavigateToLogin
         )
+    }
+
+    LaunchedEffect(state.currentPhase) {
+        if (state.currentPhase == RegistrationPhase.SUCCESS) {
+            onRegistrationSuccess()
+        }
     }
 }
 
@@ -61,7 +67,8 @@ fun RegistrationScreen(
 private fun RegistrationContent(
     innerPadding: PaddingValues,
     state: RegistrationState,
-    actions: RegistrationActions
+    actions: RegistrationActions,
+    onNavigateToLogin: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -102,17 +109,29 @@ private fun RegistrationContent(
             enabled = state.username.isNotBlank() &&
                     state.password.isNotBlank() &&
                     state.confirmPassword.isNotBlank() &&
-                    !state.isLoading,
-            isLoading = state.isLoading,
+                    state.currentPhase != RegistrationPhase.LOADING,
+            isLoading = state.currentPhase == RegistrationPhase.LOADING,
             onClick = { actions.onRegisterClicked() }
         )
 
         state.error?.let { error ->
             ErrorMessage(
-                error = error,
-                onDismiss = { actions.onDismissError() }
+                error = error
             )
         }
+
+        RegisterPrompt(onNavigateToLogin)
+    }
+}
+
+@Composable
+private fun RegisterPrompt(
+    onNavigateToRegister: () -> Unit
+) {
+    TextButton(
+        onClick = onNavigateToRegister
+    ) {
+        Text("Hai già un account? Accedi")
     }
 }
 
@@ -203,8 +222,7 @@ private fun RegisterButton(
 
 @Composable
 private fun ErrorMessage(
-    error: String,
-    onDismiss: () -> Unit
+    error: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -215,9 +233,5 @@ private fun ErrorMessage(
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextButton(onClick = onDismiss) {
-            Text("Chiudi")
-        }
     }
 }
