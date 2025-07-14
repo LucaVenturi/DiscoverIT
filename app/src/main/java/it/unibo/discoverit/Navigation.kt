@@ -27,6 +27,7 @@ import it.unibo.discoverit.ui.screens.poidetails.POIDetailsViewModel
 import it.unibo.discoverit.ui.screens.registration.RegistrationScreen
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
 import it.unibo.discoverit.ui.screens.settings.SettingsScreen
+import it.unibo.discoverit.ui.screens.settings.SettingsViewModel
 import it.unibo.discoverit.ui.screens.social.SocialScreen
 import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailScreen
@@ -170,7 +171,10 @@ fun DiscoverItNavGraph(navController: NavHostController) {
             )
         }
         composable<Destination.Settings> {
-            SettingsScreen(navController)
+            val settingsViewModel: SettingsViewModel = koinViewModel()
+            SettingsScreen(navController, settingsViewModel.state, settingsViewModel.actions) {
+                bottomNavOnNavigateTo(it, navController)
+            }
         }
         composable<Destination.Account> {
             AccountScreen(navController)

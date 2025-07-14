@@ -2,6 +2,7 @@ package it.unibo.discoverit
 
 import android.content.Context
 import android.util.Log
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -14,6 +15,7 @@ import it.unibo.discoverit.ui.screens.login.LoginViewModel
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.ui.screens.poidetails.POIDetailsViewModel
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
+import it.unibo.discoverit.ui.screens.settings.SettingsViewModel
 import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import it.unibo.discoverit.utils.hasher.BCryptHasher
@@ -25,7 +27,12 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+val Context.dataStore by preferencesDataStore("settings")
+
 val appModule = module {
+    //Datastore
+    single { get<Context>().dataStore }
+
     // Password Hasher BCrypt
     single<PasswordHasher> { BCryptHasher() }
 
@@ -78,6 +85,7 @@ val appModule = module {
     single { PointOfInterestRepository(get(), get()) }
     single { UserRepository(get(), get()) }
     single { AchievementRepository(get(), get()) }
+    single { SettingsRepository(get()) }
 
     // ViewModel
     single { UserViewModel(get()) }
@@ -92,4 +100,5 @@ val appModule = module {
     viewModel { (userId: Long) ->
         UserDetailViewModel(userId, get())
     }
+    viewModel { SettingsViewModel(get()) }
 }
