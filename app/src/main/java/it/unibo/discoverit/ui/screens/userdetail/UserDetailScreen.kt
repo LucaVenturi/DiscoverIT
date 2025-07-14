@@ -14,36 +14,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.MyTopAppBar
 
-data class AchievementMock(
-    val title: String,
-    val description: String,
-    val completed: Boolean,
-    val dateCompleted: String? = null
-)
-
 @Composable
 fun UserDetailScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    state: UserDetailState,
+    actions: UserDetailActions,
+    onNavigateTo: (BottomNavDestination) -> Unit
 ) {
-    val achievements = listOf(
-        AchievementMock("Esploratore", "Visita 5 luoghi", true, "2024-06-01"),
-        AchievementMock("Collezionista", "Completa tutti i musei", false, null),
-        AchievementMock("Pioniere", "Scopri un luogo nascosto", true, "2024-06-20"),
-        AchievementMock("Maratoneta", "Visita 10 luoghi in un giorno", false, null),
-        AchievementMock("Storico", "Completa tutti i monumenti", true, "2024-06-15")
-    )
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         topBar = { MyTopAppBar(navController) },
         bottomBar = {
             DiscoverItNavigationBar(
-                currentRoute = Destination.Home, // o Destination.Social se lo hai
-                onNavigateTo = { /* TODO */ }
+                currentRoute = Destination.Social,
+                onNavigateTo = onNavigateTo
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -56,32 +47,62 @@ fun UserDetailScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val (completed, notCompleted) = achievements.partition { it.completed }
+            val completed = state.completedAchievements
+            val notCompleted = state.toDoAchievements
 
-            if (completed.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Completati",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-                items(completed) { achievement ->
-                    AchievementCardMock(achievement, completed = true)
-                }
+
+            item {
+                Text(
+                    text = "Completati",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
             }
 
-            if (notCompleted.isNotEmpty()) {
+            if (completed.isNotEmpty()) {
+                items(completed) { achievement ->
+                    AchievementCard(achievement, completed = true)
+                }
+            } else {
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Da completare",
-                        style = MaterialTheme.typography.titleMedium,
+                        text = "Nessun achievement completato",
+                        style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Da completare",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
+            if (notCompleted.isNotEmpty()) {
                 items(notCompleted) { achievement ->
-                    AchievementCardMock(achievement, completed = false)
+                    AchievementCard(achievement, completed = false)
+                }
+            } else {
+                item {
+                    Text(
+                        text = "Tutti gli achievement completati!",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+            }
+
+            state.errorMsg?.let { errorMsg ->
+                item {
+                    Text(
+                        text = errorMsg,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
                 }
             }
         }
@@ -89,7 +110,7 @@ fun UserDetailScreen(
 }
 
 @Composable
-fun AchievementCardMock(achievement: AchievementMock, completed: Boolean) {
+fun AchievementCard(achievement: Achievement, completed: Boolean) {
     val borderColor = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
     val icon = if (completed) Icons.Default.Check else Icons.Default.StarOutline
     val iconTint = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
@@ -114,7 +135,7 @@ fun AchievementCardMock(achievement: AchievementMock, completed: Boolean) {
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = achievement.title,
+                    text = achievement.name,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (completed) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -127,7 +148,7 @@ fun AchievementCardMock(achievement: AchievementMock, completed: Boolean) {
 
             if (completed) {
                 Text(
-                    text = achievement.dateCompleted ?: "",
+                    text = "achievement.dateCompleted ?:" +  "",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary
                 )

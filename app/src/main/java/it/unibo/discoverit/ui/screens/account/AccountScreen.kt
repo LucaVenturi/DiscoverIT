@@ -42,13 +42,6 @@ fun AccountScreen(
         topBar = {
             MyTopAppBar(navController)
         },
-//        bottomBar = {
-//            DiscoverItNavigationBar(
-//                navController = navController,
-//                currentRoute = lastSelectedTab,
-//                onNavigateTo = {/*TODO()*/ }
-//            )
-//        },
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
     ) { innerPadding ->

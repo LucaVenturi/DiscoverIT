@@ -14,6 +14,8 @@ import it.unibo.discoverit.ui.screens.login.LoginViewModel
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.ui.screens.poidetails.POIDetailsViewModel
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
+import it.unibo.discoverit.ui.screens.social.SocialViewModel
+import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import kotlinx.coroutines.CoroutineScope
@@ -84,4 +86,10 @@ val appModule = module {
     viewModel { HomeViewModel(get(), get()) }
     viewModel { CategoryDetailsViewModel(get()) }
     viewModel { POIDetailsViewModel(get(), get()) }
+    viewModel { (currentUserId: Long) ->
+        SocialViewModel(get(), get(), currentUserId)
+    }
+    viewModel { (userId: Long) ->
+        UserDetailViewModel(userId, get())
+    }
 }

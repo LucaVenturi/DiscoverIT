@@ -18,4 +18,8 @@ class AchievementRepository(
     fun getAchievementProgress(userId: Long): Flow<List<UserAchievementProgress>> {
         return achievementDAO.getUserAchievementsProgress(userId)
     }
+
+    fun getToDoAchievements(userId: Long): Flow<List<Achievement>> {
+        return userDAO.getToDoAchievements(userId)
+    }
 }

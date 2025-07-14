@@ -109,7 +109,7 @@ fun CategoryCard(categoryWithStats: CategoryStats, onCategoryClick: (Long) -> Un
 
             // Percentuale
             Text(
-                "${categoryWithStats.visitedCount / categoryWithStats.totalPOIs * 100}%",
+                "${(categoryWithStats.visitedCount.toDouble() / categoryWithStats.totalPOIs * 100).toLong()}%",
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.End
             )

@@ -87,9 +87,7 @@ fun CategoryDetailsScreen(
                 else -> {
                     POIList(
                         poiList = categoryDetailsState.poiList,
-                        onPOIClick = { poiId ->
-                            navController.navigate(Destination.POIDetails(poiId))
-                        }
+                        onPOIClick = onPOIClick
                     )
                 }
             }

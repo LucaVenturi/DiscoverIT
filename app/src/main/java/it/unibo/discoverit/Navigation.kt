@@ -28,9 +28,12 @@ import it.unibo.discoverit.ui.screens.registration.RegistrationScreen
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
 import it.unibo.discoverit.ui.screens.settings.SettingsScreen
 import it.unibo.discoverit.ui.screens.social.SocialScreen
+import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailScreen
+import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 sealed interface Destination {
     @Serializable
@@ -46,11 +49,11 @@ sealed interface Destination {
     @Serializable
     data object Register: Destination
     @Serializable
-    data object UserDetail: Destination
-    @Serializable
     data class CategoryDetails(val categoryId: Long): Destination
     @Serializable
     data class POIDetails(val poiId: Long): Destination
+    @Serializable
+    data class UserDetail(val userId: Long): Destination
 }
 
 sealed interface BottomNavDestination {
@@ -142,7 +145,29 @@ fun DiscoverItNavGraph(navController: NavHostController) {
             )
         }
         composable<Destination.Social> {
-            SocialScreen(navController)
+            val userViewModel: UserViewModel = koinViewModel()
+            val userState by userViewModel.userState.collectAsStateWithLifecycle()
+
+            val socialViewModel: SocialViewModel = koinViewModel(
+                parameters = { parametersOf(userState.user?.userId) }
+            )
+            val socialState by socialViewModel.state.collectAsStateWithLifecycle()
+
+            SocialScreen(
+                navController = navController,
+                onNavigateTo = {
+                    bottomNavOnNavigateTo(it, navController)
+                },
+                state = socialState,
+                actions = socialViewModel.actions,
+                userState = userState,
+                onAddFriendClick = {
+                    /*TODO*/
+                },
+                onUserClick = { userId ->
+                    navController.navigate(Destination.UserDetail(userId))
+                }
+            )
         }
         composable<Destination.Settings> {
             SettingsScreen(navController)
@@ -150,8 +175,19 @@ fun DiscoverItNavGraph(navController: NavHostController) {
         composable<Destination.Account> {
             AccountScreen(navController)
         }
-        composable<Destination.UserDetail> {
-            UserDetailScreen(navController)
+        composable<Destination.UserDetail> { backStackEntry ->
+            val args = backStackEntry.toRoute<Destination.UserDetail>()
+            val userDetailViewModel: UserDetailViewModel = koinViewModel(
+                parameters = { parametersOf(args.userId) }
+            )
+            val userDetailState by userDetailViewModel.state.collectAsStateWithLifecycle()
+
+            UserDetailScreen(
+                navController = navController,
+                state = userDetailState,
+                actions = userDetailViewModel.actions,
+                onNavigateTo = { bottomNavOnNavigateTo(it, navController) }
+            )
         }
         composable<Destination.CategoryDetails> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.CategoryDetails>()
@@ -166,7 +202,7 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 onNavigateTo = { destination ->
                     bottomNavOnNavigateTo(destination, navController)
                 },
-                onPOIClick = { poiId -> 
+                onPOIClick = { poiId ->
                     navController.navigate(Destination.POIDetails(poiId))
                 }
             )

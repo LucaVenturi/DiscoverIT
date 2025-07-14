@@ -28,13 +28,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.MyTopAppBar
+import it.unibo.discoverit.ui.screens.login.UserState
 
 @Composable
 fun SocialScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    state: SocialState,
+    actions: SocialActions,
+    userState: UserState,
+    onNavigateTo: (BottomNavDestination) -> Unit,
+    onAddFriendClick: () -> Unit,
+    onUserClick: (Long) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -42,12 +51,12 @@ fun SocialScreen(
         bottomBar = {
             DiscoverItNavigationBar(
                 currentRoute = Destination.Social,
-                onNavigateTo = { /*TODO*/ }
+                onNavigateTo = onNavigateTo
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = onAddFriendClick,
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Aggiungi amico")
@@ -73,7 +82,9 @@ fun SocialScreen(
                 )
 
                 UserProfileSection(
-                    onClick = { navController.navigate(Destination.UserDetail) }
+                    currentUser = userState.user ?: throw IllegalStateException("User is null"),
+                    countCompleted = state.currentUserCountCompleted,
+                    onClick = onUserClick
                 )
 
                 Text(
@@ -83,8 +94,8 @@ fun SocialScreen(
                 )
 
                 FriendsList(
-                    friends = listOf("Marco", "Luca", "Anna", "Antonio", "Giovanni"),
-                    onFriendClick = { navController.navigate(Destination.UserDetail) }
+                    friendsAndCountCompleted = state.friendsAndCountCompleted,
+                    onFriendClick = onUserClick
                 )
             }
         }
@@ -92,12 +103,12 @@ fun SocialScreen(
 }
 
 @Composable
-fun UserProfileSection(onClick: () -> Unit) {
+fun UserProfileSection(currentUser: User, countCompleted: Long, onClick: (Long) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .clickable { onClick() },
+            .clickable { onClick(currentUser.userId) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -113,11 +124,11 @@ fun UserProfileSection(onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
-                    text = "currentUser.username",
+                    text = currentUser.username,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "currentUser.visitedPoints visitati",
+                    text = "$countCompleted traguardi raggiunti",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -127,11 +138,12 @@ fun UserProfileSection(onClick: () -> Unit) {
 }
 
 @Composable
-fun FriendsList(friends: List<String>, onFriendClick: () -> Unit) {
+fun FriendsList(friendsAndCountCompleted: Map<User, Long>, onFriendClick: (Long) -> Unit) {
     LazyColumn {
-        items(friends) { friend ->
+        items(friendsAndCountCompleted.toList()) { friendAndCount ->
             FriendCard(
-                friendName = friend,
+                friend = friendAndCount.first,
+                countCompleted = friendAndCount.second,
                 onClick = onFriendClick
             )
         }
@@ -139,12 +151,12 @@ fun FriendsList(friends: List<String>, onFriendClick: () -> Unit) {
 }
 
 @Composable
-fun FriendCard(friendName: String, onClick: () -> Unit) {
+fun FriendCard(friend: User, countCompleted: Long, onClick: (Long) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable { onClick() },
+            .clickable { onClick(friend.userId) },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -160,11 +172,11 @@ fun FriendCard(friendName: String, onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = friendName,
+                    text = friend.username,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "friend.visitedPoints visitati",
+                    text = "$countCompleted traguardi raggiungi",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

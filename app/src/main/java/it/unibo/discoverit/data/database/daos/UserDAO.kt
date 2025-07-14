@@ -3,6 +3,8 @@ package it.unibo.discoverit.data.database.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.MapColumn
+import androidx.room.MapInfo
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
@@ -40,11 +42,51 @@ interface UserDAO {
     )
     fun getFriends(userId: Long): Flow<List<User>>
 
-    @Query(
-        "SELECT * " +
-                "FROM achievements " +
-                "WHERE achievementId IN " +
-                "(SELECT achievementId FROM user_achievement_progress WHERE userId = :userId AND isCompleted = 1)"
-    )
+    @Query("""
+        SELECT users.*, COUNT(user_achievement_progress.achievementId) as completedAchievements
+        FROM users
+        INNER JOIN user_achievement_progress ON users.userId = user_achievement_progress.userId AND user_achievement_progress.isCompleted = 1
+        WHERE users.userId IN (
+            SELECT friendId
+            FROM friendships
+            WHERE userId = :userId
+        )
+        GROUP BY 
+            users.userId,
+            users.username,
+            users.hashedPassword,
+            users.profilePicPath
+    """)
+    fun getFriendsAndCountCompletedAchievements(userId: Long): Flow<Map<
+            @MapColumn(columnName = "userId") User,
+            @MapColumn(columnName = "completedAchievements") Long>>
+
+    @Query("""
+        SELECT COUNT(*)
+        FROM user_achievement_progress
+        WHERE userId = :userId AND isCompleted = 1
+    """)
+    fun getCountCompletedAchievements(userId: Long): Flow<Long>
+
+    @Query("""
+        SELECT *
+        FROM achievements
+        WHERE achievementId IN (
+            SELECT achievementId
+            FROM user_achievement_progress
+            WHERE userId = :userId AND isCompleted = 1
+        )
+    """)
     fun getCompletedAchievements(userId: Long): Flow<List<Achievement>>
+
+    @Query("""
+        SELECT *
+        FROM achievements
+        WHERE achievementId NOT IN (
+            SELECT achievementId
+            FROM user_achievement_progress
+            WHERE userId = :userId AND isCompleted = 1
+        )
+    """)
+    fun getToDoAchievements(userId: Long): Flow<List<Achievement>>
 }

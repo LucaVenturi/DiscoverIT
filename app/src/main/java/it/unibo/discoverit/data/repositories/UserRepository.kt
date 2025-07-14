@@ -43,6 +43,9 @@ class UserRepository(
     fun getFriends(userId: Long): Flow<List<User>> =
         userDao.getFriends(userId)
 
+    fun getFriendsAndCountCompletedAchievements(userId: Long): Flow<Map<User, Long>> =
+        userDao.getFriendsAndCountCompletedAchievements(userId)
+
     private suspend fun insert(user: User): Long =
         userDao.insert(user)
 
@@ -55,21 +58,3 @@ class UserRepository(
     fun getCompletedAchievements(userId: Long): Flow<List<Achievement>> =
         userDao.getCompletedAchievements(userId)
 }
-
-//class UserRepository(
-//    private val userDao: UserDao,
-//    private val friendshipDao: FriendshipDao
-//) {
-//    suspend fun getCurrentUser(): User? {
-//        // Implementa una logica per ottenere l'utente corrente (potresti salvare l'ID in un DataStore)
-//        return userDao.getById(currentUserId)
-//    }
-//
-//    fun getFriends(userId: Long): Flow<List<User>> {
-//        return userDao.getFriends(userId)
-//    }
-//
-//    suspend fun addFriend(userId: Long, friendId: Long) {
-//        friendshipDao.insert(Friendship(userId, friendId))
-//    }
-//}
