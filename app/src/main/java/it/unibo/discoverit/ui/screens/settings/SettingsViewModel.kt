@@ -50,14 +50,22 @@ class SettingsViewModel(
         override fun onThemeChange(theme: ThemeOption) {
             state = state.copy(selectedTheme = theme)
             viewModelScope.launch {
-                settingsRepository.setTheme(theme)
+                try {
+                    settingsRepository.setTheme(theme)
+                } catch (e: Exception) {
+                    // /*TODO*/
+                }
             }
         }
 
         override fun onNotificationsChange(enabled: Boolean) {
             state = state.copy(notificationsEnabled = enabled)
             viewModelScope.launch {
-                settingsRepository.setNotificationsEnabled(enabled)
+                try {
+                    settingsRepository.setNotificationsEnabled(enabled)
+                } catch (e: Exception) {
+                    // /*TODO*/
+                }
             }
         }
     }

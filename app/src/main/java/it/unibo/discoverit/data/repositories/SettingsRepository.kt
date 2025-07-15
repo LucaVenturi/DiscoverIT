@@ -15,7 +15,7 @@ class SettingsRepository(
         private val NOTIFICATIONS_KEY = booleanPreferencesKey("notifications")
     }
 
-    val theme = dataStore.data.map { it[THEME_KEY] ?: "" }
+    val theme = dataStore.data.map { it[THEME_KEY] ?: ThemeOption.SYSTEM.name }
     val notificationsEnabled = dataStore.data.map { it[NOTIFICATIONS_KEY] ?: true }
     val appVersion = "1.0.0"
 
