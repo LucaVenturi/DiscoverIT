@@ -162,9 +162,6 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 state = socialState,
                 actions = socialViewModel.actions,
                 userState = userState,
-                onAddFriendClick = {
-                    /*TODO*/
-                },
                 onUserClick = { userId ->
                     navController.navigate(Destination.UserDetail(userId))
                 }

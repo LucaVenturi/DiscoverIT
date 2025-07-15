@@ -45,7 +45,7 @@ interface UserDAO {
     @Query("""
         SELECT users.*, COUNT(user_achievement_progress.achievementId) as completedAchievements
         FROM users
-        INNER JOIN user_achievement_progress ON users.userId = user_achievement_progress.userId AND user_achievement_progress.isCompleted = 1
+        LEFT JOIN user_achievement_progress ON users.userId = user_achievement_progress.userId AND user_achievement_progress.isCompleted = 1
         WHERE users.userId IN (
             SELECT friendId
             FROM friendships

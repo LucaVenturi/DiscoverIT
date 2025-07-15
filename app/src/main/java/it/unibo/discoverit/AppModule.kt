@@ -83,7 +83,7 @@ val appModule = module {
     // Repository
     single { CategoryRepository(get(), get()) }
     single { PointOfInterestRepository(get(), get()) }
-    single { UserRepository(get(), get()) }
+    single { UserRepository(get(), get(), get()) }
     single { AchievementRepository(get(), get()) }
     single { SettingsRepository(get()) }
 

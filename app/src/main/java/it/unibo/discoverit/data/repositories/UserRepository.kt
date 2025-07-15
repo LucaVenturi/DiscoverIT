@@ -1,14 +1,17 @@
 package it.unibo.discoverit.data.repositories
 
 import android.accounts.AuthenticatorException
+import it.unibo.discoverit.data.database.daos.FriendshipDAO
 import it.unibo.discoverit.data.database.daos.UserDAO
 import it.unibo.discoverit.data.database.entities.Achievement
+import it.unibo.discoverit.data.database.entities.Friendship
 import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import kotlinx.coroutines.flow.Flow
 
 class UserRepository(
     private val userDao: UserDAO,
+    private val friendShipDao: FriendshipDAO,
     private val passwordHasher: PasswordHasher
 ) {
     suspend fun login(username: String, plainPassword: String): User {
@@ -57,4 +60,24 @@ class UserRepository(
 
     fun getCompletedAchievements(userId: Long): Flow<List<Achievement>> =
         userDao.getCompletedAchievements(userId)
+
+    suspend fun addFriendship(userId: Long, username: String) {
+        val friendId = (userDao.getUserByUsername(username) ?: throw Exception("User not found")).userId
+
+        when {
+            userId == friendId -> throw Exception("You cannot add yourself as a friend")
+            friendShipDao.isFriend(userId, friendId) -> throw Exception("Friendship already exists")
+            else -> friendShipDao.insert(
+                Friendship(
+                    userId = userId,
+                    friendId = friendId,
+                    friendshipDate = System.currentTimeMillis()
+                )
+            )
+        }
+    }
+
+    suspend fun removeFriendship(userId: Long, friendId: Long) {
+        friendShipDao.delete(userId, friendId)
+    }
 }
