@@ -29,11 +29,6 @@ interface UserDAO {
     @Query("SELECT * FROM users")
     suspend fun getAll(): List<User>
 
-//    @Query(
-//        "SELECT * FROM users WHERE username = :username AND password = :password"
-//    )
-//    suspend fun login(username: String, password: String): User?
-
     @Query("SELECT * FROM users WHERE username = :username")
     suspend fun getUserByUsername(username: String): User?
 
@@ -89,4 +84,7 @@ interface UserDAO {
         )
     """)
     fun getToDoAchievements(userId: Long): Flow<List<Achievement>>
+
+    @Query("SELECT * FROM users WHERE userId = :userId")
+    suspend fun getUserById(userId: Long): User
 }

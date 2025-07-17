@@ -20,6 +20,7 @@ import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
+import it.unibo.discoverit.utils.profilepic.ProfilePicStorageHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +36,9 @@ val appModule = module {
 
     // Password Hasher BCrypt
     single<PasswordHasher> { BCryptHasher() }
+
+    // Helper per salvare le foto profilo degli utenti
+    single { ProfilePicStorageHelper(get()) }
 
     // Database
     single {

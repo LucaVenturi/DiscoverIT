@@ -40,9 +40,6 @@ class UserRepository(
         return userDao.insert(user)
     }
 
-//    fun getUserByUsername(username: String): Flow<User?> =
-//        userDao.getUserByUsername(username)
-
     fun getFriends(userId: Long): Flow<List<User>> =
         userDao.getFriends(userId)
 
@@ -79,5 +76,9 @@ class UserRepository(
 
     suspend fun removeFriendship(userId: Long, friendId: Long) {
         friendShipDao.delete(userId, friendId)
+    }
+
+    suspend fun getUserById(userId: Long): User {
+        return userDao.getUserById(userId)
     }
 }
