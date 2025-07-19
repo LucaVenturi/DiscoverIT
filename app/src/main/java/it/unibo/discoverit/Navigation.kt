@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import it.unibo.discoverit.data.database.entities.Category
 import it.unibo.discoverit.ui.screens.account.AccountSettingsScreen
 import it.unibo.discoverit.ui.screens.account.AccountSettingsViewModel
 import it.unibo.discoverit.ui.screens.categorydetails.CategoryDetailsScreen
@@ -208,12 +209,13 @@ fun DiscoverItNavGraph(navController: NavHostController) {
         }
         composable<Destination.CategoryDetails> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.CategoryDetails>()
-            val categoryDetailsViewModel: CategoryDetailsViewModel = koinViewModel()
+            val categoryDetailsViewModel: CategoryDetailsViewModel = koinViewModel(
+                parameters = { parametersOf(args.categoryId) }
+            )
             val categoryDetailsState by categoryDetailsViewModel.state.collectAsStateWithLifecycle()
 
             CategoryDetailsScreen(
                 navController = navController,
-                categoryId = args.categoryId,
                 categoryDetailsState = categoryDetailsState,
                 categoryDetailsActions = categoryDetailsViewModel.actions,
                 onNavigateTo = { destination ->

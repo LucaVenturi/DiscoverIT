@@ -39,18 +39,12 @@ import androidx.compose.runtime.remember
 @Composable
 fun CategoryDetailsScreen(
     navController: NavHostController,
-    categoryId: Long,
     categoryDetailsState: CategoryDetailsState,
     categoryDetailsActions: CategoryDetailsActions,
     onNavigateTo: (BottomNavDestination) -> Unit,
     onPOIClick: (Long) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-
-    // Caricamento iniziale e al cambio di categoryId
-    LaunchedEffect(categoryId) {
-        categoryDetailsActions.loadPOIs(categoryId)
-    }
 
     // Gestione errori
     categoryDetailsState.error?.let { error ->
@@ -62,7 +56,7 @@ fun CategoryDetailsScreen(
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
-            MyTopAppBar(navController)
+            MyTopAppBar(navController, categoryDetailsState.currentCategoryName)
         },
         bottomBar = {
             DiscoverItNavigationBar(
@@ -82,7 +76,7 @@ fun CategoryDetailsScreen(
                     )
                 }
                 categoryDetailsState.poiList.isEmpty() && !categoryDetailsState.isLoading -> {
-                    EmptyStateUI()
+                    EmptyStateUI("Nessun punto di interesse trovato", categoryDetailsActions::onRefresh)
                 }
                 else -> {
                     POIList(
@@ -162,18 +156,18 @@ fun POICard(
 }
 
 @Composable
-private fun EmptyStateUI() {
+private fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Nessun punto di interesse trovato",
+            text = message,
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = { /* TODO: Refresh logic */ }) {
+        TextButton(onClick = { onRefresh() }) {
             Text("Ricarica")
         }
     }

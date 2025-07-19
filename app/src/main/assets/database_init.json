@@ -206,13 +206,15 @@
       "userId": 1,
       "username": "test",
       "hashedPassword": "$2a$10$N9qo8uLOickgx2ZMRZoMy.MQDq5phQ5So2QPSne2gLQCWpIV9mQFi",
-      "profilePicPath": "default_profile.jpg"
+      "profilePicPath": null,
+      "profilePicLastModified":  null
     },
     {
       "userId": 2,
       "username": "marco_esploratore",
       "hashedPassword": "$2a$10$hashedpasswordexample",
-      "profilePicPath": "profile2.jpg"
+      "profilePicPath": null,
+      "profilePicLastModified":  null
     }
   ],
   "visits": [

@@ -70,7 +70,7 @@ fun AccountSettingsScreen(
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
-            MyTopAppBar(navController)
+            MyTopAppBar(navController, "Impostazioni")
         },
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,

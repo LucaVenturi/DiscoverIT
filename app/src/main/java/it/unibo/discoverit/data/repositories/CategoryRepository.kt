@@ -13,6 +13,10 @@ class CategoryRepository(
         return categoryDAO.getCategoriesWithStats(userId)
     }
 
+    suspend fun getCategoryName(categoryId: Long): String {
+        return categoryDAO.getCategoryName(categoryId)
+    }
+
 //    suspend fun getCategoryById(categoryId: Long): Category? {
 //        return categoryDao.getById(categoryId)
 //    }

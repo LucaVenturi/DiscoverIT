@@ -46,35 +46,40 @@ val appModule = module {
         Room.databaseBuilder(
             get(),
             DiscoverItDatabase::class.java,
-            "discoverit_database"
+            "discoverit_database_v4" // Cambia nome database per forzare ricreazione
         )
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
+                    Log.d("DB_INIT", "onCreate callback chiamato")
+                    populateDatabase(get())
+                }
+
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    Log.d("DB_INIT", "onOpen callback chiamato")
+                    // Verifica se il database è vuoto e popolalo se necessario
                     CoroutineScope(Dispatchers.IO).launch {
                         try {
-                            val json = get<Context>().assets.open("database_init.json")
-                                .bufferedReader().use { it.readText() }
+                            val database = get<DiscoverItDatabase>()
+                            val categoriesCount = database.categoriesDAO().getCategoriesCount()
+                            Log.d("DB_INIT", "Numero categorie trovate: $categoriesCount")
 
-                            val data = Json.decodeFromString<DatabaseData>(json)
-
-                            with(get<DiscoverItDatabase>()) {
-                                categoriesDAO().insertAll(data.categories)
-                                pointsOfInterestDAO().insertAll(data.pointsOfInterest)
-                                usersDAO().insertAll(data.users)
-                                achievementsDao().insertAll(data.achievements)
-                                visitsDao().insertAll(data.visits)
-                                friendshipsDao().insertAll(data.friendships)
+                            if (categoriesCount == 0) {
+                                Log.d("DB_INIT", "Database vuoto, procedo con il popolamento")
+                                populateDatabase(get())
+                            } else {
+                                Log.d("DB_INIT", "Database già popolato")
                             }
-                            Log.d("DB_INIT", "Database popolato con successo!")
                         } catch (e: Exception) {
-                            Log.e("DB_INIT", "Errore nel popolamento", e)
+                            Log.e("DB_INIT", "Errore nel controllo/popolamento database", e)
                         }
                     }
                 }
-            })
-            .fallbackToDestructiveMigration()
-            .build()
+            }
+        )
+        .fallbackToDestructiveMigration() // Usa destructiveMigration solo per debug/sviluppo
+        .build()
     }
 
     // DAO
@@ -98,7 +103,9 @@ val appModule = module {
     viewModel { LoginViewModel(get(), get())}
     viewModel { RegistrationViewModel(get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
-    viewModel { CategoryDetailsViewModel(get()) }
+    viewModel { (categoryId: Long) ->
+        CategoryDetailsViewModel(get(), get(), categoryId)
+    }
     viewModel { POIDetailsViewModel(get(), get()) }
     viewModel { (currentUserId: Long) ->
         SocialViewModel(get(), get(), currentUserId)
@@ -108,4 +115,70 @@ val appModule = module {
     }
     viewModel { SettingsViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get(), get()) }
+}
+
+private fun populateDatabase(context: Context) {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            Log.d("DB_INIT", "Inizio popolamento database")
+
+            // Verifica che il file JSON esista
+            val assetManager = context.assets
+            val files = assetManager.list("")
+            Log.d("DB_INIT", "File in assets: ${files?.joinToString()}")
+
+            val json = context.assets.open("database_init.json")
+                .bufferedReader().use { it.readText() }
+
+            Log.d("DB_INIT", "JSON letto: ${json.take(100)}...") // Primi 100 caratteri
+
+            val data = Json.decodeFromString<DatabaseData>(json)
+            Log.d("DB_INIT", "JSON decodificato con successo")
+
+            // Ottieni l'istanza del database tramite Koin (se disponibile)
+            // o creane una temporanea
+            val database = try {
+                // Prova a ottenere l'istanza da Koin se disponibile
+                org.koin.core.context.GlobalContext.get().get<DiscoverItDatabase>()
+            } catch (e: Exception) {
+                // Se Koin non è ancora inizializzato, crea un'istanza temporanea
+                Room.databaseBuilder(
+                    context,
+                    DiscoverItDatabase::class.java,
+                    "discoverit_database"
+                ).build()
+            }
+
+            with(database) {
+                Log.d("DB_INIT", "Inserimento categorie...")
+                categoriesDAO().insertAll(data.categories)
+                Log.d("DB_INIT", "Categorie inserite: ${data.categories.size}")
+
+                Log.d("DB_INIT", "Inserimento POI...")
+                pointsOfInterestDAO().insertAll(data.pointsOfInterest)
+                Log.d("DB_INIT", "POI inseriti: ${data.pointsOfInterest.size}")
+
+                Log.d("DB_INIT", "Inserimento utenti...")
+                usersDAO().insertAll(data.users)
+                Log.d("DB_INIT", "Utenti inseriti: ${data.users.size}")
+
+                Log.d("DB_INIT", "Inserimento achievements...")
+                achievementsDao().insertAll(data.achievements)
+                Log.d("DB_INIT", "Achievements inseriti: ${data.achievements.size}")
+
+                Log.d("DB_INIT", "Inserimento visite...")
+                visitsDao().insertAll(data.visits)
+                Log.d("DB_INIT", "Visite inserite: ${data.visits.size}")
+
+                Log.d("DB_INIT", "Inserimento amicizie...")
+                friendshipsDao().insertAll(data.friendships)
+                Log.d("DB_INIT", "Amicizie inserite: ${data.friendships.size}")
+            }
+
+            Log.d("DB_INIT", "Database popolato con successo!")
+        } catch (e: Exception) {
+            Log.e("DB_INIT", "Errore nel popolamento database", e)
+            e.printStackTrace()
+        }
+    }
 }

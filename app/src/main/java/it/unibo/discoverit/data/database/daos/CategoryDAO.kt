@@ -31,4 +31,10 @@ interface CategoryDAO {
         GROUP BY cat.categoryId
     """)
     fun getCategoriesWithStats(userId: Long): Flow<List<CategoryStats>>
+
+    @Query("SELECT name FROM categories WHERE categoryId = :categoryId")
+    fun getCategoryName(categoryId: Long): String
+
+    @Query("SELECT COUNT(*) FROM categories")
+    suspend fun getCategoriesCount(): Int
 }

@@ -20,7 +20,8 @@ import it.unibo.discoverit.Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(
-    navController: NavHostController
+    navController: NavHostController,
+    title: String = "Discoverit"
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -39,7 +40,7 @@ fun MyTopAppBar(
         ),
         title = {
             Text(
-                "Centered Top App Bar",
+                title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
