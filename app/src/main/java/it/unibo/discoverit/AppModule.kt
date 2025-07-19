@@ -9,6 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import it.unibo.discoverit.data.database.DatabaseData
 import it.unibo.discoverit.data.database.DiscoverItDatabase
 import it.unibo.discoverit.data.repositories.*
+import it.unibo.discoverit.ui.screens.account.AccountSettingsViewModel
 import it.unibo.discoverit.ui.screens.categorydetails.CategoryDetailsViewModel
 import it.unibo.discoverit.ui.screens.home.HomeViewModel
 import it.unibo.discoverit.ui.screens.login.LoginViewModel
@@ -90,6 +91,7 @@ val appModule = module {
     single { UserRepository(get(), get(), get()) }
     single { AchievementRepository(get(), get()) }
     single { SettingsRepository(get()) }
+    single { AccountSettingsRepository(get(), get()) }
 
     // ViewModel
     single { UserViewModel(get()) }
@@ -105,4 +107,5 @@ val appModule = module {
         UserDetailViewModel(userId, get())
     }
     viewModel { SettingsViewModel(get()) }
+    viewModel { AccountSettingsViewModel(get(), get(), get()) }
 }

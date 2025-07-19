@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.login
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +20,6 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
     val userState: StateFlow<UserState> = _userState
 
     fun setUser(user: User) {
-        Log.d("USER_VM", "Setting user: ${user.username}")
         _userState.update { it.copy(user = user) }
     }
 

@@ -37,7 +37,8 @@ interface UserDAO {
     )
     fun getFriends(userId: Long): Flow<List<User>>
 
-    @Query("""
+    @Query(
+        """
         SELECT users.*, COUNT(user_achievement_progress.achievementId) as completedAchievements
         FROM users
         LEFT JOIN user_achievement_progress ON users.userId = user_achievement_progress.userId AND user_achievement_progress.isCompleted = 1
@@ -51,7 +52,8 @@ interface UserDAO {
             users.username,
             users.hashedPassword,
             users.profilePicPath
-    """)
+    """
+    )
     fun getFriendsAndCountCompletedAchievements(userId: Long): Flow<Map<
             @MapColumn(columnName = "userId") User,
             @MapColumn(columnName = "completedAchievements") Long>>

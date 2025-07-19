@@ -13,7 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import it.unibo.discoverit.ui.screens.account.AccountScreen
+import it.unibo.discoverit.ui.screens.account.AccountSettingsScreen
+import it.unibo.discoverit.ui.screens.account.AccountSettingsViewModel
 import it.unibo.discoverit.ui.screens.categorydetails.CategoryDetailsScreen
 import it.unibo.discoverit.ui.screens.categorydetails.CategoryDetailsViewModel
 import it.unibo.discoverit.ui.screens.home.HomeScreen
@@ -169,12 +170,27 @@ fun DiscoverItNavGraph(navController: NavHostController) {
         }
         composable<Destination.Settings> {
             val settingsViewModel: SettingsViewModel = koinViewModel()
-            SettingsScreen(navController, settingsViewModel.state, settingsViewModel.actions) {
+            SettingsScreen(
+                navController = navController,
+                state = settingsViewModel.state,
+                actions = settingsViewModel.actions
+            ) {
                 bottomNavOnNavigateTo(it, navController)
             }
         }
         composable<Destination.Account> {
-            AccountScreen(navController)
+            val accountSettingsViewModel: AccountSettingsViewModel = koinViewModel()
+            val accountSettingsState by accountSettingsViewModel.state.collectAsStateWithLifecycle()
+
+            val userViewModel: UserViewModel = koinViewModel()
+            val userState by userViewModel.userState.collectAsStateWithLifecycle()
+
+            AccountSettingsScreen(
+                navController = navController,
+                state = accountSettingsState,
+                actions = accountSettingsViewModel.actions,
+                userState = userState
+            )
         }
         composable<Destination.UserDetail> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.UserDetail>()

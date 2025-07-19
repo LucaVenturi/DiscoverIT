@@ -25,7 +25,7 @@ class UserRepository(
         return user
     }
 
-    suspend fun register(username: String, plainPassword: String, profilePicPath: String? = null): Long {
+    suspend fun register(username: String, plainPassword: String): Long {
         if (userDao.getUserByUsername(username) != null) {
             throw AuthenticatorException("Username already exists")
         }
@@ -34,9 +34,9 @@ class UserRepository(
         val user = User(
             username = username,
             hashedPassword = hashedPassword,
-            profilePicPath = profilePicPath
+            profilePicPath = null,
+            profilePicLastModified = null
         )
-
         return userDao.insert(user)
     }
 
@@ -80,5 +80,13 @@ class UserRepository(
 
     suspend fun getUserById(userId: Long): User {
         return userDao.getUserById(userId)
+    }
+
+    suspend fun updateProfilePicture(userId: Long, path: String): User {
+        val user = userDao.getUserById(userId)
+        val updatedUser = user.copy(profilePicPath = path, profilePicLastModified = System.currentTimeMillis())
+
+        userDao.update(updatedUser)
+        return updatedUser
     }
 }

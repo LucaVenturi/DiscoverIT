@@ -8,14 +8,22 @@ class AccountSettingsRepository(
     private val userRepository: UserRepository,
     private val profilePicStorageHelper: ProfilePicStorageHelper
 ) {
-    suspend fun updateProfilePicture(userId: Long, bitmap: Bitmap): String {
-        val filename = "profile_$userId.jpg"
+    suspend fun updateProfilePicture(userId: Long, bitmap: Bitmap): User {
+        val filename = "pp_$userId.jpg"
         val path = profilePicStorageHelper.save(bitmap, filename)
 
-        val user = userRepository.getUserById(userId)
-        val updatedUser = user.copy(profilePicPath = path)
-        userRepository.update(updatedUser)
+        val user = userRepository.updateProfilePicture(userId, path)
 
-        return path
+        return user
+    }
+
+    suspend fun changeUsername(userId: Long, newUsername: String) {
+        if (newUsername.isBlank())
+            throw Exception("Username cannot be empty")
+        val user = userRepository.getUserById(userId)
+        if (user.username == newUsername)
+            throw Exception("Username cannot be the same as the old one")
+        val updatedUser = user.copy(username = newUsername)
+        userRepository.update(updatedUser)
     }
 }

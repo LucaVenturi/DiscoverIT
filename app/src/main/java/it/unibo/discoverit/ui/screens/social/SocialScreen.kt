@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
@@ -37,9 +39,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 import it.unibo.discoverit.data.database.entities.User
@@ -157,23 +165,34 @@ fun UserProfileSection(currentUser: User, countCompleted: Long, onClick: (Long) 
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = null,
-                modifier = Modifier.size(48.dp)
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(currentUser.profilePicUri)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "Foto profilo",
+                contentScale = ContentScale.Crop,
+                placeholder = rememberVectorPainter(Icons.Default.Person),
+                error = rememberVectorPainter(Icons.Default.Person),
+                fallback = rememberVectorPainter(Icons.Default.Person),
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
                     text = currentUser.username,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Text(
                     text = "$countCompleted traguardi raggiunti",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
@@ -210,7 +229,7 @@ fun FriendCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable() {
+            .clickable {
                 onClick(friend.userId)
             }
             .pointerInput(Unit) {
@@ -222,22 +241,31 @@ fun FriendCard(
         elevation = CardDefaults.cardElevation(2.dp),
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = null,
-                modifier = Modifier.size(48.dp)
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(friend.profilePicUri)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "Foto profilo",
+                contentScale = ContentScale.Crop,
+                placeholder = rememberVectorPainter(Icons.Default.Person),
+                error = rememberVectorPainter(Icons.Default.Person),
+                fallback = rememberVectorPainter(Icons.Default.Person),
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
                     text = friend.username,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "$countCompleted traguardi raggiungi",
+                    text = "$countCompleted traguardi raggiunti",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

@@ -1,8 +1,5 @@
 package it.unibo.discoverit.ui.screens.account
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,32 +32,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
-import it.unibo.discoverit.Destination
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import it.unibo.discoverit.ui.composables.MyTopAppBar
-import java.io.File
+import it.unibo.discoverit.ui.screens.login.UserState
+import it.unibo.discoverit.utils.images.ImageSourceLauncher
+import it.unibo.discoverit.utils.images.rememberCameraLauncher
+import it.unibo.discoverit.utils.images.rememberGalleryLauncher
+import it.unibo.discoverit.utils.images.uriToBitmap
 
 @Composable
-fun AccountScreen(
+fun AccountSettingsScreen(
     navController: NavHostController,
-    lastSelectedTab: Destination = Destination.Home /* todo remove */,
     state: AccountSettingsState,
     actions: AccountSettingsActions,
-    onNavigateTo: (Destination) -> Unit
+    userState: UserState
 ) {
-    val context = LocalContext.current
+    val ctx = LocalContext.current
 
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = {  }
+    val galleryLauncher = rememberGalleryLauncher(
+        onPicturePicked = { imageUri ->
+            actions.onImagePicked(uriToBitmap(imageUri, ctx.contentResolver))
+        }
     )
 
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
-        onResult = { /* TODO */ },
+    val cameraLauncher = rememberCameraLauncher(
+        onPictureTaken = { imageUri ->
+            actions.onImagePicked(uriToBitmap(imageUri, ctx.contentResolver))
+        }
     )
 
     Scaffold(
@@ -80,14 +84,21 @@ fun AccountScreen(
             verticalArrangement = Arrangement.Top
         ) {
             if (state.showImageSourceDialog){
-                SelectImageSourceDialog()
+                SelectImageSourceDialog(
+                    actions = actions,
+                    galleryLauncher = galleryLauncher,
+                    cameraLauncher = cameraLauncher
+                )
             }
 
-            ProfilePicSection(actions = actions)
+            ProfilePicSection(state = state, actions = actions, userState)
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
-            ChangeUsernameSection()
+            ChangeUsernameSection(
+                actions = actions,
+                state = state
+            )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
@@ -97,7 +108,7 @@ fun AccountScreen(
 }
 
 @Composable
-fun ProfilePicSection(actions: AccountSettingsActions) {
+fun ProfilePicSection(state: AccountSettingsState, actions: AccountSettingsActions, userState: UserState) {
     Box(
         modifier = Modifier
             .size(120.dp)
@@ -105,11 +116,19 @@ fun ProfilePicSection(actions: AccountSettingsActions) {
             .background(MaterialTheme.colorScheme.secondaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            imageVector = Icons.Default.AccountCircle,
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(userState.user?.profilePicPath)
+                .crossfade(true)
+                .build(),
             contentDescription = "Foto profilo",
-            modifier = Modifier.size(100.dp),
-            tint = MaterialTheme.colorScheme.primary
+            contentScale = ContentScale.Crop,
+            placeholder = rememberVectorPainter(Icons.Default.AccountCircle),
+            error = rememberVectorPainter(Icons.Default.AccountCircle),
+            fallback = rememberVectorPainter(Icons.Default.AccountCircle),
+            modifier = Modifier
+                .size(110.dp)
+                .clip(CircleShape)
         )
     }
 
@@ -123,7 +142,10 @@ fun ProfilePicSection(actions: AccountSettingsActions) {
 }
 
 @Composable
-fun ChangeUsernameSection() {
+fun ChangeUsernameSection(
+    actions: AccountSettingsActions,
+    state: AccountSettingsState
+) {
     // Cambia nome utente
     Text(
         text = "Nome utente",
@@ -134,14 +156,15 @@ fun ChangeUsernameSection() {
 
     Row {
         OutlinedTextField(
-            value = "username",
-            onValueChange = {/* TODO() */},
+            value = state.username,
+            onValueChange = { actions.onUsernameChange(it) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             trailingIcon = {
                 SaveUsernameChangesIconButton(
-                    usernameChanged = false /* todo */
+                    usernameChanged = state.isUsernameChanged,
+                    onClick = actions::onSaveClick
                 )
             }
         )
@@ -150,10 +173,11 @@ fun ChangeUsernameSection() {
 
 @Composable
 fun SaveUsernameChangesIconButton(
-    usernameChanged: Boolean
+    usernameChanged: Boolean,
+    onClick: () -> Unit = {}
 ) {
     if (usernameChanged) {
-        IconButton(onClick = {/* TODO() */ }) {
+        IconButton(onClick = onClick) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Salva",
@@ -189,19 +213,27 @@ fun LogoutAndDeleteAccountSection(
 
 @Composable
 fun SelectImageSourceDialog(
-
+    actions: AccountSettingsActions,
+    galleryLauncher: ImageSourceLauncher = rememberGalleryLauncher(),
+    cameraLauncher: ImageSourceLauncher = rememberCameraLauncher()
 ) {
     AlertDialog(
-        onDismissRequest = {/* TODO() */},
+        onDismissRequest = { actions.onDismissImageSourceDialog() },
         title = { Text("Seleziona la fonte dell'immagine") },
         text = { Text("Da dove vuoi prendere la foto profilo?") },
         confirmButton = {
-            TextButton(onClick = {/* TODO() */}) {
+            TextButton(onClick = {
+                actions.onPickFromGallery()
+                galleryLauncher.captureImage()
+            }) {
                 Text("Dalla Galleria")
             }
         },
         dismissButton = {
-            TextButton(onClick = {/* TODO() */}) {
+            TextButton(onClick = {
+                actions.onTakePhoto()
+                cameraLauncher.captureImage()
+            }) {
                 Text("Scatta una foto con la Camera")
             }
         }

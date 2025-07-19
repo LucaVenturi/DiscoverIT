@@ -2,10 +2,7 @@ package it.unibo.discoverit.ui.screens.account
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.repositories.AccountSettingsRepository
 import it.unibo.discoverit.data.repositories.UserRepository
@@ -19,7 +16,6 @@ import kotlinx.coroutines.launch
 data class AccountSettingsState(
     val userId: Long? = null,
     val username: String,
-    val profilePictureUri: Uri? = null,
     val isLoading: Boolean = false,
     val errorMsg: String? = null,
     val isUsernameChanged: Boolean = false,
@@ -52,7 +48,6 @@ class AccountSettingsViewModel(
                         it.copy(
                             userId = user.userId,
                             username = user.username,
-                            profilePictureUri = Uri.parse(user.profilePicPath)
                         )
                     }
                 }
@@ -62,7 +57,12 @@ class AccountSettingsViewModel(
 
     val actions = object : AccountSettingsActions {
         override fun onUsernameChange(username: String) {
-            _state.update { it.copy(username = username) }
+            _state.update {
+                it.copy(
+                    username = username,
+                    isUsernameChanged = username != userViewModel.userState.value.user?.username,
+                )
+            }
         }
 
         override fun onChangeProfilePicClick() {
@@ -75,20 +75,27 @@ class AccountSettingsViewModel(
 
         override fun onPickFromGallery() {
             _state.update { it.copy(showImageSourceDialog = false) }
-            // trigger gallery launcher in composable
         }
 
         override fun onTakePhoto() {
             _state.update { it.copy(showImageSourceDialog = false) }
-            // trigger camera launcher in composable
         }
 
         override fun onImagePicked(bitmap: Bitmap) {
             viewModelScope.launch {
-                val userId = userViewModel.userState.value.user?.userId
-                    ?: throw IllegalStateException("No logged-in user")
-                val path = accountSettingsRepository.updateProfilePicture(userId, bitmap)
-                _state.update { it.copy(profilePictureUri = Uri.parse(path)) }
+                try {
+                    _state.update { it.copy(isLoading = true) }
+
+                    val userId = _state.value.userId ?: throw IllegalStateException("No logged-in user")
+
+                    // Aggiorna l'immagine nel repository e recupera l'utente aggiornato
+                    val updatedUser = accountSettingsRepository.updateProfilePicture(userId, bitmap)
+                    userViewModel.setUser(updatedUser)
+                } catch (e: Exception) {
+                    _state.update { it.copy(errorMsg = e.message ?: "Errore durante l'aggiornamento della foto") }
+                } finally {
+                    _state.update { it.copy(isLoading = false) }
+                }
             }
         }
 
@@ -96,12 +103,20 @@ class AccountSettingsViewModel(
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true) }
                 try {
-                    if (_state.value.username.isBlank()) {
-                        throw Exception("Username cannot be empty")
-                    }
                     val user = userRepository.getUserById(_state.value.userId ?: throw IllegalStateException("No logged-in user"))
                     val newUser = user.copy(username = _state.value.username)
-                    userRepository.update(newUser)
+                    accountSettingsRepository.changeUsername(newUser.userId, newUser.username)
+
+                    // Aggiorna anche il UserViewModel con i nuovi dati
+                    userViewModel.setUser(newUser)
+
+                    // Aggiorna lo stato locale per riflettere che l'username non è più "changed"
+                    _state.update {
+                        it.copy(
+                            isUsernameChanged = false,
+                            errorMsg = null
+                        )
+                    }
                 } catch (e: Exception) {
                     _state.update { it.copy(errorMsg = e.message ?: "Unknown error") }
                 }
