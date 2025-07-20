@@ -1,4 +1,4 @@
-package it.unibo.discoverit.ui.screens.login.composables
+package it.unibo.discoverit.ui.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,11 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginErrorMessage(
-    error: String
+fun ErrorMessage(
+    error: String,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(

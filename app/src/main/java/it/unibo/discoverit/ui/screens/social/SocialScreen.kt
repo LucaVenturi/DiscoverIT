@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,10 +42,13 @@ import it.unibo.discoverit.Destination
 import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
-import it.unibo.discoverit.ui.screens.social.composables.FriendCard
 import it.unibo.discoverit.ui.screens.home.composables.AddFriendDialog
 import it.unibo.discoverit.ui.screens.home.composables.ConfirmRemoveFriendDialog
 import it.unibo.discoverit.ui.screens.login.UserState
+import it.unibo.discoverit.ui.screens.social.composables.AddFriendFab
+import it.unibo.discoverit.ui.screens.social.composables.CurrentUserSection
+import it.unibo.discoverit.ui.screens.social.composables.FriendsList
+import it.unibo.discoverit.ui.screens.social.composables.FriendsSection
 
 @Composable
 fun SocialScreen(
@@ -75,7 +76,9 @@ fun SocialScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = { DiscoverItTopAppBar(navController) },
+        topBar = {
+            DiscoverItTopAppBar(navController)
+        },
         bottomBar = {
             DiscoverItNavigationBar(
                 currentRoute = Destination.Social,
@@ -83,12 +86,10 @@ fun SocialScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { actions.onAddFriendClick() },
+            AddFriendFab(
+                onClick = actions::onAddFriendClick,
                 modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Aggiungi amico")
-            }
+            )
         },
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -104,28 +105,17 @@ fun SocialScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                Text(
-                    text = "I miei traguardi",
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
 
-                UserProfileSection(
+                CurrentUserSection(
                     currentUser = userState.user ?: throw IllegalStateException("User is null"),
-                    countCompleted = state.currentUserCountCompleted,
-                    onClick = onUserClick
+                    currentUserCountCompleted = state.currentUserCountCompleted,
+                    onUserClick = onUserClick
                 )
 
-                Text(
-                    text = "Amici",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
-                FriendsList(
+                FriendsSection(
                     friendsAndCountCompleted = state.friendsAndCountCompleted,
-                    onFriendClick = onUserClick,
-                    onFriendLongPress = { actions.onFriendLongPress(it) }
+                    onUserClick = onUserClick,
+                    onFriendLongPress = actions::onFriendLongPress,
                 )
 
                 if (state.isAddFriendDialogVisible) {
@@ -136,6 +126,7 @@ fun SocialScreen(
                         onUsernameChange = { actions.onUsernameChange(it) }
                     )
                 }
+
                 if (state.showRemoveFriendDialog && state.selectedFriendForRemoval != null) {
                     ConfirmRemoveFriendDialog(
                         username = state.selectedFriendForRemoval.username,
@@ -144,70 +135,6 @@ fun SocialScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun UserProfileSection(currentUser: User, countCompleted: Long, onClick: (Long) -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp)
-            .clickable { onClick(currentUser.userId) },
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(currentUser.profilePicUri)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "Foto profilo",
-                contentScale = ContentScale.Crop,
-                placeholder = rememberVectorPainter(Icons.Default.Person),
-                error = rememberVectorPainter(Icons.Default.Person),
-                fallback = rememberVectorPainter(Icons.Default.Person),
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column {
-                Text(
-                    text = currentUser.username,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = "$countCompleted traguardi raggiunti",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun FriendsList(
-    friendsAndCountCompleted: Map<User, Long>,
-    onFriendClick: (Long) -> Unit,
-    onFriendLongPress: (User) -> Unit
-) {
-    LazyColumn {
-        items(friendsAndCountCompleted.toList()) { friendAndCount ->
-            FriendCard(
-                friend = friendAndCount.first,
-                countCompleted = friendAndCount.second,
-                onClick = onFriendClick,
-                onLongPress = onFriendLongPress
-            )
         }
     }
 }

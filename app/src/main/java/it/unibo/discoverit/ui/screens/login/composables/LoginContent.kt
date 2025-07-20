@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.ui.composables.ErrorMessage
+import it.unibo.discoverit.ui.composables.PasswordField
+import it.unibo.discoverit.ui.composables.UsernameField
 import it.unibo.discoverit.ui.screens.login.LoginActions
 import it.unibo.discoverit.ui.screens.login.LoginPhase
 import it.unibo.discoverit.ui.screens.login.LoginState
@@ -34,16 +37,17 @@ fun LoginContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        UsernameLoginField(
+        UsernameField(
             username = loginState.username,
             onUsernameChanged = { loginActions.onUsernameChanged(it) }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PasswordLoginField(
+        PasswordField(
             password = loginState.password,
-            onPasswordChanged = { loginActions.onPasswordChanged(it) }
+            onPasswordChanged = { loginActions.onPasswordChanged(it) },
+            label = "Password"
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -61,7 +65,7 @@ fun LoginContent(
         RegisterPrompt(onNavigateToRegister)
 
         loginState.errorMsg?.let { error ->
-            LoginErrorMessage(
+            ErrorMessage(
                 error = error
             )
         }

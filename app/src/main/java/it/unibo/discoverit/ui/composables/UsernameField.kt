@@ -1,4 +1,4 @@
-package it.unibo.discoverit.ui.screens.login.composables
+package it.unibo.discoverit.ui.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,16 +9,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
-fun UsernameLoginField(
+fun UsernameField(
     username: String,
-    onUsernameChanged: (String) -> Unit
+    onUsernameChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = username,
         onValueChange = onUsernameChanged,
         label = { Text("Username") },
+        modifier = modifier.fillMaxWidth(),
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
     )
 }

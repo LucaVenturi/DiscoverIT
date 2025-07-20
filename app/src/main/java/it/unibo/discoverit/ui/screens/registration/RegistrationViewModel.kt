@@ -21,7 +21,16 @@ data class RegistrationState(
     val confirmPassword: String = "",
     val currentPhase: RegistrationPhase = RegistrationPhase.IDLE,
     val error: String? = null
-)
+) {
+    val isLoading: Boolean
+        get() = currentPhase == RegistrationPhase.LOADING
+
+    val isFormValid: Boolean
+        get() = username.isNotBlank() &&
+                password.length >= 8 &&
+                confirmPassword.length >= 8 &&
+                password == confirmPassword
+}
 
 interface RegistrationActions {
     fun onUsernameChanged(username: String)

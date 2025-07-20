@@ -5,36 +5,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.ui.composables.ErrorMessage
+import it.unibo.discoverit.ui.screens.registration.composables.LoginPrompt
+import it.unibo.discoverit.ui.screens.registration.composables.RegisterButton
+import it.unibo.discoverit.ui.screens.registration.composables.RegistrationForm
+import it.unibo.discoverit.ui.screens.registration.composables.RegistrationHeader
 
 @Composable
 fun RegistrationScreen(
@@ -43,8 +27,15 @@ fun RegistrationScreen(
     onNavigateToLogin: () -> Unit,
     onRegistrationSuccess: () -> Unit
 ) {
+    // Gestione navigazione automatica su successo
+    LaunchedEffect(state.currentPhase) {
+        if (state.currentPhase == RegistrationPhase.SUCCESS) {
+            onRegistrationSuccess()
+        }
+    }
+
     Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground
     ) { innerPadding ->
@@ -54,12 +45,6 @@ fun RegistrationScreen(
             actions = actions,
             onNavigateToLogin = onNavigateToLogin
         )
-    }
-
-    LaunchedEffect(state.currentPhase) {
-        if (state.currentPhase == RegistrationPhase.SUCCESS) {
-            onRegistrationSuccess()
-        }
     }
 }
 
@@ -80,158 +65,28 @@ private fun RegistrationContent(
     ) {
         RegistrationHeader()
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-        UsernameField(
-            username = state.username,
-            onUsernameChanged = {actions.onUsernameChanged(it)}
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        PasswordField(
-            password = state.password,
-            onPasswordChanged = {actions.onPasswordChanged(it)},
-            label = "Password"
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        PasswordField(
-            password = state.confirmPassword,
-            onPasswordChanged = {actions.onConfirmPasswordChanged(it)},
-            label = "Conferma Password"
+        RegistrationForm(
+            state = state,
+            actions = actions
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         RegisterButton(
-            enabled = state.username.isNotBlank() &&
-                    state.password.isNotBlank() &&
-                    state.confirmPassword.isNotBlank() &&
-                    state.currentPhase != RegistrationPhase.LOADING,
-            isLoading = state.currentPhase == RegistrationPhase.LOADING,
-            onClick = { actions.onRegisterClicked() }
+            enabled = state.isFormValid && !state.isLoading,
+            isLoading = state.isLoading,
+            onClick = actions::onRegisterClicked
         )
 
+        // Mostra errore se presente
         state.error?.let { error ->
-            ErrorMessage(
-                error = error
-            )
+            ErrorMessage(error = error)
         }
 
-        RegisterPrompt(onNavigateToLogin)
-    }
-}
-
-@Composable
-private fun RegisterPrompt(
-    onNavigateToRegister: () -> Unit
-) {
-    TextButton(
-        onClick = onNavigateToRegister
-    ) {
-        Text("Hai già un account? Accedi")
-    }
-}
-
-@Composable
-private fun RegistrationHeader() {
-    Text(
-        text = "Registrati",
-        style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.primary
-    )
-}
-
-@Composable
-private fun UsernameField(
-    username: String,
-    onUsernameChanged: (String) -> Unit
-) {
-    OutlinedTextField(
-        value = username,
-        onValueChange = onUsernameChanged,
-        label = { Text("Username") },
-        modifier = Modifier.fillMaxWidth(),
-        singleLine = true
-    )
-}
-
-@Composable
-private fun PasswordField(
-    password: String,
-    onPasswordChanged: (String) -> Unit,
-    label: String
-) {
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    OutlinedTextField(
-        value = password,
-        onValueChange = onPasswordChanged,
-        label = { Text(label) },
-        modifier = Modifier.fillMaxWidth(),
-        singleLine = true,
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            PasswordVisibilityToggle(
-                isVisible = passwordVisible,
-                onToggle = { passwordVisible = !passwordVisible }
-            )
-        }
-    )
-}
-
-@Composable
-private fun PasswordVisibilityToggle(
-    isVisible: Boolean,
-    onToggle: () -> Unit
-) {
-    IconButton(onClick = onToggle) {
-        Icon(
-            imageVector = if (isVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-            contentDescription = "Toggle password visibility"
-        )
-    }
-}
-
-@Composable
-private fun RegisterButton(
-    enabled: Boolean,
-    isLoading: Boolean,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
-        enabled = enabled
-    ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(24.dp)
-            )
-        } else {
-            Text("Registrati", style = MaterialTheme.typography.labelLarge)
-        }
-    }
-}
-
-@Composable
-private fun ErrorMessage(
-    error: String
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = error,
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodyMedium
-        )
+
+        LoginPrompt(onNavigateToLogin = onNavigateToLogin)
     }
 }

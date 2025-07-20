@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-enum class ThemeOption{
-    LIGHT,
-    DARK,
-    SYSTEM
+enum class ThemeOption(val displayName: String){
+    LIGHT("Light"),
+    DARK("Dark"),
+    SYSTEM("System default")
 }
 
 data class SettingsState(

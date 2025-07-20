@@ -1,4 +1,4 @@
-package it.unibo.discoverit.ui.screens.login.composables
+package it.unibo.discoverit.ui.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,19 +15,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
-fun PasswordLoginField(
+fun PasswordField(
     password: String,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
     OutlinedTextField(
         value = password,
         onValueChange = onPasswordChanged,
-        label = { Text("Password") },
+        label = { Text(label) },
+        modifier = modifier.fillMaxWidth(),
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (passwordVisible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
             PasswordVisibilityToggle(
