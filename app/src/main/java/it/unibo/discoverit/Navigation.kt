@@ -228,14 +228,18 @@ fun DiscoverItNavGraph(navController: NavHostController) {
         }
         composable<Destination.POIDetails> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.POIDetails>()
-            val poiDetailsViewModel: POIDetailsViewModel = koinViewModel()
-            val poiDetailsState: POIDetailsState by poiDetailsViewModel.state.collectAsStateWithLifecycle()
+            val poiDetailsViewModel: POIDetailsViewModel = koinViewModel(
+                parameters = { parametersOf(args.poiId) }
+            )
+            val poiDetailsState by poiDetailsViewModel.state.collectAsStateWithLifecycle()
+
             POIDetailsScreen(
                 navController = navController,
-                poiId = args.poiId,
                 state = poiDetailsState,
                 actions = poiDetailsViewModel.actions,
-                onNavigateTo = {destination -> bottomNavOnNavigateTo(destination, navController) }
+                onNavigateTo = { destination ->
+                    bottomNavOnNavigateTo(destination, navController)
+                }
             )
         }
     }

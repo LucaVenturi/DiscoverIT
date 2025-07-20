@@ -28,7 +28,6 @@ class HomeViewModel(
     private val _homeState = MutableStateFlow(HomeState(emptyList()))
     val homeState: StateFlow<HomeState> = _homeState.asStateFlow()
 
-
     init {
         viewModelScope.launch {
             // Osserva direttamente lo StateFlow dell'UserViewModel

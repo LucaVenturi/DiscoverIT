@@ -1,24 +1,18 @@
 package it.unibo.discoverit.ui.screens.userdetail
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
-import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
-import it.unibo.discoverit.ui.composables.MyTopAppBar
+import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
+import it.unibo.discoverit.ui.screens.userdetail.composables.AchievementCard
 
 @Composable
 fun UserDetailScreen(
@@ -27,10 +21,9 @@ fun UserDetailScreen(
     actions: UserDetailActions,
     onNavigateTo: (BottomNavDestination) -> Unit
 ) {
-
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = { MyTopAppBar(navController) },
+        topBar = { DiscoverItTopAppBar(navController) },
         bottomBar = {
             DiscoverItNavigationBar(
                 currentRoute = Destination.Social,
@@ -109,50 +102,4 @@ fun UserDetailScreen(
     }
 }
 
-@Composable
-fun AchievementCard(achievement: Achievement, completed: Boolean) {
-    val borderColor = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-    val icon = if (completed) Icons.Default.Check else Icons.Default.StarOutline
-    val iconTint = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(2.dp, borderColor)
-    ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = iconTint,
-                modifier = Modifier.size(32.dp)
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = achievement.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = if (completed) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = achievement.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            if (completed) {
-                Text(
-                    text = "achievement.dateCompleted ?:" +  "",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}

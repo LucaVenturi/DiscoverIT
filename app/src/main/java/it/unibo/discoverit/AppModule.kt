@@ -106,7 +106,9 @@ val appModule = module {
     viewModel { (categoryId: Long) ->
         CategoryDetailsViewModel(get(), get(), categoryId)
     }
-    viewModel { POIDetailsViewModel(get(), get()) }
+    viewModel { (poiId: Long) ->
+        POIDetailsViewModel(get(), get(), poiId)
+    }
     viewModel { (currentUserId: Long) ->
         SocialViewModel(get(), get(), currentUserId)
     }

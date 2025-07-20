@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
-import it.unibo.discoverit.ui.composables.MyTopAppBar
+import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 
 
 @Composable
@@ -23,7 +23,7 @@ fun SettingsScreen(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = { MyTopAppBar(navController) },
+        topBar = { DiscoverItTopAppBar(navController) },
         bottomBar = {
             DiscoverItNavigationBar(
                 currentRoute = Destination.Settings,

@@ -19,53 +19,30 @@ data class POIDetailsState(
 )
 
 interface POIDetailsActions {
-    fun loadPOI(poiId: Long)
-    fun toggleVisit(poiId: Long)
+    fun toggleVisit()
     fun dismissError()
+    fun onRefresh()
 }
 
 class POIDetailsViewModel(
     private val poiRepository: PointOfInterestRepository,
-    private val userViewModel: UserViewModel
+    private val userViewModel: UserViewModel,
+    private val selectedPoiId: Long
 ) : ViewModel() {
     private val _state = MutableStateFlow(POIDetailsState())
     val state: StateFlow<POIDetailsState> = _state.asStateFlow()
 
+    init {
+        loadPOI()
+    }
+
     val actions = object : POIDetailsActions {
-        override fun loadPOI(poiId: Long) {
-            _state.update { it.copy(isLoading = true, errorMsg = null) }
-
-            viewModelScope.launch {
-                try {
-                    val poi = poiRepository.getPOIDetails(poiId) ?: throw Exception("POI non trovato")
-                    val userId = userViewModel.userState.value.user?.userId
-                        ?: throw Exception("Utente non loggato")
-                    val isVisited = poiRepository.isVisited(userId, poiId)
-
-                    _state.update {
-                        it.copy(
-                            currentPoi = poi,
-                            isVisited = isVisited,
-                            isLoading = false
-                        )
-                    }
-                } catch (e: Exception) {
-                    _state.update {
-                        it.copy(
-                            errorMsg = e.message ?: "Errore di caricamento",
-                            isLoading = false
-                        )
-                    }
-                }
-            }
-        }
-
-        override fun toggleVisit(poiId: Long) {
+        override fun toggleVisit() {
             viewModelScope.launch {
                 try {
                     val userId = userViewModel.userState.value.user?.userId
                         ?: throw Exception("Utente non loggato")
-                    poiRepository.toggleVisit(userId, poiId)
+                    poiRepository.toggleVisit(userId, selectedPoiId)
                     _state.update { currentState ->
                         currentState.copy(
                             isVisited = !currentState.isVisited
@@ -81,6 +58,39 @@ class POIDetailsViewModel(
 
         override fun dismissError() {
             _state.update { it.copy(errorMsg = null) }
+        }
+
+        override fun onRefresh() {
+            loadPOI()
+        }
+    }
+
+    private fun loadPOI() {
+        _state.update { it.copy(isLoading = true, errorMsg = null) }
+
+        viewModelScope.launch {
+            try {
+                val poi = poiRepository.getPOIDetails(selectedPoiId)
+                    ?: throw Exception("POI non trovato")
+                val userId = userViewModel.userState.value.user?.userId
+                    ?: throw Exception("Utente non loggato")
+                val isVisited = poiRepository.isVisited(userId, selectedPoiId)
+
+                _state.update {
+                    it.copy(
+                        currentPoi = poi,
+                        isVisited = isVisited,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        errorMsg = e.message ?: "Errore di caricamento",
+                        isLoading = false
+                    )
+                }
+            }
         }
     }
 }

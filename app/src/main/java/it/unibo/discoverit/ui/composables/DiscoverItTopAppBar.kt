@@ -19,7 +19,7 @@ import it.unibo.discoverit.Destination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(
+fun DiscoverItTopAppBar(
     navController: NavHostController,
     title: String = "Discoverit"
 ) {

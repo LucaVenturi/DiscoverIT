@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -39,9 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import it.unibo.discoverit.ui.composables.MyTopAppBar
+import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
+import it.unibo.discoverit.ui.screens.account.composables.ChangeUsernameSection
+import it.unibo.discoverit.ui.screens.account.composables.LogoutAndDeleteAccountSection
+import it.unibo.discoverit.ui.screens.account.composables.ProfilePicSection
+import it.unibo.discoverit.ui.screens.account.composables.SelectImageSourceDialog
 import it.unibo.discoverit.ui.screens.login.UserState
-import it.unibo.discoverit.utils.images.ImageSourceLauncher
 import it.unibo.discoverit.utils.images.rememberCameraLauncher
 import it.unibo.discoverit.utils.images.rememberGalleryLauncher
 import it.unibo.discoverit.utils.images.uriToBitmap
@@ -70,7 +72,7 @@ fun AccountSettingsScreen(
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
-            MyTopAppBar(navController, "Impostazioni")
+            DiscoverItTopAppBar(navController, "Settings")
         },
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -85,157 +87,29 @@ fun AccountSettingsScreen(
         ) {
             if (state.showImageSourceDialog){
                 SelectImageSourceDialog(
-                    actions = actions,
                     galleryLauncher = galleryLauncher,
-                    cameraLauncher = cameraLauncher
+                    cameraLauncher = cameraLauncher,
+                    onPickFromGallery = actions::onPickFromGallery,
+                    onTakePhoto = actions::onTakePhoto,
+                    onDismiss = actions::onDismissImageSourceDialog
                 )
             }
 
-            ProfilePicSection(state = state, actions = actions, userState)
+            ProfilePicSection(userState.user?.profilePicPath, actions::onPickFromGallery)
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             ChangeUsernameSection(
-                actions = actions,
-                state = state
+                shownUsername = state.username,
+                onUsernameChange = actions::onUsernameChange,
+                isUsernameChanged = state.isUsernameChanged,
+                onSaveClick = actions::onSaveClick
             )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
+            /* TODO */
             LogoutAndDeleteAccountSection()
         }
     }
-}
-
-@Composable
-fun ProfilePicSection(state: AccountSettingsState, actions: AccountSettingsActions, userState: UserState) {
-    Box(
-        modifier = Modifier
-            .size(120.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.secondaryContainer),
-        contentAlignment = Alignment.Center
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(userState.user?.profilePicPath)
-                .crossfade(true)
-                .build(),
-            contentDescription = "Foto profilo",
-            contentScale = ContentScale.Crop,
-            placeholder = rememberVectorPainter(Icons.Default.AccountCircle),
-            error = rememberVectorPainter(Icons.Default.AccountCircle),
-            fallback = rememberVectorPainter(Icons.Default.AccountCircle),
-            modifier = Modifier
-                .size(110.dp)
-                .clip(CircleShape)
-        )
-    }
-
-    Spacer(Modifier.height(8.dp))
-
-    TextButton(
-        onClick = { actions.onChangeProfilePicClick() }
-    ) {
-        Text("Cambia foto profilo")
-    }
-}
-
-@Composable
-fun ChangeUsernameSection(
-    actions: AccountSettingsActions,
-    state: AccountSettingsState
-) {
-    // Cambia nome utente
-    Text(
-        text = "Nome utente",
-        style = MaterialTheme.typography.titleMedium
-    )
-
-    Spacer(Modifier.height(4.dp))
-
-    Row {
-        OutlinedTextField(
-            value = state.username,
-            onValueChange = { actions.onUsernameChange(it) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            trailingIcon = {
-                SaveUsernameChangesIconButton(
-                    usernameChanged = state.isUsernameChanged,
-                    onClick = actions::onSaveClick
-                )
-            }
-        )
-    }
-}
-
-@Composable
-fun SaveUsernameChangesIconButton(
-    usernameChanged: Boolean,
-    onClick: () -> Unit = {}
-) {
-    if (usernameChanged) {
-        IconButton(onClick = onClick) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Salva",
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
-
-@Composable
-fun LogoutAndDeleteAccountSection(
-
-){
-    Button(
-        onClick = {/* TODO() */},
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text("Logout")
-    }
-
-    Spacer(Modifier.height(8.dp))
-
-    OutlinedButton(
-        onClick = {/* TODO() */},
-        modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.error
-        )
-    ) {
-        Text("Elimina account")
-    }
-}
-
-@Composable
-fun SelectImageSourceDialog(
-    actions: AccountSettingsActions,
-    galleryLauncher: ImageSourceLauncher = rememberGalleryLauncher(),
-    cameraLauncher: ImageSourceLauncher = rememberCameraLauncher()
-) {
-    AlertDialog(
-        onDismissRequest = { actions.onDismissImageSourceDialog() },
-        title = { Text("Seleziona la fonte dell'immagine") },
-        text = { Text("Da dove vuoi prendere la foto profilo?") },
-        confirmButton = {
-            TextButton(onClick = {
-                actions.onPickFromGallery()
-                galleryLauncher.captureImage()
-            }) {
-                Text("Dalla Galleria")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = {
-                actions.onTakePhoto()
-                cameraLauncher.captureImage()
-            }) {
-                Text("Scatta una foto con la Camera")
-            }
-        }
-    )
 }
