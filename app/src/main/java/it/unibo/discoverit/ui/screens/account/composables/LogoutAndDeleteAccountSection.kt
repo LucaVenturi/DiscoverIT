@@ -14,10 +14,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LogoutAndDeleteAccountSection(
-    /* TODO */
+    onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit
 ){
     Button(
-        onClick = {/* TODO() */},
+        onClick = onLogoutClick,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text("Logout")
@@ -26,7 +27,7 @@ fun LogoutAndDeleteAccountSection(
     Spacer(Modifier.height(8.dp))
 
     OutlinedButton(
-        onClick = {/* TODO() */},
+        onClick = onDeleteAccountClick,
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = MaterialTheme.colorScheme.error

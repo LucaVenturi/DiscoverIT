@@ -22,7 +22,7 @@ enum class ThemeOption(val displayName: String){
 data class SettingsState(
     val selectedTheme: ThemeOption = ThemeOption.SYSTEM,
     val notificationsEnabled: Boolean = true,
-    val appVersion: String = "0.0.0"
+    val appVersion: String = "0.0.0",
 )
 
 interface SettingsActions{

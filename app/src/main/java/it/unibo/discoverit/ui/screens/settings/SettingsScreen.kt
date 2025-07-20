@@ -3,6 +3,8 @@ package it.unibo.discoverit.ui.screens.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,6 +50,7 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
+
             ThemeSection(
                 selectedTheme = state.selectedTheme,
                 onThemeChange = actions::onThemeChange
@@ -71,4 +74,3 @@ fun SettingsScreen(
 private fun SectionDivider() {
     HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 }
-

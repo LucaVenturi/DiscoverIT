@@ -19,7 +19,9 @@ data class AccountSettingsState(
     val isLoading: Boolean = false,
     val errorMsg: String? = null,
     val isUsernameChanged: Boolean = false,
-    val showImageSourceDialog: Boolean = false
+    val showImageSourceDialog: Boolean = false,
+    val showLogoutDialog: Boolean = false,
+    val showDeleteAccountDialog: Boolean = false
 )
 
 interface AccountSettingsActions {
@@ -30,6 +32,12 @@ interface AccountSettingsActions {
     fun onTakePhoto()
     fun onImagePicked(bitmap: Bitmap)
     fun onSaveClick()
+    fun onLogoutClick()
+    fun onDeleteAccountClick()
+    fun onLogoutConfirmation()
+    fun onDeleteAccountConfirmation()
+    fun onLogoutDismiss()
+    fun onDeleteAccountDismiss()
 }
 
 class AccountSettingsViewModel(
@@ -122,6 +130,42 @@ class AccountSettingsViewModel(
                 }
                 _state.update { it.copy(isLoading = false) }
             }
+        }
+
+        override fun onLogoutClick() {
+            _state.update { it.copy(showLogoutDialog = true) }
+        }
+
+        override fun onDeleteAccountClick() {
+            _state.update { it.copy(showDeleteAccountDialog = true) }
+        }
+
+        override fun onLogoutConfirmation() {
+            _state.update { it.copy(showLogoutDialog = false) }
+            userViewModel.logout()
+        }
+
+        override fun onDeleteAccountConfirmation() {
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true, showDeleteAccountDialog = false) }
+                try {
+                    userRepository.delete(userViewModel.userState.value.user ?: throw IllegalStateException("No logged-in user"))
+                    userViewModel.logout()
+                } catch (e: Exception) {
+                    _state.update { it.copy(errorMsg = e.message ?: "Unknown error") }
+                } finally {
+                    _state.update { it.copy(isLoading = false) }
+                }
+
+            }
+        }
+
+        override fun onLogoutDismiss() {
+            _state.update { it.copy(showLogoutDialog = false) }
+        }
+
+        override fun onDeleteAccountDismiss() {
+            _state.update { it.copy(showDeleteAccountDialog = false) }
         }
     }
 }

@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -53,7 +55,8 @@ fun AccountSettingsScreen(
     navController: NavHostController,
     state: AccountSettingsState,
     actions: AccountSettingsActions,
-    userState: UserState
+    userState: UserState,
+    onLogout: () -> Unit
 ) {
     val ctx = LocalContext.current
 
@@ -95,6 +98,28 @@ fun AccountSettingsScreen(
                 )
             }
 
+            if (state.showLogoutDialog) {
+                ConfirmDialog(
+                    label = "Are you sure you want to logout?",
+                    onDismissRequest = actions::onLogoutDismiss,
+                    onConfirmation = {
+                        actions.onLogoutConfirmation()
+                        onLogout()
+                    }
+                )
+            }
+
+            if (state.showDeleteAccountDialog) {
+                ConfirmDialog(
+                    label = "Are you sure you want to delete your account?\nThis action cannot be undone.",
+                    onDismissRequest = actions::onDeleteAccountDismiss,
+                    onConfirmation = {
+                        actions.onDeleteAccountConfirmation()
+                        onLogout()
+                    }
+                )
+            }
+
             ProfilePicSection(userState.user?.profilePicPath, actions::onPickFromGallery)
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
@@ -108,8 +133,44 @@ fun AccountSettingsScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
-            /* TODO */
-            LogoutAndDeleteAccountSection()
+            LogoutAndDeleteAccountSection(actions::onLogoutClick, actions::onDeleteAccountClick)
         }
     }
+}
+
+@Composable
+private fun ConfirmDialog(
+    label: String,
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+) {
+    AlertDialog(
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning"
+            )
+        },
+        title = {
+            Text("Caution")
+        },
+        text = {
+            Text(label)
+        },
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(
+                onClick = onConfirmation
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismissRequest
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
 }

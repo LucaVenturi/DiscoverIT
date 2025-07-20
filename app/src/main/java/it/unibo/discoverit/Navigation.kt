@@ -190,7 +190,12 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 navController = navController,
                 state = accountSettingsState,
                 actions = accountSettingsViewModel.actions,
-                userState = userState
+                userState = userState,
+                onLogout = {
+                    navController.navigate(Destination.Login) {
+                        popUpTo(Destination.Home) { inclusive = true }
+                    }
+                }
             )
         }
         composable<Destination.UserDetail> { backStackEntry ->
