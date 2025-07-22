@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 import it.unibo.discoverit.data.database.entities.Achievement
+import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.composables.ErrorMessage
@@ -59,7 +60,7 @@ private fun UserDetailContent(
     ) {
         achievementsSection(
             title = "Completati",
-            achievements = state.completedAchievements,
+            achievements = state.achievementsWithProgress.filterValues { it?.isCompleted ?: false },
             emptyMessage = "Nessun achievement completato",
             completed = true
         )
@@ -68,7 +69,7 @@ private fun UserDetailContent(
 
         achievementsSection(
             title = "Da completare",
-            achievements = state.toDoAchievements,
+            achievements = state.achievementsWithProgress.filterValues { !(it?.isCompleted ?: false) },
             emptyMessage = "Tutti gli achievement completati!",
             completed = false
         )
@@ -85,7 +86,7 @@ private fun UserDetailContent(
 // Se creassi un composable e facessi item { mioComposable } la lazycolumn non funzionerebbe a dovere
 private fun LazyListScope.achievementsSection(
     title: String,
-    achievements: List<Achievement>,
+    achievements: Map<Achievement, UserAchievementProgress?>,
     emptyMessage: String,
     completed: Boolean
 ) {
@@ -98,8 +99,8 @@ private fun LazyListScope.achievementsSection(
     }
 
     if (achievements.isNotEmpty()) {
-        items(achievements) { achievement ->
-            AchievementCard(achievement, completed = completed)
+        items(achievements.toList()) { achievementWithProgress ->
+            AchievementCard(achievementWithProgress)
         }
     } else {
         item {

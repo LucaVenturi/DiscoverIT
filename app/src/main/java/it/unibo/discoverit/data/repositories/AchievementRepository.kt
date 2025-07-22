@@ -11,15 +11,30 @@ class AchievementRepository(
     private val achievementDAO: AchievementDAO,
     private val userDAO: UserDAO
 ) {
-    fun getCompletedAchievements(userId: Long): Flow<List<Achievement>> {
-        return userDAO.getCompletedAchievements(userId)
+    fun getAchievementsWithProgress(userId: Long): Flow<Map<Achievement, UserAchievementProgress?>> {
+        return achievementDAO.getAchievementsWithProgress(userId)
     }
 
-    fun getAchievementProgress(userId: Long): Flow<List<UserAchievementProgress>> {
-        return achievementDAO.getUserAchievementsProgress(userId)
-    }
+    suspend fun updateAchievementsProgressForUser(userId: Long, categoryId: Long) {
+        val achievements = achievementDAO.getAchievementsByCategory(categoryId)
+        achievements.forEach { achievement ->
+            val count = if (achievement.targetCategory != null) {
+                userDAO.countVisitsForCategory(userId, achievement.targetCategory)
+            } else {
+                userDAO.countVisits(userId)
+            }
 
-    fun getToDoAchievements(userId: Long): Flow<List<Achievement>> {
-        return userDAO.getToDoAchievements(userId)
+            val isCompleted = count >= achievement.targetCount
+
+            achievementDAO.upsertUserAchievementProgress(
+                UserAchievementProgress(
+                    userId = userId,
+                    achievementId = achievement.achievementId,
+                    progress = count,
+                    isCompleted = isCompleted,
+                    completionDate = if (isCompleted) System.currentTimeMillis() else null
+                )
+            )
+        }
     }
 }

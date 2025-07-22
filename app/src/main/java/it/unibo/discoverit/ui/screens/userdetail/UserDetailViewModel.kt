@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.User
+import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import it.unibo.discoverit.data.repositories.AchievementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,8 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class UserDetailState(
-    val completedAchievements: List<Achievement> = emptyList(),
-    val toDoAchievements: List<Achievement> = emptyList(),
+    val achievementsWithProgress: Map<Achievement, UserAchievementProgress?> = emptyMap(),  // Map with achievement and progress
     val isLoading: Boolean = false,
     val errorMsg: String? = null
 )
@@ -35,27 +35,13 @@ class UserDetailViewModel(
             _state.update { it.copy(isLoading = true) }
         }
 
-        // Lancio due coroutine separate
-        // una per ottenere i achievements completati
         viewModelScope.launch {
             try {
-                achievementRepository.getCompletedAchievements(userId).collect { completed ->
-                    _state.update { it.copy(completedAchievements = completed) }
+                achievementRepository.getAchievementsWithProgress(userId).collect { achievements ->
+                    _state.update { it.copy(achievementsWithProgress = achievements) }
                 }
             } catch (e: Exception) {
                 _state.update { it.copy(errorMsg = "Error loading completed: ${e.message}") }
-            }
-        }
-        // e l'altra per ottenere i achievements da fare
-        viewModelScope.launch {
-            try {
-                achievementRepository.getToDoAchievements(userId).collect { toDo ->
-                    _state.update { it.copy(toDoAchievements = toDo) }
-                }
-            } catch (e: Exception) {
-                _state.update { it.copy(errorMsg = "Error loading to-do: ${e.message}") }
-            } finally {
-                _state.update { it.copy(isLoading = false) }
             }
         }
     }

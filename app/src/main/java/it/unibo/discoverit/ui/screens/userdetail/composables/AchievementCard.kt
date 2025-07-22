@@ -21,12 +21,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import it.unibo.discoverit.data.database.entities.Achievement
+import it.unibo.discoverit.data.database.entities.UserAchievementProgress
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun AchievementCard(
-    achievement: Achievement,
-    completed: Boolean
+    achievementWithProgress: Pair<Achievement, UserAchievementProgress?>
 ) {
+    val achievement = achievementWithProgress.first
+    val progress = achievementWithProgress.second
+    val completed = progress?.isCompleted ?: false
+
     val borderColor = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
     val icon = if (completed) Icons.Default.Check else Icons.Default.StarOutline
     val iconTint = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
@@ -64,9 +71,23 @@ fun AchievementCard(
 
             if (completed) {
                 Text(
-                    text = "achievement.dateCompleted ?:" +  "",
+                    text = progress?.completionDate?.let { millis ->
+                        // Formattazione della data
+                        SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+                            .format(Date(millis))
+                    } ?: "error",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary
+                )
+            } else {
+                Text(
+                    text = StringBuilder()
+                        .append(progress?.progress ?: 0)
+                        .append("/")
+                        .append(achievement.targetCount)
+                        .toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

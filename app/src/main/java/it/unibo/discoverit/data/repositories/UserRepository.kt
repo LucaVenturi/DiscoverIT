@@ -55,9 +55,6 @@ class UserRepository(
     suspend fun delete(user: User) =
         userDao.delete(user)
 
-    fun getCompletedAchievements(userId: Long): Flow<List<Achievement>> =
-        userDao.getCompletedAchievements(userId)
-
     suspend fun addFriendship(userId: Long, username: String) {
         val friendId = (userDao.getUserByUsername(username) ?: throw Exception("User not found")).userId
 

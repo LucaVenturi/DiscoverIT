@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.PointOfInterest
+import it.unibo.discoverit.data.repositories.AchievementRepository
 import it.unibo.discoverit.data.repositories.PointOfInterestRepository
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.utils.location.LocationService
@@ -54,7 +55,8 @@ class POIDetailsViewModel(
     private val poiRepository: PointOfInterestRepository,
     private val userViewModel: UserViewModel,
     private val selectedPoiId: Long,
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    private val achievementRepository: AchievementRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(POIDetailsState())
     val state: StateFlow<POIDetailsState> = _state.asStateFlow()
@@ -70,6 +72,10 @@ class POIDetailsViewModel(
                     val userId = userViewModel.userState.value.user?.userId
                         ?: throw Exception("Utente non loggato")
                     poiRepository.toggleVisit(userId, selectedPoiId)
+                    // Recupera la categoria del POI
+                    val poi = poiRepository.getPOIDetails(selectedPoiId)
+                    val categoryId = poi?.categoryId ?: return@launch
+                    achievementRepository.updateAchievementsProgressForUser(userId, categoryId)
                     _state.update { currentState ->
                         currentState.copy(
                             isVisited = !currentState.isVisited

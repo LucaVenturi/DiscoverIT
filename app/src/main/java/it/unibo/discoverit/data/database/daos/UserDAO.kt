@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.Update
 import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.User
+import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -64,28 +65,24 @@ interface UserDAO {
     """)
     fun getCountCompletedAchievements(userId: Long): Flow<Long>
 
-    @Query("""
-        SELECT *
-        FROM achievements
-        WHERE achievementId IN (
-            SELECT achievementId
-            FROM user_achievement_progress
-            WHERE userId = :userId AND isCompleted = 1
-        )
-    """)
-    fun getCompletedAchievements(userId: Long): Flow<List<Achievement>>
-
-    @Query("""
-        SELECT *
-        FROM achievements
-        WHERE achievementId NOT IN (
-            SELECT achievementId
-            FROM user_achievement_progress
-            WHERE userId = :userId AND isCompleted = 1
-        )
-    """)
-    fun getToDoAchievements(userId: Long): Flow<List<Achievement>>
-
     @Query("SELECT * FROM users WHERE userId = :userId")
     suspend fun getUserById(userId: Long): User
+
+    @Query("""
+        SELECT COUNT(*)
+        FROM visits
+        WHERE userId = :userId AND poiId IN (
+            SELECT poiId
+            FROM points_of_interest
+            WHERE categoryId = :categoryId
+        )
+    """)
+    suspend fun countVisitsForCategory(userId: Long, categoryId: Long): Int
+
+    @Query("""
+        SELECT COUNT(*)
+        FROM visits
+        WHERE userId = :userId
+    """)
+    suspend fun countVisits(userId: Long): Int
 }
