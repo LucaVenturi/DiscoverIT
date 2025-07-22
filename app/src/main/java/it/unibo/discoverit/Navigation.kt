@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import it.unibo.discoverit.data.database.entities.Category
 import it.unibo.discoverit.ui.screens.account.AccountSettingsScreen
 import it.unibo.discoverit.ui.screens.account.AccountSettingsViewModel
 import it.unibo.discoverit.ui.screens.categorydetails.CategoryDetailsScreen
@@ -24,7 +23,6 @@ import it.unibo.discoverit.ui.screens.login.LoginScreen
 import it.unibo.discoverit.ui.screens.login.LoginViewModel
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.ui.screens.poidetails.POIDetailsScreen
-import it.unibo.discoverit.ui.screens.poidetails.POIDetailsState
 import it.unibo.discoverit.ui.screens.poidetails.POIDetailsViewModel
 import it.unibo.discoverit.ui.screens.registration.RegistrationScreen
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
@@ -85,7 +83,6 @@ sealed interface BottomNavDestination {
         val routes = items.map { it.route::class.qualifiedName }.toSet()
     }
 }
-
 
 @Composable
 fun DiscoverItNavGraph(navController: NavHostController) {
@@ -171,9 +168,10 @@ fun DiscoverItNavGraph(navController: NavHostController) {
         }
         composable<Destination.Settings> {
             val settingsViewModel: SettingsViewModel = koinViewModel()
+            val settingsState by settingsViewModel.state.collectAsStateWithLifecycle()
             SettingsScreen(
                 navController = navController,
-                state = settingsViewModel.state,
+                state = settingsState,
                 actions = settingsViewModel.actions
             ) {
                 bottomNavOnNavigateTo(it, navController)

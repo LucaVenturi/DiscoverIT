@@ -15,10 +15,13 @@ import it.unibo.discoverit.data.database.entities.PointOfInterest
 fun POIDetailsContent(
     poi: PointOfInterest,
     isVisited: Boolean,
+    showOutOfRangeMessage: Boolean,
+    distanceToPOI: Float?,
     onToggleVisit: () -> Unit,
-    onOpenMap: () -> Unit,
+    onOpenInMap: () -> Unit,
     onUseGPS: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isButtonLoading: Boolean
 ) {
     Column(
         modifier = modifier
@@ -40,14 +43,21 @@ fun POIDetailsContent(
         POIActionButtons(
             isVisited = isVisited,
             onToggleVisit = onToggleVisit,
-            onOpenMap = onOpenMap
+            onOpenMap = onOpenInMap
         )
 
         Spacer(Modifier.height(16.dp))
 
         GPSButton(
             onClick = onUseGPS,
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            isLoading = isButtonLoading
+        )
+
+        OutOfRangeMessage(
+            show = showOutOfRangeMessage,
+            distance = distanceToPOI,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
     }
 }

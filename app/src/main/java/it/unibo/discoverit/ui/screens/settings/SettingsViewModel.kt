@@ -32,13 +32,13 @@ interface SettingsActions{
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository
-): ViewModel() {
-    var state by mutableStateOf(SettingsState())
-        private set
+) : ViewModel() {
+    private val _state = MutableStateFlow(SettingsState())
+    val state: StateFlow<SettingsState> = _state
 
     init {
         viewModelScope.launch {
-            state = state.copy(
+            _state.value = _state.value.copy(
                 selectedTheme = ThemeOption.valueOf(settingsRepository.theme.first()),
                 notificationsEnabled = settingsRepository.notificationsEnabled.first(),
                 appVersion = settingsRepository.appVersion
@@ -46,26 +46,22 @@ class SettingsViewModel(
         }
     }
 
-    val actions = object : SettingsActions{
+    val actions = object : SettingsActions {
         override fun onThemeChange(theme: ThemeOption) {
-            state = state.copy(selectedTheme = theme)
+            _state.update { it.copy(selectedTheme = theme) }
             viewModelScope.launch {
                 try {
                     settingsRepository.setTheme(theme)
-                } catch (e: Exception) {
-                    // /*TODO*/
-                }
+                } catch (_: Exception) { }
             }
         }
 
         override fun onNotificationsChange(enabled: Boolean) {
-            state = state.copy(notificationsEnabled = enabled)
+            _state.update { it.copy(notificationsEnabled = enabled) }
             viewModelScope.launch {
                 try {
                     settingsRepository.setNotificationsEnabled(enabled)
-                } catch (e: Exception) {
-                    // /*TODO*/
-                }
+                } catch (_: Exception) { }
             }
         }
     }

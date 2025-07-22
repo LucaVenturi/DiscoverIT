@@ -21,6 +21,7 @@ import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
+import it.unibo.discoverit.utils.location.LocationService
 import it.unibo.discoverit.utils.profilepic.ProfilePicStorageHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,9 @@ val appModule = module {
 
     // Helper per salvare le foto profilo degli utenti
     single { ProfilePicStorageHelper(get()) }
+
+    // Servizio di geolocalizzazione per ottenere la posizione dell'utente
+    single { LocationService(get()) }
 
     // Database
     single {
@@ -107,7 +111,7 @@ val appModule = module {
         CategoryDetailsViewModel(get(), get(), categoryId)
     }
     viewModel { (poiId: Long) ->
-        POIDetailsViewModel(get(), get(), poiId)
+        POIDetailsViewModel(get(), get(), poiId, get())
     }
     viewModel { (currentUserId: Long) ->
         SocialViewModel(get(), get(), currentUserId)
@@ -115,7 +119,7 @@ val appModule = module {
     viewModel { (userId: Long) ->
         UserDetailViewModel(userId, get())
     }
-    viewModel { SettingsViewModel(get()) }
+    single { SettingsViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get(), get()) }
 }
 

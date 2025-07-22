@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.coil.compose)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.play.services.location)
+    implementation(libs.kotlinx.coroutines.play.services)
 
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))
