@@ -7,7 +7,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class ProfilePicStorageHelper(private val context: Context) {
+class ProfilePicStorageHelper(context: Context) {
     private val directory: File = File(context.filesDir, "profilePictures").apply {
         if (!exists()) {
             mkdirs()

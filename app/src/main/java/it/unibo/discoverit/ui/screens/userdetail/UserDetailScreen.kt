@@ -1,15 +1,19 @@
 package it.unibo.discoverit.ui.screens.userdetail
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
@@ -61,8 +65,7 @@ private fun UserDetailContent(
         achievementsSection(
             title = "Completati",
             achievements = state.achievementsWithProgress.filterValues { it?.isCompleted ?: false },
-            emptyMessage = "Nessun achievement completato",
-            completed = true
+            emptyMessage = "Nessun achievement completato"
         )
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -70,8 +73,7 @@ private fun UserDetailContent(
         achievementsSection(
             title = "Da completare",
             achievements = state.achievementsWithProgress.filterValues { !(it?.isCompleted ?: false) },
-            emptyMessage = "Tutti gli achievement completati!",
-            completed = false
+            emptyMessage = "Tutti gli achievement completati!"
         )
 
         state.errorMsg?.let { errorMsg ->
@@ -87,8 +89,7 @@ private fun UserDetailContent(
 private fun LazyListScope.achievementsSection(
     title: String,
     achievements: Map<Achievement, UserAchievementProgress?>,
-    emptyMessage: String,
-    completed: Boolean
+    emptyMessage: String
 ) {
     item {
         Text(

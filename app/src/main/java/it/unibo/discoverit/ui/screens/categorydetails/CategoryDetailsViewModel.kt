@@ -2,7 +2,6 @@ package it.unibo.discoverit.ui.screens.categorydetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.unibo.discoverit.data.database.entities.Category
 import it.unibo.discoverit.data.database.entities.PointOfInterest
 import it.unibo.discoverit.data.repositories.CategoryRepository
 import it.unibo.discoverit.data.repositories.PointOfInterestRepository

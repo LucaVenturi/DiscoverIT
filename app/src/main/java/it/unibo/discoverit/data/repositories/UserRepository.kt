@@ -3,7 +3,6 @@ package it.unibo.discoverit.data.repositories
 import android.accounts.AuthenticatorException
 import it.unibo.discoverit.data.database.daos.FriendshipDAO
 import it.unibo.discoverit.data.database.daos.UserDAO
-import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.Friendship
 import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.hasher.PasswordHasher

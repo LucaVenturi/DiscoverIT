@@ -1,7 +1,6 @@
 package it.unibo.discoverit.ui.screens.account
 
 import android.graphics.Bitmap
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.repositories.AccountSettingsRepository

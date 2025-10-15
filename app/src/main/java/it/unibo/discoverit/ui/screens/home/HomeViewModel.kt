@@ -1,17 +1,14 @@
 package it.unibo.discoverit.ui.screens.home
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.CategoryStats
 import it.unibo.discoverit.data.repositories.CategoryRepository
-import it.unibo.discoverit.ui.screens.login.UserState
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 

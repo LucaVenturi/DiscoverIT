@@ -7,9 +7,7 @@ import androidx.room.MapColumn
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.User
-import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,10 +19,10 @@ interface UserDAO {
     suspend fun insertAll(users: List<User>)
 
     @Delete
-    suspend fun delete(user: User): Unit
+    suspend fun delete(user: User)
 
     @Update
-    suspend fun update(user: User): Unit
+    suspend fun update(user: User)
 
     @Query("SELECT * FROM users")
     suspend fun getAll(): List<User>

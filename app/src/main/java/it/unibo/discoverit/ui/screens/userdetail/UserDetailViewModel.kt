@@ -1,10 +1,8 @@
 package it.unibo.discoverit.ui.screens.userdetail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.Achievement
-import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import it.unibo.discoverit.data.repositories.AchievementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +17,7 @@ data class UserDetailState(
     val errorMsg: String? = null
 )
 
-interface UserDetailActions {
-
-}
+interface UserDetailActions
 
 class UserDetailViewModel(
     private val userId: Long,

@@ -21,7 +21,8 @@ import kotlinx.serialization.Serializable
             childColumns = ["achievementId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [androidx.room.Index("userId"), androidx.room.Index("achievementId")]
 )
 data class UserAchievementProgress(
     val userId: Long,

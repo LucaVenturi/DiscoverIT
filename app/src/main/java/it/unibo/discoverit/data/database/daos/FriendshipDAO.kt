@@ -5,8 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import it.unibo.discoverit.data.database.entities.Friendship
-import it.unibo.discoverit.data.database.entities.User
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FriendshipDAO {

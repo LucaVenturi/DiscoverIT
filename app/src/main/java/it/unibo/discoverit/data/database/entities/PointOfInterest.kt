@@ -16,7 +16,8 @@ import kotlinx.serialization.Serializable
             childColumns = ["categoryId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [androidx.room.Index("categoryId")]
 )
 data class PointOfInterest(
     @PrimaryKey(autoGenerate = true) val poiId: Long = 0,

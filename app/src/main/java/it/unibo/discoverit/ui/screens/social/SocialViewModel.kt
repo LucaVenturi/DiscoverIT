@@ -3,7 +3,6 @@ package it.unibo.discoverit.ui.screens.social
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.User
-import it.unibo.discoverit.data.repositories.AchievementRepository
 import it.unibo.discoverit.data.repositories.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +36,6 @@ interface SocialActions{
 }
 
 class SocialViewModel(
-    private val achievementRepository: AchievementRepository,
     private val userRepository: UserRepository,
     private val currentUserId: Long
 ) : ViewModel() {

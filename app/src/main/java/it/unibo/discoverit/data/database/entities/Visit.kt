@@ -21,7 +21,8 @@ import kotlinx.serialization.Serializable
             childColumns = ["poiId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [androidx.room.Index("userId"), androidx.room.Index("poiId")]
 )
 data class Visit(
     val userId: Long,

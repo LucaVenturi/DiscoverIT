@@ -1,6 +1,5 @@
 package it.unibo.discoverit.ui.screens.social.composables
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,12 +40,10 @@ fun FriendCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable {
-                onClick(friend.userId)
-            }
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = { onLongPress(friend) },
+                    onTap = { onClick(friend.userId) }
                 )
             },
         shape = RoundedCornerShape(8.dp),

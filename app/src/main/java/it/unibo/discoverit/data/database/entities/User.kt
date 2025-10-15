@@ -6,7 +6,6 @@ import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
-import java.io.File
 
 @Serializable
 @Entity(
@@ -26,3 +25,4 @@ data class User(
             ?.takeIf { it.isNotBlank() }
             ?.let { Uri.parse("file://${it}?t=$profilePicLastModified") }
 }
+

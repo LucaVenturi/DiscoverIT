@@ -95,7 +95,7 @@ val appModule = module {
     single { get<DiscoverItDatabase>().friendshipsDao() }
 
     // Repository
-    single { CategoryRepository(get(), get()) }
+    single { CategoryRepository(get()) }
     single { PointOfInterestRepository(get(), get()) }
     single { UserRepository(get(), get(), get()) }
     single { AchievementRepository(get(), get()) }
@@ -114,7 +114,7 @@ val appModule = module {
         POIDetailsViewModel(get(), get(), poiId, get(), get())
     }
     viewModel { (currentUserId: Long) ->
-        SocialViewModel(get(), get(), currentUserId)
+        SocialViewModel(get(), currentUserId)
     }
     viewModel { (userId: Long) ->
         UserDetailViewModel(userId, get())
