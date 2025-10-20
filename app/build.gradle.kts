@@ -5,7 +5,6 @@ plugins {
     //Aggiunte da me
     alias(libs.plugins.serialization)
     alias(libs.plugins.ksp)
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -71,18 +70,6 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.kotlinx.coroutines.play.services)
 
-    // Import the Firebase BoM
-    implementation(platform(libs.firebase.bom))
-
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
-    implementation(libs.firebase.analytics)
-
-    // Add the dependencies for any other desired Firebase products
-    // https://firebase.google.com/docs/android/setup#available-libraries
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage) // Per le foto profilo
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
