@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import it.unibo.discoverit.ui.screens.settings.ThemeOption
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -21,6 +20,7 @@ class SessionRepository(
 
     val isLoggedIn: Flow<Boolean> = dataStore.data.map { it[IS_LOGGED_IN_KEY] ?: false }
     val loggedUserId: Flow<Long?> = dataStore.data.map { it[USER_ID_KEY] }
+    val loggedUsername: Flow<String?> = dataStore.data.map { it[USERNAME_KEY] }
 
     suspend fun saveSession(userId: Long, username: String) {
         dataStore.edit { preferences ->
@@ -30,7 +30,7 @@ class SessionRepository(
         }
     }
 
-    suspend fun logoutSession() {
+    suspend fun clearSession() {
         dataStore.edit { preferences ->
             preferences.remove(USER_ID_KEY)
             preferences.remove(USERNAME_KEY)

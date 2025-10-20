@@ -2,8 +2,8 @@ package it.unibo.discoverit.ui.screens.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.unibo.discoverit.data.repositories.UserRepository
 import it.unibo.discoverit.ui.screens.login.UserViewModel
+import it.unibo.discoverit.utils.authservice.AccountService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -40,7 +40,7 @@ interface RegistrationActions {
 }
 
 class RegistrationViewModel(
-    private val userRepository: UserRepository,
+    private val accountService: AccountService,
     private val userViewModel: UserViewModel
 ) : ViewModel() {
     private val _state = MutableStateFlow(RegistrationState())
@@ -64,12 +64,9 @@ class RegistrationViewModel(
                 _state.update { it.copy(currentPhase = RegistrationPhase.LOADING, error = null) }
                 try {
                     validateInputs()
-                    userRepository.register(
-                        username = _state.value.username,
-                        plainPassword = _state.value.password
-                    )
+                    accountService.register(username = _state.value.username, password = _state.value.password)
                     // Registrazione riuscita
-                    val user = userRepository.login(username = _state.value.username, plainPassword = _state.value.password)
+                    val user = accountService.login(username = _state.value.username, password = _state.value.password)
                     userViewModel.setUser(user)
                     _state.update { it.copy(currentPhase = RegistrationPhase.SUCCESS) }
                 } catch (e: Exception) {

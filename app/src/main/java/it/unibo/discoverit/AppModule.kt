@@ -19,6 +19,8 @@ import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
 import it.unibo.discoverit.ui.screens.settings.SettingsViewModel
 import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
+import it.unibo.discoverit.utils.authservice.AccountService
+import it.unibo.discoverit.utils.authservice.AccountServiceImpl
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import it.unibo.discoverit.utils.location.LocationService
@@ -44,6 +46,9 @@ val appModule = module {
 
     // Servizio di geolocalizzazione per ottenere la posizione dell'utente
     single { LocationService(get()) }
+
+    // Servizio che gestisce login registrazione e logout.
+    single<AccountService> { AccountServiceImpl(get(), get()) }
 
     // Database
     single {
@@ -95,15 +100,16 @@ val appModule = module {
     single { get<DiscoverItDatabase>().friendshipsDao() }
 
     // Repository
+    single { SessionRepository(get()) }
     single { CategoryRepository(get()) }
-    single { PointOfInterestRepository(get(), get()) }
-    single { UserRepository(get(), get(), get()) }
-    single { AchievementRepository(get(), get()) }
-    single { SettingsRepository(get()) }
-    single { AccountSettingsRepository(get(), get()) }
+    single { PointOfInterestRepository( get(), get() ) }
+    single { UserRepository( get(), get(), get() ) }
+    single { AchievementRepository( get(), get() ) }
+    single { SettingsRepository( get() ) }
+    single { AccountSettingsRepository( get(), get() ) }
 
     // ViewModel
-    single { UserViewModel(get()) }
+    single { UserViewModel() }
     viewModel { LoginViewModel(get(), get())}
     viewModel { RegistrationViewModel(get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
@@ -120,7 +126,7 @@ val appModule = module {
         UserDetailViewModel(userId, get())
     }
     single { SettingsViewModel(get()) }
-    viewModel { AccountSettingsViewModel(get(), get(), get()) }
+    viewModel { AccountSettingsViewModel(get(), get(), get(), get()) }
 }
 
 private fun populateDatabase(context: Context) {

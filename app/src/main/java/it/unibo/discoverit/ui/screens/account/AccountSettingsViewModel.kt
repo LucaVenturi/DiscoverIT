@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.repositories.AccountSettingsRepository
 import it.unibo.discoverit.data.repositories.UserRepository
 import it.unibo.discoverit.ui.screens.login.UserViewModel
+import it.unibo.discoverit.utils.authservice.AccountService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,7 +42,8 @@ interface AccountSettingsActions {
 
 class AccountSettingsViewModel(
     private val userViewModel: UserViewModel,
-    userRepository: UserRepository,
+    private val userRepository: UserRepository,
+    private val accountService: AccountService,
     private val accountSettingsRepository: AccountSettingsRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(AccountSettingsState(username = ""))
@@ -140,8 +142,12 @@ class AccountSettingsViewModel(
         }
 
         override fun onLogoutConfirmation() {
-            _state.update { it.copy(showLogoutDialog = false) }
-            userViewModel.logout()
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true, showLogoutDialog = false) }
+                accountService.logout()
+                _state.update { it.copy(showLogoutDialog = false) }
+                userViewModel.logout()
+            }
         }
 
         override fun onDeleteAccountConfirmation() {
