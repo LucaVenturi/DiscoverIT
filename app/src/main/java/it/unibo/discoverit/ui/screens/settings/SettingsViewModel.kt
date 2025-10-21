@@ -18,12 +18,14 @@ enum class ThemeOption(val displayName: String){
 data class SettingsState(
     val selectedTheme: ThemeOption = ThemeOption.SYSTEM,
     val notificationsEnabled: Boolean = true,
+    val biometricLoginEnabled: Boolean = false,
     val appVersion: String = "0.0.0",
 )
 
 interface SettingsActions{
     fun onThemeChange(theme: ThemeOption)
     fun onNotificationsChange(enabled: Boolean)
+    fun onBiometricLoginChange(enabled: Boolean)
 }
 
 class SettingsViewModel(
@@ -37,6 +39,7 @@ class SettingsViewModel(
             _state.value = _state.value.copy(
                 selectedTheme = ThemeOption.valueOf(settingsRepository.theme.first()),
                 notificationsEnabled = settingsRepository.notificationsEnabled.first(),
+                biometricLoginEnabled = settingsRepository.biometricLoginEnabled.first(),
                 appVersion = settingsRepository.appVersion
             )
         }
@@ -57,6 +60,15 @@ class SettingsViewModel(
             viewModelScope.launch {
                 try {
                     settingsRepository.setNotificationsEnabled(enabled)
+                } catch (_: Exception) { }
+            }
+        }
+
+        override fun onBiometricLoginChange(enabled: Boolean) {
+            _state.update { it.copy(biometricLoginEnabled = enabled) }
+            viewModelScope.launch {
+                try {
+                    settingsRepository.setBiometricLoginEnabled(enabled)
                 } catch (_: Exception) { }
             }
         }

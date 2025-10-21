@@ -1,24 +1,27 @@
-package it.unibo.discoverit.data.repositories
+    package it.unibo.discoverit.data.repositories
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import it.unibo.discoverit.ui.screens.settings.ThemeOption
-import kotlinx.coroutines.flow.map
+    import androidx.datastore.core.DataStore
+    import androidx.datastore.preferences.core.booleanPreferencesKey
+    import androidx.datastore.preferences.core.edit
+    import androidx.datastore.preferences.core.stringPreferencesKey
+    import it.unibo.discoverit.ui.screens.settings.ThemeOption
+    import kotlinx.coroutines.flow.map
 
-class SettingsRepository(
-    private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>
-) {
-    companion object {
-        private val THEME_KEY = stringPreferencesKey("theme")
-        private val NOTIFICATIONS_KEY = booleanPreferencesKey("notifications")
+    class SettingsRepository(
+        private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>
+    ) {
+        companion object {
+            private val THEME_KEY = stringPreferencesKey("theme")
+            private val NOTIFICATIONS_KEY = booleanPreferencesKey("notifications")
+            private val BIOMETRIC_LOGIN_KEY = booleanPreferencesKey("biometric_login")
+        }
+
+        val theme = dataStore.data.map { it[THEME_KEY] ?: ThemeOption.SYSTEM.name }
+        val notificationsEnabled = dataStore.data.map { it[NOTIFICATIONS_KEY] ?: true }
+        val biometricLoginEnabled = dataStore.data.map { it[BIOMETRIC_LOGIN_KEY] ?: false }
+        val appVersion = "1.0.0"
+
+        suspend fun setTheme(theme: ThemeOption) { dataStore.edit { it[THEME_KEY] = theme.name } }
+        suspend fun setNotificationsEnabled(enabled: Boolean) { dataStore.edit { it[NOTIFICATIONS_KEY] = enabled } }
+        suspend fun setBiometricLoginEnabled(enabled: Boolean) { dataStore.edit { it[BIOMETRIC_LOGIN_KEY] = enabled } }
     }
-
-    val theme = dataStore.data.map { it[THEME_KEY] ?: ThemeOption.SYSTEM.name }
-    val notificationsEnabled = dataStore.data.map { it[NOTIFICATIONS_KEY] ?: true }
-    val appVersion = "1.0.0"
-
-    suspend fun setTheme(theme: ThemeOption) { dataStore.edit { it[THEME_KEY] = theme.name } }
-    suspend fun setNotificationsEnabled(enabled: Boolean) { dataStore.edit { it[NOTIFICATIONS_KEY] = enabled } }
-}

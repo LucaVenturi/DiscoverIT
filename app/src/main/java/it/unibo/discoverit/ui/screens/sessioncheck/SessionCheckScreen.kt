@@ -1,52 +1,72 @@
 package it.unibo.discoverit.ui.screens.sessioncheck
 
+import android.util.Log
+import androidx.biometric.BiometricManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import it.unibo.discoverit.ui.composables.ErrorMessage
+import androidx.fragment.app.FragmentActivity
 
 @Composable
 fun SessionCheckScreen(
     state: SessionCheckState,
     actions: SessionCheckActions,
     onNavigateToLogin: () -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
+    activity: FragmentActivity? // Aggiungi questo parametro
 ) {
-    // Gestione navigazione automatica su successo
+    val context = LocalContext.current
+    val biometricManager = BiometricManager.from(context)
+
     LaunchedEffect(state.currentPhase) {
-        when(state.currentPhase) {
-            SessionCheckPhase.USER_LOGGED_IN ->
-                onNavigateToHome()
-            SessionCheckPhase.USER_NOT_LOGGED_IN, SessionCheckPhase.ERROR ->
-                onNavigateToLogin()
+        when (state.currentPhase) {
+            SessionCheckPhase.USER_LOGGED_IN -> onNavigateToHome()
+            SessionCheckPhase.USER_NOT_LOGGED_IN, SessionCheckPhase.ERROR -> onNavigateToLogin()
+            SessionCheckPhase.BIOMETRIC_REQUIRED -> {
+                Log.d("SessionCheckScreen", "Biometric authentication required")
+                if (activity != null && biometricManager.canAuthenticate(STRONG) {
+                    Log.d("SessionCheckScreen", "Biometric authentication available")
+                    biometricAdapter.authenticate(
+                        activity, // Ora abbiamo l'activity garantita
+                        onSuccess = {
+                            actions.onBiometricSuccess()
+                            onNavigateToHome()
+                        },
+                        onFailure = {
+                            Log.e("SessionCheckScreen", "Biometric authentication failed: $it")
+                            onNavigateToLogin()
+                        }
+                    )
+                } else {
+                    Log.d("SessionCheckScreen", "Biometric authentication not available")
+                    onNavigateToLogin() // fallback
+                }
+            }
             else -> {}
         }
     }
 
+    // Resto del codice invariato...
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground
     ) { innerPadding ->
-        SessionCheckContent(
-            innerPadding = innerPadding,
-            state = state,
-            actions = actions
-        )
+        SessionCheckContent(innerPadding, state, actions)
     }
 }
 

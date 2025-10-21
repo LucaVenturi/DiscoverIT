@@ -22,6 +22,7 @@ import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import it.unibo.discoverit.utils.accountservice.AccountService
 import it.unibo.discoverit.utils.accountservice.AccountServiceImpl
+import it.unibo.discoverit.utils.biometric.BiometricAuthAdapter
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import it.unibo.discoverit.utils.location.LocationService
@@ -128,7 +129,7 @@ val appModule = module {
     }
     single { SettingsViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get(), get(), get()) }
-    viewModel { SessionCheckViewModel(get(), get()) }
+    viewModel { SessionCheckViewModel(get(), get(), get()) }
 }
 
 private fun populateDatabase(context: Context) {

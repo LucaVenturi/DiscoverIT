@@ -1,5 +1,7 @@
 [versions]
 agp = "8.7.3"
+biometric = "1.4.0-alpha04"
+biometricVersion = "1.1.0"
 coilCompose = "2.3.0"
 jbcrypt = "0.4"
 koinAndroidxCompose = "4.0.2"
@@ -21,6 +23,8 @@ room = "2.7.2"
 datastorePreferences = "1.1.7"
 
 [libraries]
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-biometric-v110 = { module = "androidx.biometric:biometric", version.ref = "biometricVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
