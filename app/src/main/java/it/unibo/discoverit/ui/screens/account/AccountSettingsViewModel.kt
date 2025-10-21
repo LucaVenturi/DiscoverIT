@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.repositories.AccountSettingsRepository
 import it.unibo.discoverit.data.repositories.UserRepository
 import it.unibo.discoverit.ui.screens.login.UserViewModel
-import it.unibo.discoverit.utils.authservice.AccountService
+import it.unibo.discoverit.utils.accountservice.AccountService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,4 +1,4 @@
-package it.unibo.discoverit.utils.authservice
+package it.unibo.discoverit.utils.accountservice
 
 import it.unibo.discoverit.data.database.entities.User
 import kotlinx.coroutines.flow.Flow

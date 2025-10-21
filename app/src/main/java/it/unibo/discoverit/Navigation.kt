@@ -26,6 +26,8 @@ import it.unibo.discoverit.ui.screens.poidetails.POIDetailsScreen
 import it.unibo.discoverit.ui.screens.poidetails.POIDetailsViewModel
 import it.unibo.discoverit.ui.screens.registration.RegistrationScreen
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
+import it.unibo.discoverit.ui.screens.sessioncheck.SessionCheckScreen
+import it.unibo.discoverit.ui.screens.sessioncheck.SessionCheckViewModel
 import it.unibo.discoverit.ui.screens.settings.SettingsScreen
 import it.unibo.discoverit.ui.screens.settings.SettingsViewModel
 import it.unibo.discoverit.ui.screens.social.SocialScreen
@@ -49,6 +51,8 @@ sealed interface Destination {
     data object Login: Destination
     @Serializable
     data object Register: Destination
+    @Serializable
+    data object SessionCheck: Destination
     @Serializable
     data class CategoryDetails(val categoryId: Long): Destination
     @Serializable
@@ -88,10 +92,28 @@ sealed interface BottomNavDestination {
 fun DiscoverItNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Destination.Login
+        startDestination = Destination.SessionCheck
     ) {
+        composable<Destination.SessionCheck> {
+            val sessionCheckViewModel: SessionCheckViewModel = koinViewModel()
+            val sessionCheckState by sessionCheckViewModel.state.collectAsStateWithLifecycle()
+
+            SessionCheckScreen(
+                state = sessionCheckState,
+                actions = sessionCheckViewModel.actions,
+                onNavigateToLogin = {
+                    navController.navigate(Destination.Login) {
+                        popUpTo(Destination.SessionCheck) { inclusive = true }
+                    }
+                },
+                onNavigateToHome = {
+                    navController.navigate(Destination.Home) {
+                        popUpTo(Destination.SessionCheck) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable<Destination.Login> {
-            val userViewModel: UserViewModel = koinViewModel()
             val loginViewModel: LoginViewModel = koinViewModel()
 
             LoginScreen(

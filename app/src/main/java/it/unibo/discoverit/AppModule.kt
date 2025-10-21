@@ -16,11 +16,12 @@ import it.unibo.discoverit.ui.screens.login.LoginViewModel
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.ui.screens.poidetails.POIDetailsViewModel
 import it.unibo.discoverit.ui.screens.registration.RegistrationViewModel
+import it.unibo.discoverit.ui.screens.sessioncheck.SessionCheckViewModel
 import it.unibo.discoverit.ui.screens.settings.SettingsViewModel
 import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
-import it.unibo.discoverit.utils.authservice.AccountService
-import it.unibo.discoverit.utils.authservice.AccountServiceImpl
+import it.unibo.discoverit.utils.accountservice.AccountService
+import it.unibo.discoverit.utils.accountservice.AccountServiceImpl
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import it.unibo.discoverit.utils.location.LocationService
@@ -127,6 +128,7 @@ val appModule = module {
     }
     single { SettingsViewModel(get()) }
     viewModel { AccountSettingsViewModel(get(), get(), get(), get()) }
+    viewModel { SessionCheckViewModel(get(), get()) }
 }
 
 private fun populateDatabase(context: Context) {
