@@ -2,7 +2,6 @@
 agp = "8.7.3"
 appcompat = "1.7.1"
 biometric = "1.4.0-alpha04"
-biometricVersion = "1.1.0"
 coilCompose = "2.3.0"
 jbcrypt = "0.4"
 koinAndroidxCompose = "4.0.2"

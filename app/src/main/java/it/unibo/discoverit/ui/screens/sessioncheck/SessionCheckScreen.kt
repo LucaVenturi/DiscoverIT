@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.sessioncheck
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,26 +33,52 @@ fun SessionCheckScreen(
     val activity = context as FragmentActivity
     val biometricHelper = remember { BiometricAuthHelper(context) }
 
-
+    // Gestione navigazione basata sullo stato
     LaunchedEffect(state.currentPhase) {
+        Log.e("SessionCheckScreen", "LaunchedEffect: ${state.currentPhase}")
         when (state.currentPhase) {
+            SessionCheckPhase.USER_NOT_LOGGED_IN -> {
+                Log.e("SessionCheckScreen", "Navigating to login")
+                onNavigateToLogin()
+            }
+            SessionCheckPhase.USER_LOGGED_IN -> {
+                Log.e("SessionCheckScreen", "Navigating to home")
+                onNavigateToHome()
+            }
             SessionCheckPhase.BIOMETRIC_REQUIRED -> {
+                Log.e("SessionCheckScreen", "Starting biometric authentication")
                 if (biometricHelper.isBiometricAvailable()) {
                     biometricHelper.authenticate(
                         activity = activity,
                         title = "Biometric login for DiscoverIt",
-                        subtitle = "Usa l’impronta digitale per accedere",
+                        subtitle = "Usa l'impronta digitale per accedere",
                         negativeText = "Usa la password",
-                        onSuccess = { actions.onBiometricSuccess(); onNavigateToHome() },
+                        onSuccess = {
+                            Log.e("SessionCheckScreen", "Biometric success")
+                            // SOLO l'azione, la navigazione sarà gestita dallo stato
+                            actions.onBiometricSuccess()
+                        },
                         onError = { msg ->
+                            Log.e("SessionCheckScreen", "Biometric error: $msg")
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                            // In caso di errore biometrico, manda al login
+                            onNavigateToLogin()
                         }
                     )
                 } else {
+                    Log.e("SessionCheckScreen", "Biometric not available, going to login")
+                    // Biometria non disponibile, manda al login
                     onNavigateToLogin()
                 }
             }
-            else -> {}
+            SessionCheckPhase.CHECKING -> {
+                // Resta in attesa, niente navigazione
+                Log.e("SessionCheckScreen", "Still checking session...")
+            }
+            SessionCheckPhase.ERROR -> {
+                Log.e("SessionCheckScreen", "Error occurred, going to login")
+                onNavigateToLogin()
+            }
         }
     }
 
@@ -63,7 +90,6 @@ fun SessionCheckScreen(
         SessionCheckContent(innerPadding, state, actions)
     }
 }
-
 
 @Composable
 private fun SessionCheckContent(
@@ -81,10 +107,17 @@ private fun SessionCheckContent(
             SessionCheckPhase.CHECKING -> {
                 LoadingIndicator("Controllo sessione...")
             }
-            else -> {
-                // Se non sono in checking allora sto navigando verso login o home.
-                // Mostra loading durante la navigazione.
-                LoadingIndicator("Reindirizzamento...")
+            SessionCheckPhase.BIOMETRIC_REQUIRED -> {
+                LoadingIndicator("Autenticazione biometrica richiesta...")
+            }
+            SessionCheckPhase.USER_LOGGED_IN -> {
+                LoadingIndicator("Accesso confermato...")
+            }
+            SessionCheckPhase.USER_NOT_LOGGED_IN -> {
+                LoadingIndicator("Reindirizzamento al login...")
+            }
+            SessionCheckPhase.ERROR -> {
+                LoadingIndicator("Errore, reindirizzamento...")
             }
         }
     }

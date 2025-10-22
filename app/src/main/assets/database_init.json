@@ -2,31 +2,38 @@
   "categories": [
     {
       "categoryId": 1,
-      "name": "Monumenti storici"
+      "name": "Monumenti storici",
+      "iconName": "monument"
     },
     {
       "categoryId": 2,
-      "name": "Castelli e torri"
+      "name": "Castelli e torri",
+      "iconName": "castle"
     },
     {
       "categoryId": 3,
-      "name": "Musei"
+      "name": "Musei",
+      "iconName": "museum"
     },
     {
       "categoryId": 4,
-      "name": "Parchi e giardini"
+      "name": "Parchi e giardini",
+      "iconName": "park"
     },
     {
       "categoryId": 5,
-      "name": "Punti panoramici"
+      "name": "Punti panoramici",
+      "iconName": "panorama"
     },
     {
       "categoryId": 6,
-      "name": "Chiese"
+      "name": "Chiese",
+      "iconName": "church"
     },
     {
       "categoryId": 7,
-      "name": "Piazze e mercati"
+      "name": "Piazze e mercati",
+      "iconName": "market"
     }
   ],
   "pointsOfInterest": [

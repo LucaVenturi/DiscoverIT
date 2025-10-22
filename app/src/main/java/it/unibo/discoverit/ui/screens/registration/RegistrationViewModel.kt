@@ -64,9 +64,8 @@ class RegistrationViewModel(
                 _state.update { it.copy(currentPhase = RegistrationPhase.LOADING, error = null) }
                 try {
                     validateInputs()
-                    accountService.register(username = _state.value.username, password = _state.value.password)
-                    // Registrazione riuscita
-                    val user = accountService.login(username = _state.value.username, password = _state.value.password)
+                    val user = accountService.register(username = _state.value.username, password = _state.value.password)
+                    // Usa l'user restituito da register() invece di fare un altro login
                     userViewModel.setUser(user)
                     _state.update { it.copy(currentPhase = RegistrationPhase.SUCCESS) }
                 } catch (e: Exception) {
