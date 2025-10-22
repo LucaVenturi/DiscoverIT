@@ -20,7 +20,7 @@ import it.unibo.discoverit.data.database.entities.*
         Visit::class,
         UserAchievementProgress::class
     ],
-    version = 6
+    version = 7
 )
 abstract class DiscoverItDatabase : RoomDatabase() {
     abstract fun categoriesDAO(): CategoryDAO

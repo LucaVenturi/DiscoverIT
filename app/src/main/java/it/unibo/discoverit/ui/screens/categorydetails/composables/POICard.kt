@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,9 +18,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import it.unibo.discoverit.data.database.entities.PointOfInterest
 
 @Composable
@@ -28,6 +34,7 @@ fun POICard(
     modifier: Modifier = Modifier,
     onPOIClick: (Long) -> Unit
 ) {
+    val context = LocalContext.current
     ElevatedCard(
         modifier = modifier
             .aspectRatio(1f) // quadrata
@@ -46,12 +53,17 @@ fun POICard(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Category,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize(0.5f), // più piccolo, per non uscire
-                    tint = MaterialTheme.colorScheme.primary
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data("file:///android_asset/${poi.imagePath}")
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = poi.name,
+                    contentScale = ContentScale.Crop,
+                    placeholder = rememberVectorPainter(Icons.Default.Image),
+                    error = rememberVectorPainter(Icons.Default.Image),
+                    fallback = rememberVectorPainter(Icons.Default.Image),
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 

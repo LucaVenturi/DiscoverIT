@@ -23,173 +23,211 @@
     {
       "categoryId": 5,
       "name": "Punti panoramici",
-      "iconName": "panorama"
+      "iconName": "landscape"
     },
     {
       "categoryId": 6,
-      "name": "Chiese",
+      "name": "Chiese e abbazie",
       "iconName": "church"
     },
     {
       "categoryId": 7,
       "name": "Piazze e mercati",
-      "iconName": "market"
+      "iconName": "storefront"
+    },
+    {
+      "categoryId": 8,
+      "name": "Luoghi naturalistici",
+      "iconName": "nature"
+    },
+    {
+      "categoryId": 9,
+      "name": "Spiagge e mare",
+      "iconName": "beach_access"
     }
   ],
   "pointsOfInterest": [
     {
-      "poiId": 1,
-      "name": "Fontana di Nettuno",
-      "description": "Iconica fontana del XVI secolo con sculture di Giambologna",
-      "latitude": 44.4949,
-      "longitude": 11.3426,
-      "imagePath": "nettuno.jpg",
+      "name": "Abbazia di Santa Maria del Monte",
+      "description": "Abbazia benedettina del XI secolo, su Colle Spaziano.",
+      "latitude": 44.131957,
+      "longitude": 12.255738,
+      "imagePath": "poi_images/abbazia_santa_maria.jpg",
       "address": {
-        "street": "Piazza del Nettuno",
-        "civicNumber": null,
-        "province": "Bologna"
-      },
-      "categoryId": 1
-    },
-    {
-      "poiId": 2,
-      "name": "Torre degli Asinelli",
-      "description": "Torre medievale alta 97 metri, simbolo della città",
-      "latitude": 44.4944,
-      "longitude": 11.3465,
-      "imagePath": "asinelli.jpg",
-      "address": {
-        "street": "Piazza di Porta Ravegnana",
-        "civicNumber": null,
-        "province": "Bologna"
-      },
-      "categoryId": 2
-    },
-    {
-      "poiId": 3,
-      "name": "MAMbo - Museo d'Arte Moderna",
-      "description": "Museo di arte contemporanea con collezioni permanenti e mostre temporanee",
-      "latitude": 44.5018,
-      "longitude": 11.3403,
-      "imagePath": "mambo.jpg",
-      "address": {
-        "street": "Via Don Minzoni",
-        "civicNumber": "14",
-        "province": "Bologna"
-      },
-      "categoryId": 3
-    },
-    {
-      "poiId": 4,
-      "name": "Giardini Margherita",
-      "description": "Il più grande parco pubblico di Bologna, ideale per passeggiate e relax",
-      "latitude": 44.4836,
-      "longitude": 11.3479,
-      "imagePath": "margherita.jpg",
-      "address": {
-        "street": "Via Federico Zanardi",
-        "civicNumber": null,
-        "province": "Bologna"
-      },
-      "categoryId": 4
-    },
-    {
-      "poiId": 5,
-      "name": "Santuario di San Luca",
-      "description": "Santuario con portico più lungo del mondo (3.8 km) e vista panoramica",
-      "latitude": 44.4805,
-      "longitude": 11.3044,
-      "imagePath": "sanluca.jpg",
-      "address": {
-        "street": "Via di San Luca",
-        "civicNumber": "36",
-        "province": "Bologna"
-      },
-      "categoryId": 5
-    },
-    {
-      "poiId": 6,
-      "name": "Basilica di San Petronio",
-      "description": "Maestosa basilica gotica nella Piazza Maggiore, incompiuta",
-      "latitude": 44.4936,
-      "longitude": 11.3428,
-      "imagePath": "sanpetronio.jpg",
-      "address": {
-        "street": "Piazza Maggiore",
-        "civicNumber": null,
-        "province": "Bologna"
+        "street": "Via del Monte",
+        "civicNumber": "999",
+        "province": "FC"
       },
       "categoryId": 6
     },
     {
-      "poiId": 7,
-      "name": "Mercato delle Erbe",
-      "description": "Mercato coperto storico con bancarelle di prodotti tipici e locali",
-      "latitude": 44.4972,
-      "longitude": 11.3439,
-      "imagePath": "mercatodelleerbe.jpg",
+      "name": "Cattedrale di San Giovanni Battista",
+      "description": "Duomo di Cesena, dedicato a San Giovanni Battista.",
+      "latitude": 44.137599,
+      "longitude": 12.245190,
+      "imagePath": "poi_images/cattedrale_san_giovanni.jpg",
       "address": {
-        "street": "Via Ugo Bassi",
-        "civicNumber": "25",
-        "province": "Bologna"
+        "street": "Via Vescovado",
+        "civicNumber": "7",
+        "province": "FC"
       },
-      "categoryId": 7
+      "categoryId": 6
     },
     {
-      "poiId": 8,
-      "name": "Palazzo Re Enzo",
-      "description": "Palazzo medievale che ospitò re Enzo di Sardegna per 23 anni",
-      "latitude": 44.4947,
-      "longitude": 11.3432,
-      "imagePath": "reenzo.jpg",
+      "name": "Punto panoramico Forgione di Cesena",
+      "description": "Belvedere con vista panoramica sulla città.",
+      "latitude": 44.129453,
+      "longitude": 12.253077,
+      "imagePath": "poi_images/forgione_panoramico.jpg",
       "address": {
-        "street": "Piazza del Nettuno",
+        "street": "Via del Monte",
+        "civicNumber": "1487",
+        "province": "FC"
+      },
+      "categoryId": 5
+    },
+    {
+      "name": "Parcheggio Frati Cappuccini",
+      "description": "Punto di osservazione su Cesena presso i Frati Cappuccini.",
+      "latitude": 44.128200,
+      "longitude": 12.237516,
+      "imagePath": "poi_images/parcheggio_frati_cappuccini.jpg",
+      "address": {
+        "street": "Via Cappuccini",
+        "civicNumber": "341",
+        "province": "FC"
+      },
+      "categoryId": 5
+    },
+    {
+      "name": "Rocca Malatestiana",
+      "description": "Fortezza medievale simbolo di Cesena.",
+      "latitude": 44.136423,
+      "longitude": 12.240077,
+      "imagePath": "poi_images/rocca_malatestiana.jpg",
+      "address": {
+        "street": "Via Cia degli Ordelaffi",
+        "civicNumber": "8",
+        "province": "FC"
+      },
+      "categoryId": 2
+    },
+    {
+      "name": "Torre di Roversano",
+      "description": "Antica torre di avvistamento nella valle del Savio.",
+      "latitude": 44.085965,
+      "longitude": 12.206893,
+      "imagePath": "poi_images/torre_roversano.jpg",
+      "address": {
+        "street": "Via comunale Santa Lucia",
         "civicNumber": null,
-        "province": "Bologna"
+        "province": "FC"
       },
-      "categoryId": 1
+      "categoryId": 2
     },
     {
-      "poiId": 9,
-      "name": "Pinacoteca Nazionale",
-      "description": "Museo con collezioni di pittura emiliana dal XIII al XVIII secolo",
-      "latitude": 44.4941,
-      "longitude": 11.3492,
-      "imagePath": "pinacoteca.jpg",
+      "name": "Castello di Longiano",
+      "description": "Castello medievale con museo e giardini.",
+      "latitude": 44.072494,
+      "longitude": 12.324835,
+      "imagePath": "poi_images/castello_longiano.jpg",
       "address": {
-        "street": "Via delle Belle Arti",
-        "civicNumber": "56",
-        "province": "Bologna"
+        "street": "Piazza Malatestiana",
+        "civicNumber": "1",
+        "province": "FC"
+      },
+      "categoryId": 2
+    },
+    {
+      "name": "Rocca di Bertinoro",
+      "description": "Fortezza vescovile con panorama sulla Romagna.",
+      "latitude": 44.147525,
+      "longitude": 12.13299,
+      "imagePath": "poi_images/rocca_bertinoro.jpg",
+      "address": {
+        "street": "Via Aldruda Frangipane",
+        "civicNumber": "6",
+        "province": "FC"
+      },
+      "categoryId": 2
+    },
+    {
+      "name": "Museo della Marineria",
+      "description": "Museo galleggiante e terrestre dedicato alla marineria adriatica.",
+      "latitude": 44.1988944,
+      "longitude": 12.3943937,
+      "imagePath": "poi_images/museo_marineria_cesenatico.jpg",
+      "address": {
+        "street": "Via Carlo Armellini",
+        "civicNumber": "18",
+        "province": "FC"
       },
       "categoryId": 3
     },
     {
-      "poiId": 10,
-      "name": "Parco della Montagnola",
-      "description": "Parco storico con scalinata monumentale e area relax centrale",
-      "latitude": 44.4993,
-      "longitude": 11.3512,
-      "imagePath": "montagnola.jpg",
+      "name": "Piazza del Popolo",
+      "description": "Piazza principale di Cesena con la Fontana Masini.",
+      "latitude": 44.139700,
+      "longitude": 12.243500,
+      "imagePath": "poi_images/piazza_del_popolo.jpg",
       "address": {
-        "street": "Via Irnerio",
-        "civicNumber": "2/3",
-        "province": "Bologna"
+        "street": "Piazza del Popolo",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 7
+    },
+    {
+      "name": "Fontana Masini",
+      "description": "Fontana rinascimentale simbolo di Cesena.",
+      "latitude": 44.1371363,
+      "longitude": 12.2420792,
+      "imagePath": "poi_images/fontana_masini.jpg",
+      "address": {
+        "street": "Piazza del Popolo",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 1
+    },
+    {
+      "name": "Parco Urbano Ippodromo",
+      "description": "Grande parco verde urbano vicino all’ippodromo.",
+      "latitude": 44.149924,
+      "longitude": 12.227953,
+      "imagePath": "poi_images/parco_ippodromo.jpg",
+      "address": {
+        "street": "Via Fausto Coppi Zona Ippodromo",
+        "civicNumber": null,
+        "province": "FC"
       },
       "categoryId": 4
     },
     {
-      "poiId": 11,
-      "name": "Torre Prendiparte",
-      "description": "Torre medievale del XII secolo, seconda per altezza dopo le Due Torri",
-      "latitude": 44.4962,
-      "longitude": 11.3489,
-      "imagePath": "prendiparte.jpg",
+      "name": "Cascata dell'Alferello",
+      "description": "Suggestiva cascata immersa nella natura appenninica.",
+      "latitude": 43.848730,
+      "longitude": 12.072127,
+      "imagePath": "poi_images/cascata_alferello.jpg",
       "address": {
-        "street": "Piazzetta Prendiparte",
+        "street": "Località Mazzi, 47028 Verghereto",
         "civicNumber": null,
-        "province": "Bologna"
+        "province": "FC"
       },
-      "categoryId": 2
+      "categoryId": 8
+    },
+    {
+      "name": "Spiaggia di Cesenatico",
+      "description": "Spiaggia sabbiosa attrezzata sul litorale adriatico.",
+      "latitude": 44.2061855,
+      "longitude": 12.4047684,
+      "imagePath": "poi_images/spiaggia_cesenatico.jpg",
+      "address": {
+        "street": "Lungomare Cesenatico",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 9
     }
   ],
   "achievements": [

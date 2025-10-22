@@ -28,7 +28,7 @@ fun POIDetailsContent(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        POIImagePlaceholder()
+        POIImage(poi.imagePath, modifier)
 
         Spacer(Modifier.height(16.dp))
 

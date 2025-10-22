@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalance
+import androidx.compose.material.icons.outlined.BeachAccess
 import androidx.compose.material.icons.outlined.Castle
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Church
 import androidx.compose.material.icons.outlined.Landscape
 import androidx.compose.material.icons.outlined.Museum
+import androidx.compose.material.icons.outlined.Nature
 import androidx.compose.material.icons.outlined.Park
 import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -87,6 +90,10 @@ private fun getIconFromName(iconName: String?) :ImageVector {
         "panorama" -> Icons.Outlined.Landscape
         "church" -> Icons.Outlined.Church
         "market" -> Icons.Outlined.ShoppingCart
+        "landscape" -> Icons.Outlined.Landscape
+        "storefront" -> Icons.Outlined.Storefront
+        "nature" -> Icons.Outlined.Nature
+        "beach_access" -> Icons.Outlined.BeachAccess
         else -> Icons.Outlined.Category
     }
 }
