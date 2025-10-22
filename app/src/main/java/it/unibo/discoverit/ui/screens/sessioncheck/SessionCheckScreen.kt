@@ -1,7 +1,6 @@
 package it.unibo.discoverit.ui.screens.sessioncheck
 
-import android.util.Log
-import androidx.biometric.BiometricManager
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
+import it.unibo.discoverit.utils.biometric.BiometricAuthHelper
 
 @Composable
 fun SessionCheckScreen(
@@ -27,40 +27,34 @@ fun SessionCheckScreen(
     actions: SessionCheckActions,
     onNavigateToLogin: () -> Unit,
     onNavigateToHome: () -> Unit,
-    activity: FragmentActivity? // Aggiungi questo parametro
 ) {
     val context = LocalContext.current
-    val biometricManager = BiometricManager.from(context)
+    val activity = context as FragmentActivity
+    val biometricHelper = remember { BiometricAuthHelper(context) }
+
 
     LaunchedEffect(state.currentPhase) {
         when (state.currentPhase) {
-            SessionCheckPhase.USER_LOGGED_IN -> onNavigateToHome()
-            SessionCheckPhase.USER_NOT_LOGGED_IN, SessionCheckPhase.ERROR -> onNavigateToLogin()
             SessionCheckPhase.BIOMETRIC_REQUIRED -> {
-                Log.d("SessionCheckScreen", "Biometric authentication required")
-                if (activity != null && biometricManager.canAuthenticate(STRONG) {
-                    Log.d("SessionCheckScreen", "Biometric authentication available")
-                    biometricAdapter.authenticate(
-                        activity, // Ora abbiamo l'activity garantita
-                        onSuccess = {
-                            actions.onBiometricSuccess()
-                            onNavigateToHome()
-                        },
-                        onFailure = {
-                            Log.e("SessionCheckScreen", "Biometric authentication failed: $it")
-                            onNavigateToLogin()
+                if (biometricHelper.isBiometricAvailable()) {
+                    biometricHelper.authenticate(
+                        activity = activity,
+                        title = "Biometric login for DiscoverIt",
+                        subtitle = "Usa l’impronta digitale per accedere",
+                        negativeText = "Usa la password",
+                        onSuccess = { actions.onBiometricSuccess(); onNavigateToHome() },
+                        onError = { msg ->
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
                     )
                 } else {
-                    Log.d("SessionCheckScreen", "Biometric authentication not available")
-                    onNavigateToLogin() // fallback
+                    onNavigateToLogin()
                 }
             }
             else -> {}
         }
     }
 
-    // Resto del codice invariato...
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
@@ -69,6 +63,7 @@ fun SessionCheckScreen(
         SessionCheckContent(innerPadding, state, actions)
     }
 }
+
 
 @Composable
 private fun SessionCheckContent(

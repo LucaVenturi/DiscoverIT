@@ -22,7 +22,6 @@ import it.unibo.discoverit.ui.screens.social.SocialViewModel
 import it.unibo.discoverit.ui.screens.userdetail.UserDetailViewModel
 import it.unibo.discoverit.utils.accountservice.AccountService
 import it.unibo.discoverit.utils.accountservice.AccountServiceImpl
-import it.unibo.discoverit.utils.biometric.BiometricAuthAdapter
 import it.unibo.discoverit.utils.hasher.BCryptHasher
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import it.unibo.discoverit.utils.location.LocationService
@@ -51,6 +50,7 @@ val appModule = module {
 
     // Servizio che gestisce login registrazione e logout.
     single<AccountService> { AccountServiceImpl(get(), get()) }
+
 
     // Database
     single {

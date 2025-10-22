@@ -69,7 +69,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.play.services.location)
     implementation(libs.kotlinx.coroutines.play.services)
-    implementation(libs.androidx.biometric.v110)
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.appcompat)
 
 
     testImplementation(libs.junit)

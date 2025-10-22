@@ -1,5 +1,7 @@
 package it.unibo.discoverit.ui.screens.settings
 
+import android.hardware.biometrics.BiometricManager.Authenticators
+import androidx.biometric.AuthenticationResultLauncher
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,7 +25,7 @@ import it.unibo.discoverit.ui.screens.settings.composables.BiometricSection
 import it.unibo.discoverit.ui.screens.settings.composables.InfoSection
 import it.unibo.discoverit.ui.screens.settings.composables.NotificationsSection
 import it.unibo.discoverit.ui.screens.settings.composables.ThemeSection
-import it.unibo.discoverit.utils.biometric.BiometricAuthAdapter
+import it.unibo.discoverit.utils.biometric.BiometricAuthHelper
 
 @Composable
 fun SettingsScreen(
@@ -33,8 +35,7 @@ fun SettingsScreen(
     onNavigateTo: (BottomNavDestination) -> Unit
 ) {
     val context = LocalContext.current
-    val activity = context as? FragmentActivity
-    val biometricAdapter = remember { BiometricAuthAdapter(context) }
+    val biometricHelper = remember { BiometricAuthHelper(context) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -71,7 +72,7 @@ fun SettingsScreen(
             BiometricSection(
                 biometricEnabled = state.biometricLoginEnabled,
                 onBiometricChange = actions::onBiometricLoginChange,
-                biometricAvailable = biometricAdapter.canAuthenticate(),
+                biometricAvailable = biometricHelper.isBiometricAvailable()
             )
 
             SectionDivider()

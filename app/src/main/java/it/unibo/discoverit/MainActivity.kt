@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -14,17 +15,17 @@ import it.unibo.discoverit.ui.theme.DiscoverItTheme
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             KoinAndroidContext {
                 val settingsViewModel: SettingsViewModel = koinViewModel()
-                val state by settingsViewModel.state.collectAsStateWithLifecycle()
+                val settingsState by settingsViewModel.state.collectAsStateWithLifecycle()
 
                 DiscoverItTheme(
-                    darkTheme = when (state.selectedTheme) {
+                    darkTheme = when (settingsState.selectedTheme) {
                         ThemeOption.LIGHT -> false
                         ThemeOption.DARK -> true
                         ThemeOption.SYSTEM -> isSystemInDarkTheme()

@@ -95,7 +95,7 @@ fun DiscoverItTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography, // Se non lo hai personalizzato, puoi usare quello generato dal template
+        typography = Typography,
         shapes = shapes,
         content = content
     )
