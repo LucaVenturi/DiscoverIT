@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 class CategoryRepository(
     private val categoryDAO: CategoryDAO
 ) {
-    fun getCategoriesWithStats(userId: Long): Flow<List<CategoryStats>> {
+    suspend fun getCategoriesWithStats(userId: Long): Flow<List<CategoryStats>> {
         return categoryDAO.getCategoriesWithStats(userId)
     }
 
-    fun getCategoryName(categoryId: Long): String {
+    suspend fun getCategoryName(categoryId: Long): String {
         return categoryDAO.getCategoryName(categoryId)
     }
 

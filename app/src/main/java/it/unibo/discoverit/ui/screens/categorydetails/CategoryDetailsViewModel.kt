@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.categorydetails
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.PointOfInterest
@@ -8,6 +9,7 @@ import it.unibo.discoverit.data.repositories.PointOfInterestRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -32,6 +34,7 @@ class CategoryDetailsViewModel(
     val state: StateFlow<CategoryDetailsState> = _state.asStateFlow()
 
     init {
+        Log.e("CATEGORY_TESTING", selectedCategoryId.toString())
         loadCategoryName(selectedCategoryId)
         loadPOIs(selectedCategoryId)
     }
@@ -46,17 +49,22 @@ class CategoryDetailsViewModel(
         viewModelScope.launch {
             try {
                 _state.update { it.copy(isLoading = true) }
+                Log.e("CATEGORY_TESTING", selectedCategoryId.toString())
                 val selectedCategoryName = categoryRepository.getCategoryName(selectedCategoryId)
+                Log.e("CATEGORY_TESTING", selectedCategoryName)
                 _state.update {
                     it.copy(
                         currentCategoryId = selectedCategoryId,
                         currentCategoryName = selectedCategoryName,
                     )
                 }
+                Log.e("CATEGORY_TESTING", "CategoryName loaded$_state")
             } catch (e: Exception) {
                 _state.update { it.copy(error = e.message) }
+                Log.e("CATEGORY_TESTING", e.message.toString())
             } finally {
                 _state.update { it.copy(isLoading = false) }
+                Log.e("CATEGORY_TESTING", "Finally")
             }
         }
     }

@@ -69,7 +69,11 @@ fun CurrentUserCard(currentUser: User, countCompleted: Long, onClick: (Long) -> 
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = "$countCompleted traguardi raggiunti",
+                    text = if (countCompleted == 1L) {
+                        "$countCompleted traguardo raggiunto"
+                    } else {
+                        "$countCompleted traguardi raggiunti"
+                    },
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

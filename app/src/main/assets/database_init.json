@@ -2,7 +2,7 @@
   "categories": [
     {
       "categoryId": 1,
-      "name": "Monumenti storici",
+      "name": "Punti di riferimento storici",
       "iconName": "monument"
     },
     {
@@ -61,6 +61,19 @@
       "categoryId": 6
     },
     {
+      "name": "Basilica Concattedrale Santa Maria Annunziata e San Vicinio\n",
+      "description": "La concattedrale di San Vicinio è il principale luogo di culto cattolico di Sarsina e concattedrale della diocesi di Cesena-Sarsina. Nota per gli esorcismi legati alla Basilica, che custodisce le reliquie del santo e la sua sacra catena",
+      "latitude": 43.918684,
+      "longitude": 12.1438473,
+      "imagePath": "poi_images/basilica_san_vicinio.jpg",
+      "address": {
+        "street": "Piazza Tito Maccio Plauto",
+        "civicNumber": "1",
+        "province": "FC"
+      },
+      "categoryId": 6
+    },
+    {
       "name": "Cattedrale di San Giovanni Battista",
       "description": "Duomo di Cesena, dedicato a San Giovanni Battista.",
       "latitude": 44.137599,
@@ -82,6 +95,19 @@
       "address": {
         "street": "Via del Monte",
         "civicNumber": "1487",
+        "province": "FC"
+      },
+      "categoryId": 5
+    },
+    {
+      "name": "Balcone della Romagna\n",
+      "description": "Piazza sotto alla torre di bertinoro con vista su tutta Cesena fino al Mare.",
+      "latitude": 44.149393,
+      "longitude": 12.133627,
+      "imagePath": "poi_images/balcone_bertinoro.jpg",
+      "address": {
+        "street": "Piazza della Libertà",
+        "civicNumber": "9b",
         "province": "FC"
       },
       "categoryId": 5
@@ -152,6 +178,19 @@
       "categoryId": 2
     },
     {
+      "name": "Rocca di Forlimpopoli",
+      "description": "La rocca di Forlimpopoli o rocca albornoziana, in memoria del suo edificatore, è una rocca che si affaccia sull'odierna Piazza Garibaldi nella città di Forlimpopoli.",
+      "latitude": 44.1087158,
+      "longitude": 12.126954,
+      "imagePath": "poi_images/rocca_forlimpopoli.jpg",
+      "address": {
+        "street": "Rocca Albornoziana, Via Guglielmo Oberdan",
+        "civicNumber": "6",
+        "province": "FC"
+      },
+      "categoryId": 2
+    },
+    {
       "name": "Museo della Marineria",
       "description": "Museo galleggiante e terrestre dedicato alla marineria adriatica.",
       "latitude": 44.1988944,
@@ -165,6 +204,32 @@
       "categoryId": 3
     },
     {
+      "name": "Museo Musicalia",
+      "description": "Museo sulla storia della musica meccanica nella 'casa vacanze' di Carducci",
+      "latitude": 44.124579,
+      "longitude": 12.180573,
+      "imagePath": "poi_images/museo_musicalia.jpg",
+      "address": {
+        "street": "Via Lizzano",
+        "civicNumber": "1241",
+        "province": "FC"
+      },
+      "categoryId": 3
+    },
+    {
+      "name": "Biblioteca Malatestiana",
+      "description": "Unico esempio al mondo di Biblioteca umanistica perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.",
+      "latitude": 44.138872,
+      "longitude": 12.2437160,
+      "imagePath": "poi_images/biblioteca_malatestiana.jpg",
+      "address": {
+        "street": "Piazza Maurizio Bufalini",
+        "civicNumber": "1",
+        "province": "FC"
+      },
+      "categoryId": 3
+    },
+    {
       "name": "Piazza del Popolo",
       "description": "Piazza principale di Cesena con la Fontana Masini.",
       "latitude": 44.139700,
@@ -172,6 +237,32 @@
       "imagePath": "poi_images/piazza_del_popolo.jpg",
       "address": {
         "street": "Piazza del Popolo",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 7
+    },
+    {
+      "name": "Piazza della libertà",
+      "description": "Piazza secondaria di Cesena dove spesso vengono allestiti eventi.",
+      "latitude": 44.137106,
+      "longitude": 12.2462096,
+      "imagePath": "poi_images/piazza_della_liberta.jpg",
+      "address": {
+        "street": "P.za della Libertà",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 7
+    },
+    {
+      "name": "Piazza Fratti",
+      "description": "Piazza centrale di Forlimpopoli che ospita il mercato e tutti gli eventi della città, tra cui la Madonna del Fuoco.",
+      "latitude": 44.187309,
+      "longitude": 12.125904,
+      "imagePath": "poi_images/piazza_antonio_fratti.jpg",
+      "address": {
+        "street": "Piazza Antonio Fratti",
         "civicNumber": null,
         "province": "FC"
       },
@@ -191,6 +282,32 @@
       "categoryId": 1
     },
     {
+      "name": "Ponte Vecchio",
+      "description": "Ponte storico di Cesena che attraversa il fiume Savio.",
+      "latitude": 44.1371363,
+      "longitude": 12.2420792,
+      "imagePath": "poi_images/ponte_vecchio.jpg",
+      "address": {
+        "street": "Ponte Vecchio",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 1
+    },
+    {
+      "name": "Teatro Alessandro Bonci",
+      "description": "Storico teatro di cesena tuttora in attività.",
+      "latitude": 44.136085,
+      "longitude": 12.248292,
+      "imagePath": "poi_images/teatro_bonci.jpg",
+      "address": {
+        "street": "Piazza Mario Guidazzi",
+        "civicNumber": "8",
+        "province": "FC"
+      },
+      "categoryId": 1
+    },
+    {
       "name": "Parco Urbano Ippodromo",
       "description": "Grande parco verde urbano vicino all’ippodromo.",
       "latitude": 44.149924,
@@ -204,6 +321,32 @@
       "categoryId": 4
     },
     {
+      "name": "Parco Naturale di Cervia",
+      "description": "Oasi di pace immersa nella millenaria pineta di Milano Marittima, il Parco Naturale di Cervia è il luogo perfetto per trascorrere qualche ora in completo relax, all’ombra dei pini, tra il profumo del sottobosco e i suoni della natura.",
+      "latitude": 44.269335,
+      "longitude": 12.332403,
+      "imagePath": "poi_images/parco_cervia.jpg",
+      "address": {
+        "street": "Via C. Forlanini",
+        "civicNumber": null,
+        "province": "RA"
+      },
+      "categoryId": 4
+    },
+    {
+      "name": "Giardini Pubblici\n",
+      "description": "Il Giardino Pubblico è un Museo all'aperto dell'arredo urbano in ghisa.",
+      "latitude": 44.135546,
+      "longitude": 12.249214,
+      "imagePath": "poi_images/giardini_pubblici.jpg",
+      "address": {
+        "street": "Via Giuseppe Verdi",
+        "civicNumber": null,
+        "province": "RA"
+      },
+      "categoryId": 4
+    },
+    {
       "name": "Cascata dell'Alferello",
       "description": "Suggestiva cascata immersa nella natura appenninica.",
       "latitude": 43.848730,
@@ -211,6 +354,32 @@
       "imagePath": "poi_images/cascata_alferello.jpg",
       "address": {
         "street": "Località Mazzi, 47028 Verghereto",
+        "civicNumber": null,
+        "province": "FC"
+      },
+      "categoryId": 8
+    },
+    {
+      "name": "Riserva naturale Salina di Cervia",
+      "description": "La Salina di Cervia è la più piccola e la più a nord d’Italia, si estende per 827 ettari, in un parco naturale, oggi porta sud del Parco regionale del Delta del Po e da sempre riserva naturale di popolamento e di nidificazione per molte specie animali e vegetali.",
+      "latitude": 44.253606,
+      "longitude": 12.341199,
+      "imagePath": "poi_images/saline_cervia.jpg",
+      "address": {
+        "street": "Via Bova",
+        "civicNumber": "61",
+        "province": "RA"
+      },
+      "categoryId": 8
+    },
+    {
+      "name": "Lago Pontini",
+      "description": "Il Lago dei Pontini è un lago artificiale situato alle pendici del Monte Còmero, vicino a Bagno di Romagna, formatosi nel 1855 a seguito di una frana. È circondato da un antico castagneto e offre servizi per il relax e lo svago, come aree picnic, ristoranti con specialità locali e percorsi per passeggiate a piedi, in mountain bike o a cavallo. È anche un luogo popolare per la pesca sportiva di trote, carpe, tinche e lucci. ",
+      "latitude": 43.843058,
+      "longitude": 12.004211,
+      "imagePath": "poi_images/lago_pontini.jpg",
+      "address": {
+        "street": "Località Lago Pontini",
         "civicNumber": null,
         "province": "FC"
       },
@@ -240,10 +409,80 @@
     },
     {
       "achievementId": 2,
+      "name": "Esploratore Intermedio",
+      "description": "Visita 10 punti di interesse",
+      "targetCount": 10,
+      "targetCategory": null
+    },
+    {
+      "achievementId": 3,
+      "name": "Esploratore Esperto",
+      "description": "Visita 20 punti di interesse",
+      "targetCount": 20,
+      "targetCategory": null
+    },
+    {
+      "achievementId": 4,
       "name": "Amante dell'Arte",
       "description": "Visita 3 musei",
       "targetCount": 3,
       "targetCategory": 3
+    },
+    {
+      "achievementId": 5,
+      "name": "Conoscere le proprie radici",
+      "description": "Visita 3 musei",
+      "targetCount": 3,
+      "targetCategory": 1
+    },
+    {
+      "achievementId": 6,
+      "name": "Tornare al medioevo",
+      "description": "Visita 3 castelli",
+      "targetCount": 3,
+      "targetCategory": 2
+    },
+    {
+      "achievementId": 7,
+      "name": "Nel chill",
+      "description": "Visita 3 parchi o giardini",
+      "targetCount": 3,
+      "targetCategory": 4
+    },
+    {
+      "achievementId": 8,
+      "name": "Panorama Guy",
+      "description": "Visita 3 punti panoramici",
+      "targetCount": 3,
+      "targetCategory": 5
+    },
+    {
+      "achievementId": 9,
+      "name": "In God we trust",
+      "description": "Visita 3 chiese",
+      "targetCount": 3,
+      "targetCategory": 6
+    },
+    {
+      "achievementId": 10,
+      "name": "Al cuore delle città",
+      "description": "Visita 3 piazze",
+      "targetCount": 3,
+      "targetCategory": 7
+    },
+    {
+      "achievementId": 11,
+      "name": "Indiana Jones",
+      "description": "Visita 3 attrazioni naturali",
+      "targetCount": 3,
+      "targetCategory": 8
+    },
+    {
+      "achievementId": 12,
+      "name": "Vamos a la playa",
+      "description": "Visita 1 spiaggia",
+      "targetCount": 3,
+      "targetCategory": 9
     }
   ],
   "users": [

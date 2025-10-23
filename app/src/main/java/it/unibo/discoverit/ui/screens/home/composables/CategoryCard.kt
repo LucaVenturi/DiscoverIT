@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.BeachAccess
 import androidx.compose.material.icons.outlined.Castle
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Church
+import androidx.compose.material.icons.outlined.Forest
 import androidx.compose.material.icons.outlined.Landscape
 import androidx.compose.material.icons.outlined.Museum
 import androidx.compose.material.icons.outlined.Nature
@@ -92,7 +93,7 @@ private fun getIconFromName(iconName: String?) :ImageVector {
         "market" -> Icons.Outlined.ShoppingCart
         "landscape" -> Icons.Outlined.Landscape
         "storefront" -> Icons.Outlined.Storefront
-        "nature" -> Icons.Outlined.Nature
+        "nature" -> Icons.Outlined.Forest
         "beach_access" -> Icons.Outlined.BeachAccess
         else -> Icons.Outlined.Category
     }

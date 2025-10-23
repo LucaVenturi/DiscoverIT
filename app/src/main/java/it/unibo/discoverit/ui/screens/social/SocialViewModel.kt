@@ -46,6 +46,9 @@ class SocialViewModel(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             try {
+                userRepository.getCountCompleted(currentUserId).collect { count ->
+                    _state.update { it.copy(currentUserCountCompleted = count) }
+                }
                 userRepository.getFriendsAndCountCompletedAchievements(currentUserId).collect { friendsAndCountCompleted ->
                     _state.value = _state.value.copy(friendsAndCountCompleted = friendsAndCountCompleted)
                 }

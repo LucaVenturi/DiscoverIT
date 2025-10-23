@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.categorydetails
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,6 +42,7 @@ fun CategoryDetailsScreen(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
             DiscoverItTopAppBar(navController, categoryDetailsState.currentCategoryName)
+            Log.e("CATEGORY_TESTING", categoryDetailsState.currentCategoryName)
         },
         bottomBar = {
             DiscoverItNavigationBar(

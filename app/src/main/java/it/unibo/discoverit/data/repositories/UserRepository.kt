@@ -85,4 +85,8 @@ class UserRepository(
         userDao.update(updatedUser)
         return updatedUser
     }
+
+    suspend fun getCountCompleted(currentUserId: Long): Flow<Long> {
+        return userDao.getCountCompletedAchievements(currentUserId)
+    }
 }
