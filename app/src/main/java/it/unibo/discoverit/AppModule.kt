@@ -108,7 +108,7 @@ val appModule = module {
     single { UserRepository( get(), get(), get() ) }
     single { AchievementRepository( get(), get() ) }
     single { SettingsRepository( get() ) }
-    single { AccountSettingsRepository( get(), get() ) }
+    single { AccountSettingsRepositoryImpl( get(), get() ) }
 
     // ViewModel
     single { UserViewModel() }

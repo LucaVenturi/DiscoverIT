@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.profilepic.ProfilePicStorageHelper
 
-class AccountSettingsRepository(
+class AccountSettingsRepositoryImpl(
     private val userRepository: UserRepository,
     private val profilePicStorageHelper: ProfilePicStorageHelper
 ) {

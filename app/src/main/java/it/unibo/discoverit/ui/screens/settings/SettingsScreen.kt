@@ -1,7 +1,5 @@
 package it.unibo.discoverit.ui.screens.settings
 
-import android.hardware.biometrics.BiometricManager.Authenticators
-import androidx.biometric.AuthenticationResultLauncher
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
