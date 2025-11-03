@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.social.composables
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -11,8 +12,9 @@ fun FriendsList(
     onFriendClick: (Long) -> Unit,
     onFriendLongPress: (User) -> Unit
 ) {
-    LazyColumn {
-        items(friendsAndCountCompleted.toList()) { friendAndCount ->
+    // Non uso una lazycolumn perchè improbabile avere tantissimi amici e per non creare due zone scrollabili nella stessa pagina.
+    Column {
+        friendsAndCountCompleted.toList().forEach { friendAndCount ->
             FriendCard(
                 friend = friendAndCount.first,
                 countCompleted = friendAndCount.second,
