@@ -20,7 +20,7 @@ class UserRepositoryImpl(
 
         if (!passwordHasher.verifyPassword(plainPassword, user.hashedPassword)) {
             throw AuthenticatorException("Invalid credentials")
-        }
+        }git s
 
         return user
     }
