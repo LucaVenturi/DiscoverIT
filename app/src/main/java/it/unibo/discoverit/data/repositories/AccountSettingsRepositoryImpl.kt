@@ -5,10 +5,10 @@ import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.profilepic.ProfilePicStorageHelper
 
 class AccountSettingsRepositoryImpl(
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepositoryImpl,
     private val profilePicStorageHelper: ProfilePicStorageHelper
-) {
-    suspend fun updateProfilePicture(userId: Long, bitmap: Bitmap): User {
+): AccountSettingsRepository {
+    override suspend fun updateProfilePicture(userId: Long, bitmap: Bitmap): User {
         val filename = "pp_$userId.jpg"
         val path = profilePicStorageHelper.save(bitmap, filename)
 
@@ -17,7 +17,7 @@ class AccountSettingsRepositoryImpl(
         return user
     }
 
-    suspend fun changeUsername(userId: Long, newUsername: String) {
+    override suspend fun changeUsername(userId: Long, newUsername: String) {
         if (newUsername.isBlank())
             throw Exception("Username cannot be empty")
         val user = userRepository.getUserById(userId)

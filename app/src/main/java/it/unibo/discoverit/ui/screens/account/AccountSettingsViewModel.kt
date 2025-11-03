@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.repositories.AccountSettingsRepositoryImpl
-import it.unibo.discoverit.data.repositories.UserRepository
+import it.unibo.discoverit.data.repositories.UserRepositoryImpl
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.utils.accountservice.AccountService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,7 +42,7 @@ interface AccountSettingsActions {
 
 class AccountSettingsViewModel(
     private val userViewModel: UserViewModel,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepositoryImpl,
     private val accountService: AccountService,
     private val accountSettingsRepository: AccountSettingsRepositoryImpl
 ) : ViewModel() {

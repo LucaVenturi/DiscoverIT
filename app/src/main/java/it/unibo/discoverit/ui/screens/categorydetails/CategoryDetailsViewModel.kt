@@ -4,12 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.PointOfInterest
-import it.unibo.discoverit.data.repositories.CategoryRepository
-import it.unibo.discoverit.data.repositories.PointOfInterestRepository
+import it.unibo.discoverit.data.repositories.CategoryRepositoryImpl
+import it.unibo.discoverit.data.repositories.PointOfInterestRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -26,8 +25,8 @@ interface CategoryDetailsActions {
 }
 
 class CategoryDetailsViewModel(
-    private val poiRepository: PointOfInterestRepository,
-    private val categoryRepository: CategoryRepository,
+    private val poiRepository: PointOfInterestRepositoryImpl,
+    private val categoryRepository: CategoryRepositoryImpl,
     private val selectedCategoryId: Long
 ) : ViewModel() {
     private val _state = MutableStateFlow(CategoryDetailsState())

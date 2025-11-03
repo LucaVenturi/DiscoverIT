@@ -3,7 +3,7 @@ package it.unibo.discoverit.ui.screens.social
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.User
-import it.unibo.discoverit.data.repositories.UserRepository
+import it.unibo.discoverit.data.repositories.UserRepositoryImpl
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +36,7 @@ interface SocialActions{
 }
 
 class SocialViewModel(
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepositoryImpl,
     private val currentUserId: Long
 ) : ViewModel() {
     private val _state = MutableStateFlow(SocialState())
@@ -46,7 +46,7 @@ class SocialViewModel(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             try {
-                userRepository.getCountCompleted(currentUserId).collect { count ->
+                userRepository.getCountCompletedAchievements(currentUserId).collect { count ->
                     _state.update { it.copy(currentUserCountCompleted = count) }
                 }
                 userRepository.getFriendsAndCountCompletedAchievements(currentUserId).collect { friendsAndCountCompleted ->

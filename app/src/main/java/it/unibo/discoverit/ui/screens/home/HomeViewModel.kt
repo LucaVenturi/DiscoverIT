@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.CategoryStats
-import it.unibo.discoverit.data.repositories.CategoryRepository
+import it.unibo.discoverit.data.repositories.CategoryRepositoryImpl
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +19,7 @@ data class HomeState(
 )
 
 class HomeViewModel(
-    private val categoryRepository: CategoryRepository,
+    private val categoryRepository: CategoryRepositoryImpl,
     private val userViewModel: UserViewModel
 ) :ViewModel() {
     private val _homeState = MutableStateFlow(HomeState(emptyList()))

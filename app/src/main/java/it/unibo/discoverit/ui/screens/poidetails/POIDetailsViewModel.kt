@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.PointOfInterest
-import it.unibo.discoverit.data.repositories.AchievementRepository
-import it.unibo.discoverit.data.repositories.PointOfInterestRepository
+import it.unibo.discoverit.data.repositories.AchievementRepositoryImpl
+import it.unibo.discoverit.data.repositories.PointOfInterestRepositoryImpl
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.utils.location.LocationService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,11 +52,11 @@ sealed class PermissionError {
 }
 
 class POIDetailsViewModel(
-    private val poiRepository: PointOfInterestRepository,
+    private val poiRepository: PointOfInterestRepositoryImpl,
     private val userViewModel: UserViewModel,
     private val selectedPoiId: Long,
     private val locationService: LocationService,
-    private val achievementRepository: AchievementRepository
+    private val achievementRepository: AchievementRepositoryImpl
 ) : ViewModel() {
     private val _state = MutableStateFlow(POIDetailsState())
     val state: StateFlow<POIDetailsState> = _state.asStateFlow()

@@ -2,7 +2,7 @@ package it.unibo.discoverit.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.unibo.discoverit.data.repositories.SettingsRepository
+import it.unibo.discoverit.data.repositories.SettingsRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -29,7 +29,7 @@ interface SettingsActions{
 }
 
 class SettingsViewModel(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepositoryImpl
 ) : ViewModel() {
     private val _state = MutableStateFlow(SettingsState())
     val state: StateFlow<SettingsState> = _state
