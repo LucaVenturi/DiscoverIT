@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -33,6 +32,7 @@ import it.unibo.discoverit.ui.composables.EmptyStateUI
 import it.unibo.discoverit.ui.screens.poidetails.composables.POIDetailsContent
 import it.unibo.discoverit.utils.permissions.PermissionStatus
 import it.unibo.discoverit.utils.permissions.rememberMultiplePermissions
+import androidx.core.net.toUri
 
 @Composable
 fun POIDetailsScreen(
@@ -183,7 +183,7 @@ private fun openInMaps(
     longitude: Double,
     locationName: String
 ) {
-    val uri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude($locationName)")
+    val uri = "geo:$latitude,$longitude?q=$latitude,$longitude($locationName)".toUri()
     val openInMapsIntent = Intent(Intent.ACTION_VIEW).apply {
         data = uri
     }
@@ -191,8 +191,8 @@ private fun openInMaps(
     if (openInMapsIntent.resolveActivity(context.packageManager) != null) {
         context.startActivity(openInMapsIntent)
     } else {
-        // Se non dovessero esserci app per le mappe (crazy) lo apre sul browser
-        val webUri = Uri.parse("https://www.openstreetmap.org/?mlat=$latitude&mlon=$longitude&zoom=16")
+        // Se non dovessero esserci app per le mappe (crazy) lo apre sul browser da osm
+        val webUri = "https://www.openstreetmap.org/?mlat=$latitude&mlon=$longitude&zoom=16".toUri()
         val webIntent = Intent(Intent.ACTION_VIEW, webUri)
         context.startActivity(webIntent)
     }

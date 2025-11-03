@@ -2,6 +2,7 @@ package it.unibo.discoverit.ui.screens.poidetails.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,7 +19,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun POIImage(
     imagePath: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.widthIn(max = 600.dp)
 ) {
     val context = LocalContext.current
 
