@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.UserAchievementProgress
-import it.unibo.discoverit.data.repositories.AchievementRepositoryImpl
+import it.unibo.discoverit.data.repositories.AchievementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +21,7 @@ interface UserDetailActions
 
 class UserDetailViewModel(
     private val userId: Long,
-    private val achievementRepository: AchievementRepositoryImpl,
+    private val achievementRepository: AchievementRepository,
 ): ViewModel() {
     private val _state = MutableStateFlow(UserDetailState())
     val state: StateFlow<UserDetailState> = _state.asStateFlow()

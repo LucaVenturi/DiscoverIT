@@ -5,7 +5,7 @@ import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.profilepic.ProfilePicStorageHelper
 
 class AccountSettingsRepositoryImpl(
-    private val userRepository: UserRepositoryImpl,
+    private val userRepository: UserRepository,
     private val profilePicStorageHelper: ProfilePicStorageHelper
 ): AccountSettingsRepository {
     override suspend fun updateProfilePicture(userId: Long, bitmap: Bitmap): User {

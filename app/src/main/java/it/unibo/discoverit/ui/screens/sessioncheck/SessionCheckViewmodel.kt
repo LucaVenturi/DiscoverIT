@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.User
-import it.unibo.discoverit.data.repositories.SettingsRepositoryImpl
+import it.unibo.discoverit.data.repositories.SettingsRepository
 import it.unibo.discoverit.ui.screens.login.UserViewModel
 import it.unibo.discoverit.utils.accountservice.AccountService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ interface SessionCheckActions {
 class SessionCheckViewModel(
     private val accountService: AccountService,
     private val userViewModel: UserViewModel,
-    private val settingsRepository: SettingsRepositoryImpl
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SessionCheckState())

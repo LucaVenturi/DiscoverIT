@@ -102,13 +102,13 @@ val appModule = module {
     single { get<DiscoverItDatabase>().friendshipsDao() }
 
     // Repository
-    single { SessionRepositoryImpl(get()) }
-    single { CategoryRepositoryImpl(get()) }
-    single { PointOfInterestRepositoryImpl( get(), get() ) }
-    single { UserRepositoryImpl( get(), get(), get() ) }
-    single { AchievementRepositoryImpl( get(), get() ) }
-    single { SettingsRepositoryImpl( get() ) }
-    single { AccountSettingsRepositoryImpl( get(), get() ) }
+    single<SessionRepository> { SessionRepositoryImpl(get()) }
+    single<CategoryRepository> { CategoryRepositoryImpl(get()) }
+    single<PointOfInterestRepository> { PointOfInterestRepositoryImpl( get(), get() ) }
+    single<UserRepository> { UserRepositoryImpl( get(), get(), get() ) }
+    single<AchievementRepository> { AchievementRepositoryImpl( get(), get() ) }
+    single<SettingsRepository> { SettingsRepositoryImpl( get() ) }
+    single<AccountSettingsRepository> { AccountSettingsRepositoryImpl( get(), get() ) }
 
     // ViewModel
     single { UserViewModel() }

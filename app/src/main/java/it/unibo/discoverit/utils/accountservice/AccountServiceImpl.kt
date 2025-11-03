@@ -1,14 +1,14 @@
 package it.unibo.discoverit.utils.accountservice
 
 import it.unibo.discoverit.data.database.entities.User
-import it.unibo.discoverit.data.repositories.SessionRepositoryImpl
-import it.unibo.discoverit.data.repositories.UserRepositoryImpl
+import it.unibo.discoverit.data.repositories.SessionRepository
+import it.unibo.discoverit.data.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class AccountServiceImpl(
-    private val userRepository: UserRepositoryImpl,
-    private val sessionRepository: SessionRepositoryImpl
+    private val userRepository: UserRepository,
+    private val sessionRepository: SessionRepository
 ) : AccountService {
 
     override suspend fun login(username: String, password: String): User {
