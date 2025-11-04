@@ -14,7 +14,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R.string
+import it.unibo.discoverit.R.string.save_changes
 
 @Composable
 fun ChangeUsernameSection(
@@ -25,7 +28,7 @@ fun ChangeUsernameSection(
 ) {
     // Cambia nome utente
     Text(
-        text = "Nome utente",
+        text = stringResource(string.username),
         style = MaterialTheme.typography.titleMedium
     )
 
@@ -58,7 +61,7 @@ fun SaveUsernameChangesIconButton(
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = "Salva",
+                contentDescription = stringResource(save_changes),
                 tint = MaterialTheme.colorScheme.primary
             )
         }

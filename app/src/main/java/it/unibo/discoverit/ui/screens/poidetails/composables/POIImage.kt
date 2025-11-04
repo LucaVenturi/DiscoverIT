@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun POIImage(
@@ -28,7 +30,7 @@ fun POIImage(
             .data(imagePath?.let { "file:///android_asset/$it" })
             .crossfade(true)
             .build(),
-        contentDescription = "POI Image",
+        contentDescription = stringResource(R.string.poi_image),
         contentScale = androidx.compose.ui.layout.ContentScale.Crop,
         placeholder = rememberVectorPainter(Icons.Default.Place),
         error = rememberVectorPainter(Icons.Default.Place),

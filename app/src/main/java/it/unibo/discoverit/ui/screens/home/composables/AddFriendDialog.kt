@@ -8,6 +8,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import it.unibo.discoverit.R
 
 @Composable
 fun AddFriendDialog(
@@ -18,15 +20,15 @@ fun AddFriendDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Aggiungi amico") },
+        title = { Text(stringResource(R.string.add_friend)) },
         text = {
             Column {
-                Text("Inserisci l'username dell'amico:")
+                Text(stringResource(R.string.insert_friends_username))
                 OutlinedTextField(
                     value = usernameToAdd,
                     onValueChange = onUsernameChange,
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("Username") }
+                    placeholder = { Text(stringResource(R.string.username)) }
                 )
             }
         },
@@ -35,12 +37,12 @@ fun AddFriendDialog(
                 onClick = { onConfirm(usernameToAdd) },
                 enabled = usernameToAdd.isNotBlank()
             ) {
-                Text("Conferma")
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text("Annulla")
+                Text(stringResource(R.string.dismiss))
             }
         }
     )

@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun BiometricSection(
@@ -20,13 +22,13 @@ fun BiometricSection(
     biometricAvailable: Boolean
 ) {
     Column {
-        SectionTitle(title = "Sicurezza")
+        SectionTitle(title = stringResource(R.string.safety))
 
         SwitchPreference(
             checked = biometricEnabled,
             onCheckedChange = onBiometricChange,
-            title = "Login con impronta digitale",
-            subtitle = "Usa l'impronta digitale per accedere rapidamente",
+            title = stringResource(R.string.fingerprint_login),
+            subtitle = stringResource(R.string.use_fingerprint_to_login),
             biometricAvailable = biometricAvailable
         )
     }

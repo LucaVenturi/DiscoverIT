@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun MapButton(
@@ -20,8 +22,8 @@ fun MapButton(
         onClick = onClick,
         modifier = modifier
     ) {
-        Icon(Icons.Default.Map, contentDescription = "Maps")
+        Icon(Icons.Default.Map, contentDescription = stringResource(R.string.maps))
         Spacer(Modifier.width(8.dp))
-        Text("Apri in Maps")
+        Text(stringResource(R.string.open_in_maps))
     }
 }

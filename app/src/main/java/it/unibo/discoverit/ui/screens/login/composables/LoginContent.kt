@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.ErrorMessage
 import it.unibo.discoverit.ui.composables.PasswordField
 import it.unibo.discoverit.ui.composables.UsernameField
@@ -47,7 +49,7 @@ fun LoginContent(
         PasswordField(
             password = loginState.password,
             onPasswordChanged = { loginActions.onPasswordChanged(it) },
-            label = "Password"
+            label = stringResource(R.string.password)
         )
 
         Spacer(modifier = Modifier.height(32.dp))

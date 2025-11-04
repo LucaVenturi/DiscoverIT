@@ -6,8 +6,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-
+import it.unibo.discoverit.R
+import it.unibo.discoverit.R.string
 @Composable
 fun UsernameField(
     username: String,
@@ -17,7 +19,7 @@ fun UsernameField(
     OutlinedTextField(
         value = username,
         onValueChange = onUsernameChanged,
-        label = { Text("Username") },
+        label = { Text(stringResource(R.string.username)) },
         modifier = modifier.fillMaxWidth(),
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)

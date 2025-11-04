@@ -5,8 +5,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 import it.unibo.discoverit.data.database.entities.User
+import it.unibo.discoverit.R.string
 
 @Composable
 fun CurrentUserSection(
@@ -15,7 +18,7 @@ fun CurrentUserSection(
     onUserClick: (Long) -> Unit
 ) {
     Text(
-        text = "I miei traguardi",
+        text = stringResource(R.string.my_achievements),
         style = MaterialTheme.typography.headlineMedium,
         modifier = Modifier.padding(bottom = 16.dp)
     )

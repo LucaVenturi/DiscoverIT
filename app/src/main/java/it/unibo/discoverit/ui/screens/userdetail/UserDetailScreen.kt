@@ -14,10 +14,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.R
 import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
@@ -56,6 +58,7 @@ private fun UserDetailContent(
     state: UserDetailState,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     LazyColumn(
         modifier = modifier
             .padding(16.dp)
@@ -63,17 +66,17 @@ private fun UserDetailContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         achievementsSection(
-            title = "Completati",
+            title = context.getString(R.string.completed),
             achievements = state.achievementsWithProgress.filterValues { it?.isCompleted ?: false },
-            emptyMessage = "Nessun achievement completato"
+            emptyMessage = context.getString(R.string.no_completed_achievement)
         )
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
 
         achievementsSection(
-            title = "Da completare",
+            title = context.getString(R.string.to_be_completed),
             achievements = state.achievementsWithProgress.filterValues { !(it?.isCompleted ?: false) },
-            emptyMessage = "Tutti gli achievement completati!"
+            emptyMessage = context.getString(R.string.all_achievements_completed)
         )
 
         state.errorMsg?.let { errorMsg ->

@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.screens.settings.ThemeOption
 
 @Composable
@@ -16,7 +18,7 @@ fun ThemeSection(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SectionTitle(title = "Tema")
+        SectionTitle(title = stringResource(R.string.theme))
 
         Spacer(modifier = Modifier.height(12.dp))
 

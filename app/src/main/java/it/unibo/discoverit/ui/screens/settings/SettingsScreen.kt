@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.screens.settings.composables.BiometricSection
@@ -39,7 +41,7 @@ fun SettingsScreen(
         topBar = {
             DiscoverItTopAppBar(
                 navController = navController,
-                title = "Impostazioni"
+                title = stringResource(R.string.theme)
             )
         },
         bottomBar = {
@@ -72,12 +74,12 @@ fun SettingsScreen(
                 biometricAvailable = biometricHelper.isBiometricAvailable()
             )
 
-            SectionDivider()
+//            SectionDivider()
 
-            NotificationsSection(
-                notificationsEnabled = state.notificationsEnabled,
-                onNotificationsChange = actions::onNotificationsChange
-            )
+//            NotificationsSection(
+//                notificationsEnabled = state.notificationsEnabled,
+//                onNotificationsChange = actions::onNotificationsChange
+//            )
 
             SectionDivider()
 

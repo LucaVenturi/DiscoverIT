@@ -20,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.screens.account.composables.ChangeUsernameSection
 import it.unibo.discoverit.ui.screens.account.composables.LogoutAndDeleteAccountSection
@@ -31,6 +33,7 @@ import it.unibo.discoverit.ui.screens.login.UserState
 import it.unibo.discoverit.utils.images.rememberCameraLauncher
 import it.unibo.discoverit.utils.images.rememberGalleryLauncher
 import it.unibo.discoverit.utils.images.uriToBitmap
+
 
 @Composable
 fun AccountSettingsScreen(
@@ -57,7 +60,7 @@ fun AccountSettingsScreen(
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
-            DiscoverItTopAppBar(navController, "Settings")
+            DiscoverItTopAppBar(navController, stringResource(R.string.settings))
         },
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -83,7 +86,7 @@ fun AccountSettingsScreen(
 
             if (state.showLogoutDialog) {
                 ConfirmDialog(
-                    label = "Are you sure you want to logout?",
+                    label = stringResource(R.string.logout_confirm_dialog),
                     onDismissRequest = actions::onLogoutDismiss,
                     onConfirmation = {
                         actions.onLogoutConfirmation()
@@ -94,7 +97,7 @@ fun AccountSettingsScreen(
 
             if (state.showDeleteAccountDialog) {
                 ConfirmDialog(
-                    label = "Are you sure you want to delete your account?\nThis action cannot be undone.",
+                    label = stringResource(R.string.delete_account_confirm_dialog),
                     onDismissRequest = actions::onDeleteAccountDismiss,
                     onConfirmation = {
                         actions.onDeleteAccountConfirmation()
@@ -131,11 +134,11 @@ private fun ConfirmDialog(
         icon = {
             Icon(
                 imageVector = Icons.Default.Warning,
-                contentDescription = "Warning"
+                contentDescription = stringResource(R.string.warning)
             )
         },
         title = {
-            Text("Caution")
+            Text(stringResource(R.string.warning))
         },
         text = {
             Text(label)
@@ -145,14 +148,14 @@ private fun ConfirmDialog(
             TextButton(
                 onClick = onConfirmation
             ) {
-                Text("Confirm")
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissRequest
             ) {
-                Text("Dismiss")
+                Text(stringResource(R.string.dismiss))
             }
         }
     )

@@ -5,7 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 import it.unibo.discoverit.data.database.entities.User
 
 @Composable
@@ -15,7 +17,7 @@ fun FriendsSection(
     onFriendLongPress: (User) -> Unit,
 ) {
     Text(
-        text = "Friends",
+        text = stringResource(R.string.friends),
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(bottom = 8.dp)
     )

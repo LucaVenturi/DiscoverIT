@@ -13,13 +13,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.composables.EmptyStateUI
 import it.unibo.discoverit.ui.screens.categorydetails.composables.POIList
+
 
 @Composable
 fun CategoryDetailsScreen(
@@ -42,7 +45,6 @@ fun CategoryDetailsScreen(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
             DiscoverItTopAppBar(navController, categoryDetailsState.currentCategoryName)
-            Log.e("CATEGORY_TESTING", categoryDetailsState.currentCategoryName)
         },
         bottomBar = {
             DiscoverItNavigationBar(
@@ -64,7 +66,7 @@ fun CategoryDetailsScreen(
                 }
                 // Gestisce il caso in cui la lista dei punti di interesse sia vuota.
                 categoryDetailsState.poiList.isEmpty() && !categoryDetailsState.isLoading -> {
-                    EmptyStateUI("Nessun punto di interesse trovato", categoryDetailsActions::onRefresh)
+                    EmptyStateUI(stringResource(R.string.no_poi_found), categoryDetailsActions::onRefresh)
                 }
                 // Gestisce lo stato di successo mostrando la lista dei punti di interesse.
                 else -> {

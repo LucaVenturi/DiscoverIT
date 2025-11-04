@@ -18,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
+import it.unibo.discoverit.R
 import it.unibo.discoverit.utils.biometric.BiometricAuthHelper
 
 @Composable
@@ -35,48 +37,39 @@ fun SessionCheckScreen(
 
     // Gestione navigazione basata sullo stato
     LaunchedEffect(state.currentPhase) {
-        Log.e("SessionCheckScreen", "LaunchedEffect: ${state.currentPhase}")
         when (state.currentPhase) {
             SessionCheckPhase.USER_NOT_LOGGED_IN -> {
-                Log.e("SessionCheckScreen", "Navigating to login")
                 onNavigateToLogin()
             }
             SessionCheckPhase.USER_LOGGED_IN -> {
-                Log.e("SessionCheckScreen", "Navigating to home")
                 onNavigateToHome()
             }
             SessionCheckPhase.BIOMETRIC_REQUIRED -> {
-                Log.e("SessionCheckScreen", "Starting biometric authentication")
                 if (biometricHelper.isBiometricAvailable()) {
                     biometricHelper.authenticate(
                         activity = activity,
-                        title = "Biometric login for DiscoverIt",
-                        subtitle = "Usa l'impronta digitale per accedere",
-                        negativeText = "Usa la password",
+                        title = context.getString(R.string.biometric_login_title),
+                        subtitle = context.getString(R.string.use_fingerprint),
+                        negativeText = context.getString(R.string.use_password),
                         onSuccess = {
-                            Log.e("SessionCheckScreen", "Biometric success")
                             // SOLO l'azione, la navigazione sarà gestita dallo stato
                             actions.onBiometricSuccess()
                         },
                         onError = { msg ->
-                            Log.e("SessionCheckScreen", "Biometric error: $msg")
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                             // In caso di errore biometrico, manda al login
                             onNavigateToLogin()
                         }
                     )
                 } else {
-                    Log.e("SessionCheckScreen", "Biometric not available, going to login")
                     // Biometria non disponibile, manda al login
                     onNavigateToLogin()
                 }
             }
             SessionCheckPhase.CHECKING -> {
                 // Resta in attesa, niente navigazione
-                Log.e("SessionCheckScreen", "Still checking session...")
             }
             SessionCheckPhase.ERROR -> {
-                Log.e("SessionCheckScreen", "Error occurred, going to login")
                 onNavigateToLogin()
             }
         }
@@ -105,19 +98,19 @@ private fun SessionCheckContent(
     ) {
         when (state.currentPhase) {
             SessionCheckPhase.CHECKING -> {
-                LoadingIndicator("Controllo sessione...")
+                LoadingIndicator(stringResource(R.string.check_session))
             }
             SessionCheckPhase.BIOMETRIC_REQUIRED -> {
-                LoadingIndicator("Autenticazione biometrica richiesta...")
+                LoadingIndicator(stringResource(R.string.biometric_login_required))
             }
             SessionCheckPhase.USER_LOGGED_IN -> {
-                LoadingIndicator("Accesso confermato...")
+                LoadingIndicator(stringResource(R.string.login_successful))
             }
             SessionCheckPhase.USER_NOT_LOGGED_IN -> {
-                LoadingIndicator("Reindirizzamento al login...")
+                LoadingIndicator(stringResource(R.string.redirect_to_login))
             }
             SessionCheckPhase.ERROR -> {
-                LoadingIndicator("Errore, reindirizzamento...")
+                LoadingIndicator(stringResource(R.string.error_redirecting))
             }
         }
     }

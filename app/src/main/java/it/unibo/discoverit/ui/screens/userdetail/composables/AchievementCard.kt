@@ -71,7 +71,7 @@ fun AchievementCard(
 
             if (completed) {
                 Text(
-                    text = progress?.completionDate?.let { millis ->
+                    text = progress.completionDate?.let { millis ->
                         // Formattazione della data
                         SimpleDateFormat("dd/MM/yy", Locale.getDefault())
                             .format(Date(millis))

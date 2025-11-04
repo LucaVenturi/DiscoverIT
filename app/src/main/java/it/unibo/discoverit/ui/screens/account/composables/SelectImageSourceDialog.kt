@@ -4,6 +4,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import it.unibo.discoverit.R
 import it.unibo.discoverit.utils.images.ImageSourceLauncher
 import it.unibo.discoverit.utils.images.rememberCameraLauncher
 import it.unibo.discoverit.utils.images.rememberGalleryLauncher
@@ -18,14 +20,14 @@ fun SelectImageSourceDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Seleziona la fonte dell'immagine") },
-        text = { Text("Da dove vuoi prendere la foto profilo?") },
+        title = { Text(stringResource(R.string.select_profile_pic)) },
+        text = { Text(stringResource(R.string.select_profile_pic_source)) },
         confirmButton = {
             TextButton(onClick = {
                 onPickFromGallery()
                 galleryLauncher.captureImage()
             }) {
-                Text("Dalla Galleria")
+                Text(stringResource(R.string.from_gallery))
             }
         },
         dismissButton = {
@@ -33,7 +35,7 @@ fun SelectImageSourceDialog(
                 onTakePhoto()
                 cameraLauncher.captureImage()
             }) {
-                Text("Scatta una foto con la Camera")
+                Text(stringResource(R.string.from_camera))
             }
         }
     )

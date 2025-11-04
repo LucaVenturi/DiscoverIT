@@ -6,6 +6,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import it.unibo.discoverit.R
 
 @Composable
 fun ConfirmRemoveFriendDialog(
@@ -15,9 +17,9 @@ fun ConfirmRemoveFriendDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Rimuovi amico") },
+        title = { Text(stringResource(R.string.remove_friend)) },
         text = {
-            Text("Rimuovere $username dagli amici?")
+            Text(stringResource(R.string.confirm_remove_x_from_friends, username))
         },
         confirmButton = {
             Button(
@@ -26,12 +28,12 @@ fun ConfirmRemoveFriendDialog(
                     containerColor = MaterialTheme.colorScheme.error
                 )
             ) {
-                Text("Rimuovi")
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text("Annulla")
+                Text(stringResource(R.string.dismiss))
             }
         }
     )

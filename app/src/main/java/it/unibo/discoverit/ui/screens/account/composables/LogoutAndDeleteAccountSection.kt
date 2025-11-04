@@ -10,7 +10,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun LogoutAndDeleteAccountSection(
@@ -21,7 +23,7 @@ fun LogoutAndDeleteAccountSection(
         onClick = onLogoutClick,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("Logout")
+        Text(stringResource(R.string.logout))
     }
 
     Spacer(Modifier.height(8.dp))
@@ -33,6 +35,6 @@ fun LogoutAndDeleteAccountSection(
             contentColor = MaterialTheme.colorScheme.error
         )
     ) {
-        Text("Elimina account")
+        Text(stringResource(R.string.delete_account))
     }
 }

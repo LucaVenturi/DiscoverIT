@@ -18,9 +18,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import it.unibo.discoverit.R
 
 @Composable
 fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Unit) {
@@ -36,7 +38,7 @@ fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Un
                 .data(profilePicPath)
                 .crossfade(true)
                 .build(),
-            contentDescription = "Foto profilo",
+            contentDescription = stringResource(R.string.profile_pic),
             contentScale = ContentScale.Crop,
             placeholder = rememberVectorPainter(Icons.Default.AccountCircle),
             error = rememberVectorPainter(Icons.Default.AccountCircle),
@@ -52,6 +54,6 @@ fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Un
     TextButton(
         onClick = onChangeProfilePicClick
     ) {
-        Text("Cambia foto profilo")
+        Text(stringResource(R.string.change_profile_pic))
     }
 }

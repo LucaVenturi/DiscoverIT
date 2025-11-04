@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun POIImagePlaceholder(
@@ -30,7 +32,7 @@ fun POIImagePlaceholder(
     ) {
         Icon(
             imageVector = Icons.Default.Place,
-            contentDescription = "POI Image",
+            contentDescription = stringResource(R.string.poi_image),
             modifier = Modifier.size(96.dp),
             tint = MaterialTheme.colorScheme.primary
         )

@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun LoginButton(
@@ -30,7 +32,7 @@ fun LoginButton(
                 modifier = Modifier.size(24.dp)
             )
         } else {
-            Text("Accedi", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.login), style = MaterialTheme.typography.labelLarge)
         }
     }
 }

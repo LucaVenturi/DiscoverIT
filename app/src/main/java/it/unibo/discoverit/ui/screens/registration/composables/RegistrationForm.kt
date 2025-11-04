@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.PasswordField
 import it.unibo.discoverit.ui.composables.UsernameField
 import it.unibo.discoverit.ui.screens.registration.RegistrationActions
@@ -28,7 +30,7 @@ fun RegistrationForm(
         PasswordField(
             password = state.password,
             onPasswordChanged = actions::onPasswordChanged,
-            label = "Password"
+            label = stringResource(R.string.password)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -36,7 +38,7 @@ fun RegistrationForm(
         PasswordField(
             password = state.confirmPassword,
             onPasswordChanged = actions::onConfirmPasswordChanged,
-            label = "Conferma Password"
+            label = stringResource(R.string.confirm_password)
         )
     }
 }

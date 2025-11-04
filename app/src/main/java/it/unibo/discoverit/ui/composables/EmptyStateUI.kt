@@ -11,7 +11,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
+import it.unibo.discoverit.R.string
 
 @Composable
 fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
@@ -26,7 +29,7 @@ fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(onClick = { onRefresh() }) {
-            Text("Ricarica")
+            Text(stringResource(R.string.reload))
         }
     }
 }

@@ -12,16 +12,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.R
+import it.unibo.discoverit.R.string.arrowback_description
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscoverItTopAppBar(
     navController: NavHostController,
-    title: String = "Discoverit"
+    title: String = stringResource(R.string.title)
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -53,7 +56,7 @@ fun DiscoverItTopAppBar(
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Localized description"
+                        contentDescription = stringResource(arrowback_description)
                     )
                 }
             }
@@ -63,7 +66,7 @@ fun DiscoverItTopAppBar(
                 IconButton(onClick = { navController.navigate(Destination.Account) }) {
                     Icon(
                         imageVector = Icons.Outlined.AccountCircle,
-                        contentDescription = "Localized description"
+                        contentDescription = stringResource(arrowback_description)
                     )
                 }
             }

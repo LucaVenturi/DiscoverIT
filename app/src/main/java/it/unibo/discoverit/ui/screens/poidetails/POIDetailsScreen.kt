@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
@@ -33,6 +34,8 @@ import it.unibo.discoverit.ui.screens.poidetails.composables.POIDetailsContent
 import it.unibo.discoverit.utils.permissions.PermissionStatus
 import it.unibo.discoverit.utils.permissions.rememberMultiplePermissions
 import androidx.core.net.toUri
+import it.unibo.discoverit.R
+import it.unibo.discoverit.R.string.poi_details
 
 @Composable
 fun POIDetailsScreen(
@@ -65,25 +68,21 @@ fun POIDetailsScreen(
     }
 
     state.locationError?.let { locationError ->
+        val errorMessage = stringResource(R.string.gps_is_off_error)
+        val actionLabel = stringResource(R.string.go_to_settings)
         LaunchedEffect(locationError) {
-            Log.d("POIDetailsScreen", "Location error: $locationError")
             when (locationError) {
                 LocationError.GpsDisabled -> {
-                    Log.d("POIDetailsScreen", "Showing GPS disabled snackbar")
                     val res = snackbarHostState.showSnackbar(
-                        "GPS disattivato, attivalo nelle impostazioni.",
-                        "Vai alle impostazioni",
+                        errorMessage,
+                        actionLabel,
                         duration = SnackbarDuration.Long
                     )
-                    Log.d("POIDetailsScreen", "Snackbar result: $res")
                     if (res == SnackbarResult.ActionPerformed)
                         openLocationSettings(ctx)
-                    Log.d("POIDetailsScreen", "Snackbar action performed")
                 }
                 is LocationError.GenericError -> {
-                    Log.d("POIDetailsScreen", "Showing generic error snackbar")
                     snackbarHostState.showSnackbar(locationError.message, duration = SnackbarDuration.Long)
-                    Log.d("POIDetailsScreen", "Snackbar shown")
                 }
             }
             actions.onDismissLocationError()
@@ -91,12 +90,14 @@ fun POIDetailsScreen(
     }
 
     state.permissionError?.let { permissionError ->
+        val errorMessage = stringResource(R.string.permissions_permanently_negated_error)
+        val actionLabel = stringResource(R.string.go_to_settings)
         LaunchedEffect(permissionError) {
             when (permissionError) {
                 PermissionError.PermanentlyDenied -> {
                     val res = snackbarHostState.showSnackbar(
-                        message = "Permessi negati permanentemente, concedili dalle impostazioni.",
-                        actionLabel = "Vai alle impostazioni",
+                        message = errorMessage,
+                        actionLabel = actionLabel,
                         duration = SnackbarDuration.Long,
                     )
                     if (res == SnackbarResult.ActionPerformed)
@@ -116,7 +117,7 @@ fun POIDetailsScreen(
 
     Scaffold(
         topBar = {
-            DiscoverItTopAppBar(navController, state.currentPoi?.name ?: "POI Details")
+            DiscoverItTopAppBar(navController, state.currentPoi?.name ?: stringResource(poi_details))
         },
         bottomBar = {
             DiscoverItNavigationBar(
@@ -138,7 +139,7 @@ fun POIDetailsScreen(
                 }
                 state.currentPoi == null && !state.isLoading -> {
                     EmptyStateUI(
-                        message = "Nessun punto di interesse trovato",
+                        message = stringResource(R.string.no_poi_found_error),
                         onRefresh = actions::onRefresh
                     )
                 }
@@ -161,11 +162,9 @@ fun POIDetailsScreen(
                             onUseGPS = {
                                 if (locationPermissions.statuses.all { it.value != PermissionStatus.Granted }) {
                                     locationPermissions.launchPermissionRequest()
-                                    Log.d("POIDetailsScreen", "Requesting permissions")
                                     return@POIDetailsContent
                                 } else {
                                     actions.onGPSUse()
-                                    Log.d("POIDetailsScreen", "Using GPS")
                                 }
                             },
                             isButtonLoading = state.isLocationLoading

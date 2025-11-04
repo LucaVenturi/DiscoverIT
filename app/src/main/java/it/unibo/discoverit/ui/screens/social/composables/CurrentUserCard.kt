@@ -23,9 +23,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import it.unibo.discoverit.R
 import it.unibo.discoverit.data.database.entities.User
 
 @Composable
@@ -50,7 +52,7 @@ fun CurrentUserCard(currentUser: User, countCompleted: Long, onClick: (Long) -> 
                     .data(currentUser.profilePicUri)
                     .crossfade(true)
                     .build(),
-                contentDescription = "Foto profilo",
+                contentDescription = stringResource(R.string.profile_pic),
                 contentScale = ContentScale.Crop,
                 placeholder = rememberVectorPainter(Icons.Default.Person),
                 error = rememberVectorPainter(Icons.Default.Person),
@@ -70,9 +72,9 @@ fun CurrentUserCard(currentUser: User, countCompleted: Long, onClick: (Long) -> 
                 )
                 Text(
                     text = if (countCompleted == 1L) {
-                        "$countCompleted traguardo raggiunto"
+                        stringResource(R.string.achievement_completed, countCompleted)
                     } else {
-                        "$countCompleted traguardi raggiunti"
+                        stringResource(R.string.x_achievements_completed, countCompleted)
                     },
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary

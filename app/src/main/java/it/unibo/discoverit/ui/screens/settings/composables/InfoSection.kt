@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 
 @Composable
 fun InfoSection(
@@ -19,7 +21,7 @@ fun InfoSection(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SectionTitle(title = "Info")
+        SectionTitle(title = stringResource(R.string.info))
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -29,7 +31,7 @@ fun InfoSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Versione app",
+                text = stringResource(R.string.app_version),
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
