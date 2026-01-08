@@ -35,13 +35,16 @@ fun LoginContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val isError = loginState.errorMsg != null
+
         LoginHeader()
 
         Spacer(modifier = Modifier.height(24.dp))
 
         UsernameField(
             username = loginState.username,
-            onUsernameChanged = { loginActions.onUsernameChanged(it) }
+            onUsernameChanged = { loginActions.onUsernameChanged(it) },
+            isError = isError
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -49,7 +52,8 @@ fun LoginContent(
         PasswordField(
             password = loginState.password,
             onPasswordChanged = { loginActions.onPasswordChanged(it) },
-            label = stringResource(R.string.password)
+            label = stringResource(R.string.password),
+            isError = isError
         )
 
         Spacer(modifier = Modifier.height(32.dp))

@@ -38,7 +38,8 @@ fun RegistrationForm(
         PasswordField(
             password = state.confirmPassword,
             onPasswordChanged = actions::onConfirmPasswordChanged,
-            label = stringResource(R.string.confirm_password)
+            label = stringResource(R.string.confirm_password),
+            isError = state.password != state.confirmPassword
         )
     }
 }

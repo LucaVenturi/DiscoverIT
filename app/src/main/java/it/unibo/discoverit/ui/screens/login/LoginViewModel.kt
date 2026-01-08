@@ -52,7 +52,7 @@ class LoginViewModel(
                         password = _loginState.value.password
                     )
                     userViewModel.setUser(user)
-                    _loginState.update { it.copy(currentPhase = LoginPhase.SUCCESS) }
+                    _loginState.update { it.copy(currentPhase = LoginPhase.SUCCESS, errorMsg = null) }
                 } catch (e: Exception) {
                     _loginState.update {
                         it.copy(

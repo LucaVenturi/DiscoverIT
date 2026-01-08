@@ -19,7 +19,8 @@ fun PasswordField(
     password: String,
     onPasswordChanged: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isError: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -35,6 +36,7 @@ fun PasswordField(
             PasswordVisualTransformation()
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        isError = isError,
         trailingIcon = {
             PasswordVisibilityToggle(
                 isVisible = passwordVisible,

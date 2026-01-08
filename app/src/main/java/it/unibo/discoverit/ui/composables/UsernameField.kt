@@ -14,7 +14,8 @@ import it.unibo.discoverit.R.string
 fun UsernameField(
     username: String,
     onUsernameChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isError: Boolean = false
 ) {
     OutlinedTextField(
         value = username,
@@ -22,6 +23,7 @@ fun UsernameField(
         label = { Text(stringResource(R.string.username)) },
         modifier = modifier.fillMaxWidth(),
         singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        isError = isError
     )
 }
