@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.social
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.User
@@ -8,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -43,21 +45,43 @@ class SocialViewModel(
     val state: StateFlow<SocialState> = _state.asStateFlow()
 
     init {
+        Log.d("SocialViewModel", "Initializing with currentUserId: $currentUserId")
+        loadData()
+    }
+
+    private fun loadData() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.update { it.copy(isLoading = true) }
             try {
-                userRepository.getCountCompletedAchievements(currentUserId).collect { count ->
-                    _state.update { it.copy(currentUserCountCompleted = count) }
+                // Usa combine per raccogliere entrambi i Flow
+                combine(
+                    userRepository.getCountCompletedAchievements(currentUserId),
+                    userRepository.getFriendsAndCountCompletedAchievements(currentUserId)
+                ) { count, friendsMap ->
+                    Log.d("SocialViewModel", "Data updated - count: $count, friends: ${friendsMap.size}")
+                    SocialState(
+                        currentUserCountCompleted = count,
+                        friendsAndCountCompleted = friendsMap,
+                        isLoading = false
+                    )
+                }.collect { newData ->
+                    // Aggiorna lo stato mantenendo i valori degli altri campi
+                    _state.update { currentState ->
+                        currentState.copy(
+                            currentUserCountCompleted = newData.currentUserCountCompleted,
+                            friendsAndCountCompleted = newData.friendsAndCountCompleted,
+                            isLoading = newData.isLoading
+                        )
+                    }
                 }
-                userRepository.getFriendsAndCountCompletedAchievements(currentUserId).collect { friendsAndCountCompleted ->
-                    _state.value = _state.value.copy(friendsAndCountCompleted = friendsAndCountCompleted)
-                }
-                _state.value = _state.value.copy(isLoading = false)
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    errorMsg = e.message,
-                    isLoading = false
-                )
+                Log.e("SocialViewModel", "Error fetching data", e)
+                _state.update {
+                    it.copy(
+                        errorMsg = e.message,
+                        isLoading = false
+                    )
+                }
             }
         }
     }
