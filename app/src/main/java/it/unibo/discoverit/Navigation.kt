@@ -9,9 +9,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import it.unibo.discoverit.ui.screens.account.AccountSettingsScreen
 import it.unibo.discoverit.ui.screens.account.AccountSettingsViewModel
@@ -38,25 +40,44 @@ import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+// ==================== DESTINATION DEFINITIONS ====================
+
 sealed interface Destination {
+    // Auth Graph
     @Serializable
-    data object Home: Destination
-    @Serializable
-    data object Social: Destination
-    @Serializable
-    data object Settings: Destination
-    @Serializable
-    data object Account: Destination
-    @Serializable
-    data object Login: Destination
-    @Serializable
-    data object Register: Destination
+    data object AuthGraph : Destination
+
     @Serializable
     data object SessionCheck: Destination
+
+    @Serializable
+    data object Login: Destination
+
+    @Serializable
+    data object Register: Destination
+
+    // Main Graph
+    @Serializable
+    data object MainGraph : Destination
+
+    @Serializable
+    data object Home: Destination
+
+    @Serializable
+    data object Social: Destination
+
+    @Serializable
+    data object Settings: Destination
+
+    @Serializable
+    data object Account: Destination
+
     @Serializable
     data class CategoryDetails(val categoryId: Long): Destination
+
     @Serializable
     data class POIDetails(val poiId: Long): Destination
+
     @Serializable
     data class UserDetail(val userId: Long): Destination
 }
@@ -71,11 +92,13 @@ sealed interface BottomNavDestination {
         override val icon = Icons.Default.Home
         override val label = "Home"
     }
+
     data object Social : BottomNavDestination {
         override val route = Destination.Social
         override val icon = Icons.Default.Groups
         override val label = "Social"
     }
+
     data object Settings : BottomNavDestination {
         override val route = Destination.Settings
         override val icon = Icons.Default.Settings
@@ -88,12 +111,15 @@ sealed interface BottomNavDestination {
     }
 }
 
+// ==================== MAIN NAVIGATION ====================
+
 @Composable
 fun DiscoverItNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Destination.SessionCheck
     ) {
+        // Session Check - punto di ingresso
         composable<Destination.SessionCheck> {
             val sessionCheckViewModel: SessionCheckViewModel = koinViewModel()
             val sessionCheckState by sessionCheckViewModel.state.collectAsStateWithLifecycle()
@@ -102,17 +128,49 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 state = sessionCheckState,
                 actions = sessionCheckViewModel.actions,
                 onNavigateToLogin = {
-                    navController.navigate(Destination.Login) {
+                    navController.navigate(Destination.AuthGraph) {
                         popUpTo(Destination.SessionCheck) { inclusive = true }
                     }
                 },
                 onNavigateToHome = {
-                    navController.navigate(Destination.Home) {
+                    navController.navigate(Destination.MainGraph) {
                         popUpTo(Destination.SessionCheck) { inclusive = true }
                     }
                 }
             )
         }
+
+        // Auth Graph - tutto il flusso di autenticazione
+        authGraph(
+            navController = navController,
+            onLoginSuccess = {
+                navController.navigate(Destination.MainGraph) {
+                    popUpTo(Destination.AuthGraph) { inclusive = true }
+                }
+            }
+        )
+
+        // Main Graph - tutto il flusso autenticato
+        mainGraph(
+            navController = navController,
+            onLogout = {
+                navController.navigate(Destination.AuthGraph) {
+                    popUpTo(Destination.MainGraph) { inclusive = true }
+                }
+            }
+        )
+    }
+}
+
+// ==================== AUTH GRAPH ====================
+
+fun NavGraphBuilder.authGraph(
+    navController: NavHostController,
+    onLoginSuccess: () -> Unit
+) {
+    navigation<Destination.AuthGraph>(
+        startDestination = Destination.Login
+    ) {
         composable<Destination.Login> {
             val loginViewModel: LoginViewModel = koinViewModel()
 
@@ -120,19 +178,12 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 loginState = loginViewModel.loginState.collectAsState().value,
                 loginActions = loginViewModel.loginActions,
                 onNavigateToRegister = {
-                    navController.navigate(Destination.Register) {
-                        launchSingleTop = true
-                    }
+                    navController.navigate(Destination.Register)
                 },
-                onLoginSuccess = {
-                    navController.navigate(Destination.Home) {
-                        launchSingleTop = true
-                        popUpTo(Destination.Login) { inclusive = true }
-                        restoreState = true
-                    }
-                }
+                onLoginSuccess = onLoginSuccess
             )
         }
+
         composable<Destination.Register> {
             val registrationViewModel: RegistrationViewModel = koinViewModel()
 
@@ -140,17 +191,25 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 state = registrationViewModel.state.collectAsState().value,
                 actions = registrationViewModel.actions,
                 onNavigateToLogin = {
-                    navController.navigate(Destination.Login) {
-                        popUpTo(Destination.Register) { inclusive = true }
-                    }
+                    navController.popBackStack(Destination.Login, inclusive = false)
                 },
-                onRegistrationSuccess = {
-                    navController.navigate(Destination.Home) {
-                        popUpTo(Destination.Register) { inclusive = true }
-                    }
-                }
+                onRegistrationSuccess = onLoginSuccess
             )
         }
+    }
+}
+
+// ==================== MAIN GRAPH ====================
+
+fun NavGraphBuilder.mainGraph(
+    navController: NavHostController,
+    onLogout: () -> Unit
+) {
+    navigation<Destination.MainGraph>(
+        startDestination = Destination.Home
+    ) {
+        // ===== BOTTOM NAV SCREENS =====
+
         composable<Destination.Home> {
             val homeViewModel: HomeViewModel = koinViewModel()
             val homeState by homeViewModel.homeState.collectAsStateWithLifecycle()
@@ -166,6 +225,7 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 }
             )
         }
+
         composable<Destination.Social> {
             val userViewModel: UserViewModel = koinViewModel()
             val userState by userViewModel.userState.collectAsStateWithLifecycle()
@@ -188,9 +248,11 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 }
             )
         }
+
         composable<Destination.Settings> {
             val settingsViewModel: SettingsViewModel = koinViewModel()
             val settingsState by settingsViewModel.state.collectAsStateWithLifecycle()
+
             SettingsScreen(
                 navController = navController,
                 state = settingsState,
@@ -199,6 +261,9 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 bottomNavOnNavigateTo(it, navController)
             }
         }
+
+        // ===== DETAIL SCREENS =====
+
         composable<Destination.Account> {
             val accountSettingsViewModel: AccountSettingsViewModel = koinViewModel()
             val accountSettingsState by accountSettingsViewModel.state.collectAsStateWithLifecycle()
@@ -211,13 +276,10 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 state = accountSettingsState,
                 actions = accountSettingsViewModel.actions,
                 userState = userState,
-                onLogout = {
-                    navController.navigate(Destination.Login) {
-                        popUpTo(Destination.Home) { inclusive = true }
-                    }
-                }
+                onLogout = onLogout
             )
         }
+
         composable<Destination.UserDetail> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.UserDetail>()
             val userDetailViewModel: UserDetailViewModel = koinViewModel(
@@ -232,6 +294,7 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 onNavigateTo = { bottomNavOnNavigateTo(it, navController) }
             )
         }
+
         composable<Destination.CategoryDetails> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.CategoryDetails>()
             val categoryDetailsViewModel: CategoryDetailsViewModel = koinViewModel(
@@ -251,6 +314,7 @@ fun DiscoverItNavGraph(navController: NavHostController) {
                 }
             )
         }
+
         composable<Destination.POIDetails> { backStackEntry ->
             val args = backStackEntry.toRoute<Destination.POIDetails>()
             val poiDetailsViewModel: POIDetailsViewModel = koinViewModel(
@@ -270,15 +334,22 @@ fun DiscoverItNavGraph(navController: NavHostController) {
     }
 }
 
-fun bottomNavOnNavigateTo(bottomNavDestination: BottomNavDestination, navController: NavHostController) {
+// ==================== NAVIGATION HELPERS ====================
+
+fun bottomNavOnNavigateTo(
+    bottomNavDestination: BottomNavDestination,
+    navController: NavHostController
+) {
     navController.navigate(bottomNavDestination.route) {
-        // Evita destinazioni duplicate nel back stack
+        // Evita destinazioni duplicate
         launchSingleTop = true
-        // Pulisce il back stack fino alla destinazione home per evitare accumulo di destinazioni
+
+        // Torna sempre a Home e salva lo stato
         popUpTo(Destination.Home) {
             saveState = true
         }
-        // Ripristina lo stato quando si torna alla destinazione
+
+        // Ripristina lo stato della destinazione
         restoreState = true
     }
 }
