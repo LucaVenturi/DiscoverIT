@@ -51,11 +51,31 @@ fun POIDetailsScreen(
         listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     ) { statuses ->
         when {
-            statuses.all { it.value == PermissionStatus.Granted } -> {}
-            statuses.all { it.value == PermissionStatus.PermanentlyDenied } ->
+            statuses.any { it.value == PermissionStatus.Granted } -> {
+                /*
+                    Uno tra FINE e COARSE è stato garantito, per quanto sarebbe meglio FINE
+                    lascio comunque che funzioni, ma al prossimo click verrà
+                    chiesto di aumentare la precisione
+                 */
+                Log.d("POIDetailsScreen", "Location permissions granted")
+            }
+
+            statuses.all { it.value == PermissionStatus.PermanentlyDenied } -> {
+                /*
+                    Entrambi negati permanentemente, chiamo la funzione di gestione
+                 */
                 actions.onPermanentlyDenied()
-            else ->
+                Log.d("POIDetailsScreen", "Location permissions permanently denied")
+            }
+
+            else -> {
+                /*
+                    Entrambi negati temporaneamente, chiamo la funzione di gestione
+                 */
                 actions.onDenied()
+
+            Log.d("POIDetailsScreen", "Location permissions denied")
+            }
         }
     }
 
@@ -160,11 +180,20 @@ fun POIDetailsScreen(
                                 )
                             },
                             onUseGPS = {
-                                if (locationPermissions.statuses.all { it.value != PermissionStatus.Granted }) {
+                                val fineLocationPermissionStatus = locationPermissions.statuses[Manifest.permission.ACCESS_FINE_LOCATION]
+                                if (fineLocationPermissionStatus != PermissionStatus.Granted && fineLocationPermissionStatus != PermissionStatus.PermanentlyDenied) {
+                                    /*
+                                        Se non ho il permesso ACCESS_FINE_LOCATION,
+                                        lancio la richiesta di permesso
+                                        (Quindi anche se ho solo ACCESS_COARSE_LOCATION)
+                                     */
+                                    Log.d("POIDetailsScreen", "Requesting permission")
                                     locationPermissions.launchPermissionRequest()
-                                    return@POIDetailsContent
+                                    Log.d("POIDetailsScreen", "Permission requested")
                                 } else {
+                                    Log.d("POIDetailsScreen", "Permission already granted")
                                     actions.onGPSUse()
+                                    Log.d("POIDetailsScreen", "onGPSUse called")
                                 }
                             },
                             isButtonLoading = state.isLocationLoading

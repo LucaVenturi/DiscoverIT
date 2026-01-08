@@ -102,7 +102,7 @@ class POIDetailsViewModel(
             _state.update { it.copy(isLocationLoading = true) }
             viewModelScope.launch {
                 try {
-                    val location = locationService.getCurrentLocation(usePreciseLocation = true)
+                    val location = locationService.getCurrentLocation(usePreciseLocation = false)
                         ?: throw Exception("Impossibile ottenere la posizione")
                     Log.d("POIDetailsViewModel", "Location received: $location")
 
