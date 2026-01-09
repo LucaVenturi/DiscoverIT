@@ -40,8 +40,8 @@ fun CategoryCard(
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.surface,  // ← surface per card
+            contentColor = MaterialTheme.colorScheme.onSurface   // ← onSurface per testo
         ),
         onClick = {
             onCategoryClick(categoryWithStats.category.categoryId)

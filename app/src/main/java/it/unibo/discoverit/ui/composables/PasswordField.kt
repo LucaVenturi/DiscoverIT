@@ -2,8 +2,12 @@ package it.unibo.discoverit.ui.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +46,10 @@ fun PasswordField(
                 isVisible = passwordVisible,
                 onToggle = { passwordVisible = !passwordVisible }
             )
-        }
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            errorTrailingIconColor = MaterialTheme.colorScheme.error,
+            focusedTrailingIconColor = MaterialTheme.colorScheme.primary
+        )
     )
 }

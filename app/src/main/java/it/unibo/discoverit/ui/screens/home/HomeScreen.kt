@@ -1,6 +1,7 @@
 package it.unibo.discoverit.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -44,7 +45,8 @@ fun HomeScreen(
         val categories = homeState.categories
 
         LazyColumn(
-            Modifier.padding(innerPadding).fillMaxSize().padding(6.dp),
+            Modifier.padding(innerPadding).fillMaxSize().padding(4.dp),
+            contentPadding = PaddingValues(0.dp, 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
