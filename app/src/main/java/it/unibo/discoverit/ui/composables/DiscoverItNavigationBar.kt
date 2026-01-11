@@ -7,6 +7,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 
@@ -28,7 +29,7 @@ fun DiscoverItNavigationBar(
                 icon = { Icon(destination.icon, contentDescription = destination.label) },
                 label = { Text(destination.label) },
                 selected = selected,
-                onClick = {
+                onClick = dropUnlessResumed {
                     if (!selected) {
                         onNavigateTo(destination)
                     }

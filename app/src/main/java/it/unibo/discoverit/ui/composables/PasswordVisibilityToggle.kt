@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string
 
@@ -20,7 +21,7 @@ fun PasswordVisibilityToggle(
     modifier: Modifier = Modifier
 ) {
     IconButton(
-        onClick = onToggle,
+        onClick = dropUnlessResumed { onToggle() } ,
         modifier = modifier
     ) {
         Icon(

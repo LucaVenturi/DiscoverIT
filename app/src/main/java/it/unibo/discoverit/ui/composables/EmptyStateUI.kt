@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string
 
@@ -28,7 +29,7 @@ fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = { onRefresh() }) {
+        TextButton(onClick = dropUnlessResumed { onRefresh() }) {
             Text(stringResource(R.string.reload))
         }
     }

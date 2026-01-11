@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.R
 
 @Composable
@@ -17,7 +18,7 @@ fun AddFriendFab(
     modifier: Modifier = Modifier
 ) {
     FloatingActionButton(
-        onClick = onClick,
+        onClick = dropUnlessResumed { onClick() },
         modifier = modifier.padding(16.dp)
     ) {
         Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_friend))

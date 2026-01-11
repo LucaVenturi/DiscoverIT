@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.R
 
 @Composable
@@ -19,7 +20,7 @@ fun MapButton(
     modifier: Modifier = Modifier
 ) {
     TextButton(
-        onClick = onClick,
+        onClick = dropUnlessResumed { onClick() },
         modifier = modifier
     ) {
         Icon(Icons.Default.Map, contentDescription = stringResource(R.string.maps))

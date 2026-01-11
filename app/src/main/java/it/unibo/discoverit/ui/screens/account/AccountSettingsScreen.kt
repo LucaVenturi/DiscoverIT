@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
@@ -146,14 +147,14 @@ private fun ConfirmDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
-                onClick = onConfirmation
+                onClick = dropUnlessResumed { onConfirmation() }
             ) {
                 Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = onDismissRequest
+                onClick = dropUnlessResumed { onDismissRequest() }
             ) {
                 Text(stringResource(R.string.dismiss))
             }

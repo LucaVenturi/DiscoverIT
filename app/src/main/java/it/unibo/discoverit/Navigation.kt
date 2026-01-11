@@ -1,5 +1,6 @@
 package it.unibo.discoverit
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
@@ -7,6 +8,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -117,7 +119,8 @@ sealed interface BottomNavDestination {
 fun DiscoverItNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Destination.SessionCheck
+        startDestination = Destination.SessionCheck,
+        modifier = Modifier.fillMaxSize()
     ) {
         // Session Check - punto di ingresso
         composable<Destination.SessionCheck> {

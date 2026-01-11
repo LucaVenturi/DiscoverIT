@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.R
 
 @Composable
@@ -34,14 +35,14 @@ fun AddFriendDialog(
         },
         confirmButton = {
             Button(
-                onClick = { onConfirm(usernameToAdd) },
+                onClick = dropUnlessResumed { onConfirm(usernameToAdd) },
                 enabled = usernameToAdd.isNotBlank()
             ) {
                 Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
-            Button(onClick = onDismiss) {
+            Button(onClick = dropUnlessResumed { onDismiss() }) {
                 Text(stringResource(R.string.dismiss))
             }
         }

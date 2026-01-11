@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.data.database.entities.CategoryStats
 
 @Composable
@@ -43,7 +44,7 @@ fun CategoryCard(
             containerColor = MaterialTheme.colorScheme.surface,  // ← surface per card
             contentColor = MaterialTheme.colorScheme.onSurface   // ← onSurface per testo
         ),
-        onClick = {
+        onClick = dropUnlessResumed {
             onCategoryClick(categoryWithStats.category.categoryId)
         }
     ) {

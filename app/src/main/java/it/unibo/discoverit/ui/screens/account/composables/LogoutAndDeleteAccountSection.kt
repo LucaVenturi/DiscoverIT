@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import it.unibo.discoverit.R
 
 @Composable
@@ -20,7 +21,7 @@ fun LogoutAndDeleteAccountSection(
     onDeleteAccountClick: () -> Unit
 ){
     Button(
-        onClick = onLogoutClick,
+        onClick = dropUnlessResumed { onLogoutClick() },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(stringResource(R.string.logout))
@@ -29,7 +30,7 @@ fun LogoutAndDeleteAccountSection(
     Spacer(Modifier.height(8.dp))
 
     OutlinedButton(
-        onClick = onDeleteAccountClick,
+        onClick = dropUnlessResumed { onDeleteAccountClick() } ,
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = MaterialTheme.colorScheme.error

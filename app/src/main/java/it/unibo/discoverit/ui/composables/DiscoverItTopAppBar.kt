@@ -14,6 +14,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
@@ -53,7 +54,7 @@ fun DiscoverItTopAppBar(
             // 1. Non siamo in una destinazione della bottom navigation
             // 2. E c'è effettivamente una destinazione precedente
             if (!isBottomNavDestination && navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.navigateUp() }) {
+                IconButton(onClick = dropUnlessResumed { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(arrowback_description)
@@ -63,7 +64,7 @@ fun DiscoverItTopAppBar(
         },
         actions = {
             if(navController.currentBackStackEntry?.destination?.route != Destination.Account::class.qualifiedName) {
-                IconButton(onClick = { navController.navigate(Destination.Account) }) {
+                IconButton(onClick = dropUnlessResumed { navController.navigate(Destination.Account) }) {
                     Icon(
                         imageVector = Icons.Outlined.AccountCircle,
                         contentDescription = stringResource(arrowback_description)

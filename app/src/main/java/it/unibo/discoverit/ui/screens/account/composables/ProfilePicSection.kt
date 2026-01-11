@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import it.unibo.discoverit.R
@@ -52,7 +53,7 @@ fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Un
     Spacer(Modifier.height(8.dp))
 
     TextButton(
-        onClick = onChangeProfilePicClick
+        onClick = dropUnlessResumed { onChangeProfilePicClick() }
     ) {
         Text(stringResource(R.string.change_profile_pic))
     }

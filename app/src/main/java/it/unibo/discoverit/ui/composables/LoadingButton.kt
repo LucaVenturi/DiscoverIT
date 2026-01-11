@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 
 @Composable
 fun LoadingButton(
@@ -23,7 +24,7 @@ fun LoadingButton(
     content: @Composable () -> Unit
 ) {
     Button(
-        onClick = onClick,
+        onClick = dropUnlessResumed { onClick() },
         modifier = modifier,
         enabled = enabled && !isLoading,
         colors = colors

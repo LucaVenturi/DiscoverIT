@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.categorydetails.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessResumed
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import it.unibo.discoverit.data.database.entities.PointOfInterest
@@ -44,8 +46,8 @@ fun POICard(
     ElevatedCard(
         modifier = modifier
             .aspectRatio(0.85f) // leggermente più alta che larga
-            .padding(4.dp),
-        onClick = { onPOIClick(poi.poiId) }
+            .padding(4.dp)
+            .clickable(onClick = dropUnlessResumed { onPOIClick(poi.poiId) })
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
