@@ -1,4 +1,4 @@
-package it.unibo.discoverit.ui.screens.home.composables
+package it.unibo.discoverit.ui.screens.social.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

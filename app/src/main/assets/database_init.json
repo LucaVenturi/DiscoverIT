@@ -232,8 +232,8 @@
     {
       "name": "Piazza del Popolo",
       "description": "Piazza principale di Cesena con la Fontana Masini.",
-      "latitude": 44.139700,
-      "longitude": 12.243500,
+      "latitude": 44.13717842338545,
+      "longitude": 12.242087936529414,
       "imagePath": "poi_images/piazza_del_popolo.jpg",
       "address": {
         "street": "Piazza del Popolo",
@@ -271,8 +271,8 @@
     {
       "name": "Fontana Masini",
       "description": "Fontana rinascimentale simbolo di Cesena.",
-      "latitude": 44.1371363,
-      "longitude": 12.2420792,
+      "latitude": 44.13713875682085,
+      "longitude": 12.242079178100688,
       "imagePath": "poi_images/fontana_masini.jpg",
       "address": {
         "street": "Piazza del Popolo",

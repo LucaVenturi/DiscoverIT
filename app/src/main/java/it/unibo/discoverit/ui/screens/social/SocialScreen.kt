@@ -21,7 +21,7 @@ import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
-import it.unibo.discoverit.ui.screens.home.composables.AddFriendDialog
+import it.unibo.discoverit.ui.screens.social.composables.AddFriendDialog
 import it.unibo.discoverit.ui.screens.home.composables.ConfirmRemoveFriendDialog
 import it.unibo.discoverit.ui.screens.login.UserState
 import it.unibo.discoverit.ui.screens.social.composables.AddFriendFab

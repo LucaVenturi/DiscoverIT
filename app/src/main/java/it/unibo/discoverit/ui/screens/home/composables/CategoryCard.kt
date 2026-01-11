@@ -15,7 +15,6 @@ import androidx.compose.material.icons.outlined.Church
 import androidx.compose.material.icons.outlined.Forest
 import androidx.compose.material.icons.outlined.Landscape
 import androidx.compose.material.icons.outlined.Museum
-import androidx.compose.material.icons.outlined.Nature
 import androidx.compose.material.icons.outlined.Park
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Storefront
@@ -29,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import it.unibo.discoverit.data.database.entities.CategoryStats
 
@@ -53,7 +53,6 @@ fun CategoryCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Immagine/Icona più grande
             Icon(
                 imageVector = getIconFromName(categoryWithStats.category.iconName),
                 contentDescription = null,
@@ -67,16 +66,22 @@ fun CategoryCard(
             // Nome
             Text(
                 categoryWithStats.category.name,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
             )
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(12.dp))
 
             // Percentuale
             Text(
                 "${(categoryWithStats.visitedCount.toDouble() / categoryWithStats.totalPOIs * 100).toLong()}%",
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                modifier = Modifier.width(72.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
