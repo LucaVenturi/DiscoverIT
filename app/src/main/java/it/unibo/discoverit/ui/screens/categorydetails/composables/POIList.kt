@@ -15,9 +15,9 @@ fun POIList(
     onPOIClick: (Long) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 150.dp), // si adatta automaticamente
+        columns = GridCells.Adaptive(minSize = 150.dp), // Adaptive number of columns for different screen sizes
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(4.dp) // padding esterno opzionale
+        contentPadding = PaddingValues(4.dp) // Extra space around the grid
     ) {
         items(poiList.size) { index ->
             POICard(

@@ -4,6 +4,18 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import kotlinx.serialization.Serializable
 
+/**
+ * Represents the progress of an [Achievement] for a [User].
+ * It's the relation between a [User] and an [Achievement].
+ *
+ * This entity is stored in the `user_achievement_progress` table.
+ *
+ * @property userId the id of the [User] whom we want to track the progress.
+ * @property achievementId the id of the [Achievement] we want to track..
+ * @property progress the current progress of the [User] towards the [Achievement].
+ * @property isCompleted whether the [User] has completed the [Achievement].
+ * @property completionDate the date when the [User] completed the [Achievement].
+ */
 @Serializable
 @Entity(
     tableName = "user_achievement_progress",

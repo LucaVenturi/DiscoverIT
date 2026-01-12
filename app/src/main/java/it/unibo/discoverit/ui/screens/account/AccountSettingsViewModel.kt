@@ -13,6 +13,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Data class representing the state of the account settings screen.
+ *
+ * @property userId The ID of the logged-in user.
+ * @property username The current username inside of the textbox.
+ * @property isLoading Whether the screen is currently loading.
+ * @property errorMsg The error message to be displayed, if any.
+ * @property isUsernameChanged Whether the username has been changed.
+ * @property showImageSourceDialog Whether the image source dialog should be shown.
+ * @property showLogoutDialog Whether the logout dialog should be shown.
+ * @property showDeleteAccountDialog Whether the delete account dialog should be shown.
+ */
 data class AccountSettingsState(
     val userId: Long? = null,
     val username: String,
@@ -24,33 +36,104 @@ data class AccountSettingsState(
     val showDeleteAccountDialog: Boolean = false
 )
 
+/**
+ * Interface defining the actions that can be performed on the account settings screen.
+ */
 interface AccountSettingsActions {
+    /**
+     * Called when the username inside the textbox changes.
+     *
+     * @param username The changed text.
+     */
     fun onUsernameChange(username: String)
+
+    /**
+     * Called when the user clicks on the change profile picture button.
+     */
     fun onChangeProfilePicClick()
+
+    /**
+     * Called when the user clicks on the dismiss button of the image source dialog.
+     */
     fun onDismissImageSourceDialog()
+
+    /**
+     * Called when the user clicks on the pick from gallery button of the image source dialog.
+     */
     fun onPickFromGallery()
+
+    /**
+     * Called when the user clicks on the take photo button of the image source dialog.
+     */
     fun onTakePhoto()
+
+    /**
+     * Called when an image has been chosen from the gallery or the camera.
+     *
+     * @param bitmap The bitmap of the picked image.
+     */
     fun onImagePicked(bitmap: Bitmap)
+
+    /**
+     * Called when the user clicks on the save button of the username section to save the changes.
+     */
     fun onSaveClick()
+
+    /**
+     * Called when the user clicks on the logout button.
+     */
     fun onLogoutClick()
+
+    /**
+     * Called when the user clicks on the delete account button.
+     */
     fun onDeleteAccountClick()
+
+    /**
+     * Called when the user confirms the logout action.
+     */
     fun onLogoutConfirmation()
+
+    /**
+     * Called when the user confirms the delete account action.
+     */
     fun onDeleteAccountConfirmation()
+
+    /**
+     * Called when the user dismisses the logout dialog.
+     */
     fun onLogoutDismiss()
+
+    /**
+     * Called when the user dismisses the delete account dialog.
+     */
     fun onDeleteAccountDismiss()
 }
 
+/**
+ * ViewModel for the account settings screen.
+ *
+ * @property userViewModel The view model saving the state of the logged-in user.
+ * @property userRepository The repository that handles user data.
+ * @property accountService Helper class for managing user authentication.
+ * Used to logout the user or delete his account.
+ * @property accountSettingsRepository The repository that handles account settings data.
+ */
 class AccountSettingsViewModel(
     private val userViewModel: UserViewModel,
     private val userRepository: UserRepository,
     private val accountService: AccountService,
     private val accountSettingsRepository: AccountSettingsRepository
 ) : ViewModel() {
+
+    // Safe way to expose the state.
     private val _state = MutableStateFlow(AccountSettingsState(username = ""))
     val state: StateFlow<AccountSettingsState> = _state.asStateFlow()
 
+    // Initialize the state with the logged-in user's data
     init {
         viewModelScope.launch {
+            // Get the logged-in user from the user viewmodel.
             userViewModel.userState.collect { userState ->
                 userState.user?.let { user ->
                     _state.update {
@@ -64,6 +147,10 @@ class AccountSettingsViewModel(
         }
     }
 
+    /**
+     * Local implementation of the actions.
+     * @see AccountSettingsActions
+     */
     val actions = object : AccountSettingsActions {
         override fun onUsernameChange(username: String) {
             _state.update {
@@ -95,13 +182,18 @@ class AccountSettingsViewModel(
                 try {
                     _state.update { it.copy(isLoading = true) }
 
-                    val userId = _state.value.userId ?: throw IllegalStateException("No logged-in user")
+                    val userId = _state.value.userId
+                        ?: throw IllegalStateException("No logged-in user")
 
-                    // Aggiorna l'immagine nel repository e recupera l'utente aggiornato
+                    // Update the profile picture in the database.
                     val updatedUser = accountSettingsRepository.updateProfilePicture(userId, bitmap)
+
+                    // Update the user in the viewmodel.
                     userViewModel.setUser(updatedUser)
                 } catch (e: Exception) {
-                    _state.update { it.copy(errorMsg = e.message ?: "Errore durante l'aggiornamento della foto") }
+                    _state.update {
+                        it.copy(errorMsg = e.message ?: "Errore durante l'aggiornamento della foto")
+                    }
                 } finally {
                     _state.update { it.copy(isLoading = false) }
                 }
@@ -112,14 +204,19 @@ class AccountSettingsViewModel(
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true) }
                 try {
-                    val user = userRepository.getUserById(_state.value.userId ?: throw IllegalStateException("No logged-in user"))
+                    // Get the user from the database and update its username
+                    val user = userRepository.getUserById(_state.value.userId
+                        ?: throw IllegalStateException("No logged-in user"))
                     val newUser = user.copy(username = _state.value.username)
-                    accountSettingsRepository.changeUsername(newUser.userId, newUser.username)
+                    accountSettingsRepository.changeUsername(
+                        newUser.userId,
+                        newUser.username
+                    )
 
-                    // Aggiorna anche il UserViewModel con i nuovi dati
+                    // Update the user in the viewmodel
                     userViewModel.setUser(newUser)
 
-                    // Aggiorna lo stato locale per riflettere che l'username non è più "changed"
+                    // Update the state.
                     _state.update {
                         it.copy(
                             isUsernameChanged = false,
@@ -154,7 +251,9 @@ class AccountSettingsViewModel(
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true, showDeleteAccountDialog = false) }
                 try {
-                    userRepository.delete(userViewModel.userState.value.user ?: throw IllegalStateException("No logged-in user"))
+                    userRepository.delete(userViewModel.userState.value.user
+                        ?: throw IllegalStateException("No logged-in user"))
+                    // Also clear the user from the viewmodel
                     userViewModel.logout()
                 } catch (e: Exception) {
                     _state.update { it.copy(errorMsg = e.message ?: "Unknown error") }

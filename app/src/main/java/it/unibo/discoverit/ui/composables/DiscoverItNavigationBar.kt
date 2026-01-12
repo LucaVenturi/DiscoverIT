@@ -7,10 +7,21 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 
+/**
+ * Bottom navigation bar for switching between main app destinations.
+ *
+ * Displays a set of [BottomNavDestination] items with icons and labels.
+ * Highlights the currently selected destination and handles navigation.
+ *
+ * @param items The list of [BottomNavDestination]s to display. Defaults to all destinations.
+ * @param currentRoute The currently active [Destination] to highlight.
+ * @param onNavigateTo Callback invoked when a navigation item is selected.
+ */
 @Composable
 fun DiscoverItNavigationBar(
     items: List<BottomNavDestination> = BottomNavDestination.items,
@@ -29,7 +40,7 @@ fun DiscoverItNavigationBar(
                 icon = { Icon(destination.icon, contentDescription = destination.label) },
                 label = { Text(destination.label) },
                 selected = selected,
-                onClick = dropUnlessResumed {
+                onClick = dropUnlessStarted {
                     if (!selected) {
                         onNavigateTo(destination)
                     }

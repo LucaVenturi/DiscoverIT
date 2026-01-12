@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation.compose.rememberNavController
 import it.unibo.discoverit.ui.screens.settings.SettingsViewModel
 import it.unibo.discoverit.ui.screens.settings.ThemeOption

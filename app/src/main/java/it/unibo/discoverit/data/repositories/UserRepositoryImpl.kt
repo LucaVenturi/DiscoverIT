@@ -8,15 +8,27 @@ import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.hasher.PasswordHasher
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Room implementation of [UserRepository].
+ *
+ * @property userDao the [UserDAO] instance to use for database operations.
+ * @property friendShipDao the [FriendshipDAO] instance to use for database operations.
+ * @property passwordHasher the [PasswordHasher] instance to use for password hashing.
+ */
 class UserRepositoryImpl(
     private val userDao: UserDAO,
     private val friendShipDao: FriendshipDAO,
     private val passwordHasher: PasswordHasher
 ) : UserRepository {
 
+    /**
+     * @see UserRepository.login
+     * @throws IllegalArgumentException if the user is not found.
+     * @throws AuthenticatorException if the password is invalid.
+     */
     override suspend fun login(username: String, plainPassword: String): User {
         val user = userDao.getUserByUsername(username)
-            ?: throw AuthenticatorException("User not found")
+            ?: throw IllegalArgumentException("User not found")
 
         if (!passwordHasher.verifyPassword(plainPassword, user.hashedPassword)) {
             throw AuthenticatorException("Invalid credentials")
@@ -25,9 +37,13 @@ class UserRepositoryImpl(
         return user
     }
 
+    /**
+     * @see UserRepository.register
+     * @throws IllegalArgumentException if the username already exists.
+     */
     override suspend fun register(username: String, plainPassword: String): Long {
         if (userDao.getUserByUsername(username) != null) {
-            throw AuthenticatorException("Username already exists")
+            throw IllegalArgumentException("Username already exists")
         }
 
         val hashedPassword = passwordHasher.hashPassword(plainPassword)
@@ -55,12 +71,20 @@ class UserRepositoryImpl(
     override suspend fun delete(user: User) =
         userDao.delete(user)
 
+    /**
+     * @see UserRepository.addFriendship
+     * @throws IllegalArgumentException if the user is not found.
+     * @throws Exception if the friendship already exists.
+     */
     override suspend fun addFriendship(userId: Long, username: String) {
-        val friendId = (userDao.getUserByUsername(username) ?: throw Exception("User not found")).userId
+        val friendId = (userDao.getUserByUsername(username)
+            ?: throw IllegalArgumentException("User not found")).userId
 
         when {
             userId == friendId -> throw Exception("You cannot add yourself as a friend")
-            friendShipDao.isFriend(userId, friendId) -> throw Exception("Friendship already exists")
+            friendShipDao.isFriend(userId, friendId) -> throw Exception(
+                "Friendship already exists"
+            )
             else -> friendShipDao.insert(
                 Friendship(
                     userId = userId,
@@ -81,7 +105,10 @@ class UserRepositoryImpl(
 
     override suspend fun updateProfilePicture(userId: Long, path: String): User {
         val user = userDao.getUserById(userId)
-        val updatedUser = user.copy(profilePicPath = path, profilePicLastModified = System.currentTimeMillis())
+        val updatedUser = user.copy(
+            profilePicPath = path,
+            profilePicLastModified = System.currentTimeMillis()
+        )
 
         userDao.update(updatedUser)
         return updatedUser

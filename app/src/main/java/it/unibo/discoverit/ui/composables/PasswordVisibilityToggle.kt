@@ -10,10 +10,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string
 
+
+/**
+ * Composable for displaying a password visibility toggle button.
+ *
+ * @param isVisible Whether the password is currently visible.
+ * @param onToggle The callback to be invoked when the visibility toggle is clicked.
+ * @param modifier The modifier to be applied to the toggle button.
+ */
 @Composable
 fun PasswordVisibilityToggle(
     isVisible: Boolean,
@@ -21,7 +29,7 @@ fun PasswordVisibilityToggle(
     modifier: Modifier = Modifier
 ) {
     IconButton(
-        onClick = dropUnlessResumed { onToggle() } ,
+        onClick = dropUnlessStarted { onToggle() } ,
         modifier = modifier
     ) {
         Icon(

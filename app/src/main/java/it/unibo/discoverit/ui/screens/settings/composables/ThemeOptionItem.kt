@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.ui.screens.settings.ThemeOption
 
 @Composable
@@ -29,13 +29,13 @@ fun ThemeOptionItem(
             .fillMaxWidth()
             .clickable(
                 role = Role.RadioButton,
-                onClick = dropUnlessResumed { onSelect() }
+                onClick = dropUnlessStarted { onSelect() }
             )
             .padding(vertical = 8.dp)
     ) {
         RadioButton(
             selected = isSelected,
-            onClick = dropUnlessResumed { onSelect() }
+            onClick = dropUnlessStarted { onSelect() }
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(

@@ -5,12 +5,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.R
 import it.unibo.discoverit.utils.images.ImageSourceLauncher
 import it.unibo.discoverit.utils.images.rememberCameraLauncher
 import it.unibo.discoverit.utils.images.rememberGalleryLauncher
 
+/**
+ * Custom Dialog to select the source of the profile picture.
+ *
+ * @param onPickFromGallery The action to perform when the user picks an image from the gallery.
+ * @param onTakePhoto The action to perform when the user takes a photo with the camera.
+ * @param onDismiss The action to perform when the dialog is dismissed.
+ * @param galleryLauncher The launcher for picking an image from the gallery.
+ * @param cameraLauncher The launcher for taking a photo with the camera.
+ */
 @Composable
 fun SelectImageSourceDialog(
     onPickFromGallery: () -> Unit,
@@ -24,7 +33,7 @@ fun SelectImageSourceDialog(
         title = { Text(stringResource(R.string.select_profile_pic)) },
         text = { Text(stringResource(R.string.select_profile_pic_source)) },
         confirmButton = {
-            TextButton(onClick = dropUnlessResumed {
+            TextButton(onClick = dropUnlessStarted {
                 onPickFromGallery()
                 galleryLauncher.captureImage()
             }) {
@@ -32,7 +41,7 @@ fun SelectImageSourceDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = dropUnlessResumed {
+            TextButton(onClick = dropUnlessStarted {
                 onTakePhoto()
                 cameraLauncher.captureImage()
             }) {

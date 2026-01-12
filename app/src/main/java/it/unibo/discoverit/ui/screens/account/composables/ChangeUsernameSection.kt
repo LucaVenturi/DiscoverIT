@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.R.string
 import it.unibo.discoverit.R.string.save_changes
 
@@ -43,6 +43,7 @@ fun ChangeUsernameSection(
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             trailingIcon = {
+                // Small button to save the changes
                 SaveUsernameChangesIconButton(
                     usernameChanged = isUsernameChanged,
                     onClick = onSaveClick
@@ -59,7 +60,7 @@ fun SaveUsernameChangesIconButton(
     onClick: () -> Unit = {}
 ) {
     if (usernameChanged) {
-        IconButton(onClick = dropUnlessResumed { onClick() }) {
+        IconButton(onClick = dropUnlessStarted { onClick() }) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = stringResource(save_changes),

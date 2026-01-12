@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +21,7 @@ import it.unibo.discoverit.ui.composables.UsernameField
 import it.unibo.discoverit.ui.screens.login.LoginActions
 import it.unibo.discoverit.ui.screens.login.LoginPhase
 import it.unibo.discoverit.ui.screens.login.LoginState
+
 
 @Composable
 fun LoginContent(
@@ -37,7 +40,12 @@ fun LoginContent(
     ) {
         val isError = loginState.errorMsg != null
 
-        LoginHeader()
+        // Login Header.
+        Text(
+            text = stringResource(R.string.login_into_discoverit),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -68,8 +76,10 @@ fun LoginContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // If the user does not have an account, can navigate to the register screen.
         RegisterPrompt(onNavigateToRegister)
 
+        // In case of error, show the error message.
         loginState.errorMsg?.let { error ->
             ErrorMessage(
                 error = error

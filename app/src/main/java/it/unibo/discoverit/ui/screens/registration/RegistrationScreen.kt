@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.ErrorMessage
 import it.unibo.discoverit.ui.screens.registration.composables.LoginPrompt
 import it.unibo.discoverit.ui.screens.registration.composables.RegisterButton
@@ -27,7 +30,7 @@ fun RegistrationScreen(
     onNavigateToLogin: () -> Unit,
     onRegistrationSuccess: () -> Unit
 ) {
-    // Gestione navigazione automatica su successo
+    // When the registration is successful, navigate to the login screen.
     LaunchedEffect(state.currentPhase) {
         if (state.currentPhase == RegistrationPhase.SUCCESS) {
             onRegistrationSuccess()
@@ -63,7 +66,12 @@ private fun RegistrationContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        RegistrationHeader()
+        // Registration header.
+        Text(
+            text = stringResource(R.string.register),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -80,13 +88,14 @@ private fun RegistrationContent(
             onClick = actions::onRegisterClicked
         )
 
-        // Mostra errore se presente
+        // In case of error, show the error message.
         state.error?.let { error ->
             ErrorMessage(error = error)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // If the user already has an account, can navigate to the login screen.
         LoginPrompt(onNavigateToLogin = onNavigateToLogin)
     }
 }

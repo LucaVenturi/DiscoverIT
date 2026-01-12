@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
@@ -35,7 +35,15 @@ import it.unibo.discoverit.utils.images.rememberCameraLauncher
 import it.unibo.discoverit.utils.images.rememberGalleryLauncher
 import it.unibo.discoverit.utils.images.uriToBitmap
 
-
+/**
+ * Composable for displaying the account settings screen.
+ *
+ * @param navController The navigation controller for handling navigation.
+ * @param state The state of the account settings screen.
+ * @param actions The actions for the account settings screen.
+ * @param userState The state of the user.
+ * @param onLogout The action to perform when the user logs out.
+ */
 @Composable
 fun AccountSettingsScreen(
     navController: NavHostController,
@@ -44,14 +52,17 @@ fun AccountSettingsScreen(
     userState: UserState,
     onLogout: () -> Unit
 ) {
+    // Context needed to get the content resolver
     val ctx = LocalContext.current
 
+    // Launcher for picking an image from the gallery
     val galleryLauncher = rememberGalleryLauncher(
         onPicturePicked = { imageUri ->
             actions.onImagePicked(uriToBitmap(imageUri, ctx.contentResolver))
         }
     )
 
+    // Launcher for taking a picture with the camera
     val cameraLauncher = rememberCameraLauncher(
         onPictureTaken = { imageUri ->
             actions.onImagePicked(uriToBitmap(imageUri, ctx.contentResolver))
@@ -75,6 +86,7 @@ fun AccountSettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
+            // Show the dialog to pick an image source if the flag is set
             if (state.showImageSourceDialog){
                 SelectImageSourceDialog(
                     galleryLauncher = galleryLauncher,
@@ -85,6 +97,7 @@ fun AccountSettingsScreen(
                 )
             }
 
+            // Show the dialog to confirm the logout if the flag is set
             if (state.showLogoutDialog) {
                 ConfirmDialog(
                     label = stringResource(R.string.logout_confirm_dialog),
@@ -96,6 +109,7 @@ fun AccountSettingsScreen(
                 )
             }
 
+            // Show the dialog to confirm the deletion of the account if the flag is set
             if (state.showDeleteAccountDialog) {
                 ConfirmDialog(
                     label = stringResource(R.string.delete_account_confirm_dialog),
@@ -107,10 +121,12 @@ fun AccountSettingsScreen(
                 )
             }
 
+            // Show the section to change the profile picture
             ProfilePicSection(userState.user?.profilePicPath, actions::onChangeProfilePicClick)
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
+            // Show the section to change the username
             ChangeUsernameSection(
                 shownUsername = state.username,
                 onUsernameChange = actions::onUsernameChange,
@@ -120,11 +136,19 @@ fun AccountSettingsScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
+            // Show the buttons to logout or delete the account.
             LogoutAndDeleteAccountSection(actions::onLogoutClick, actions::onDeleteAccountClick)
         }
     }
 }
 
+/**
+ * Custom dialog for confirming an action.
+ *
+ * @param label The label for the dialog.
+ * @param onDismissRequest The action to perform when the dialog is dismissed.
+ * @param onConfirmation The action to perform when the user confirms the action.
+ */
 @Composable
 private fun ConfirmDialog(
     label: String,
@@ -147,14 +171,14 @@ private fun ConfirmDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
-                onClick = dropUnlessResumed { onConfirmation() }
+                onClick = dropUnlessStarted { onConfirmation() }
             ) {
                 Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = dropUnlessResumed { onDismissRequest() }
+                onClick = dropUnlessStarted { onDismissRequest() }
             ) {
                 Text(stringResource(R.string.dismiss))
             }

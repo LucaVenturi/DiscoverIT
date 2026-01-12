@@ -4,6 +4,12 @@ import android.graphics.Bitmap
 import it.unibo.discoverit.data.database.entities.User
 import it.unibo.discoverit.utils.profilepic.ProfilePicStorageHelper
 
+/**
+ * Implementation of [AccountSettingsRepository] that accesses the local Room database.
+ *
+ * @property userRepository the repository for user-related operations.
+ * @property profilePicStorageHelper the helper for saving and loading profile pictures.
+ */
 class AccountSettingsRepositoryImpl(
     private val userRepository: UserRepository,
     private val profilePicStorageHelper: ProfilePicStorageHelper
@@ -19,10 +25,10 @@ class AccountSettingsRepositoryImpl(
 
     override suspend fun changeUsername(userId: Long, newUsername: String) {
         if (newUsername.isBlank())
-            throw Exception("Username cannot be empty")
+            throw IllegalArgumentException("Username cannot be empty")
         val user = userRepository.getUserById(userId)
         if (user.username == newUsername)
-            throw Exception("Username cannot be the same as the old one")
+            throw IllegalArgumentException("Username cannot be the same as the old one")
         val updatedUser = user.copy(username = newUsername)
         userRepository.update(updatedUser)
     }

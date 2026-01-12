@@ -15,21 +15,38 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+/**
+ * Represents a pair of coordinates (latitude and longitude).
+ */
 data class Coordinates(
     val latitude: Double,
     val longitude: Double
 )
 
+/**
+ * Service to get the current location of the device.
+ *
+ * @param ctx The context of the application.
+ * @property coordinates The current location of the device.
+ * @property isLoadingLocation Whether the location is currently being loaded.
+ */
 class LocationService(private val ctx: Context) {
     private val fusedLocationClient = getFusedLocationProviderClient(ctx)
     private val locationManager = ctx.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
     private val _coordinates = MutableStateFlow<Coordinates?>(null)
     val coordinates = _coordinates.asStateFlow()
 
     private val _isLoadingLocation = MutableStateFlow(false)
     val isLoadingLocation = _isLoadingLocation.asStateFlow()
 
+    /**
+     * Gets the current location of the device.
+     *
+     * @param usePreciseLocation Whether to use the precise location provider.
+     * @return The current location of the device.
+     * @throws IllegalStateException if the location is disabled.
+     * @throws SecurityException if the location permission is not granted.
+     */
     suspend fun getCurrentLocation(usePreciseLocation: Boolean = false): Coordinates? {
         val locationEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!locationEnabled) throw IllegalStateException("Location is disabled")

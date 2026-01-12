@@ -11,10 +11,5 @@ import it.unibo.discoverit.R
 fun RegistrationHeader(
     modifier: Modifier = Modifier
 ) {
-    Text(
-        text = stringResource(R.string.register),
-        style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier
-    )
+
 }

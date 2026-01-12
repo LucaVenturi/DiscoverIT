@@ -1,6 +1,5 @@
 package it.unibo.discoverit.ui.screens.categorydetails
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.PointOfInterest
@@ -12,6 +11,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Represents the UI state of the category details screen.
+ *
+ * @property currentCategoryId The ID of the currently displayed category.
+ * @property currentCategoryName The name of the currently displayed category.
+ * @property poiList The list of points of interest in the category.
+ * @property isLoading Whether data is currently being loaded.
+ * @property error An error message if something went wrong, null otherwise.
+ */
 data class CategoryDetailsState(
     val currentCategoryId: Long? = null,
     val currentCategoryName: String = "Category Details",
@@ -20,20 +28,34 @@ data class CategoryDetailsState(
     val error: String? = null
 )
 
+/**
+ * Available actions for the category details screen.
+ */
 interface CategoryDetailsActions {
+    /**
+     * Refreshes the list of points of interest.
+     */
     fun onRefresh()
 }
 
+/**
+ * ViewModel for the category details screen.
+ * Manages the state and business logic for displaying points of interest in a category.
+ *
+ * @property poiRepository Repository for accessing point of interest data.
+ * @property categoryRepository Repository for accessing category data.
+ * @property selectedCategoryId The ID of the category to display.
+ */
 class CategoryDetailsViewModel(
     private val poiRepository: PointOfInterestRepository,
     private val categoryRepository: CategoryRepository,
     private val selectedCategoryId: Long
 ) : ViewModel() {
+
     private val _state = MutableStateFlow(CategoryDetailsState())
     val state: StateFlow<CategoryDetailsState> = _state.asStateFlow()
 
     init {
-        Log.e("CATEGORY_TESTING", selectedCategoryId.toString())
         loadCategoryName(selectedCategoryId)
         loadPOIs(selectedCategoryId)
     }
@@ -44,30 +66,31 @@ class CategoryDetailsViewModel(
         }
     }
 
+    /**
+     * Loads the name of the category from the repository.
+     */
     private fun loadCategoryName(selectedCategoryId: Long) {
         viewModelScope.launch {
             try {
                 _state.update { it.copy(isLoading = true) }
-                Log.e("CATEGORY_TESTING", selectedCategoryId.toString())
                 val selectedCategoryName = categoryRepository.getCategoryName(selectedCategoryId)
-                Log.e("CATEGORY_TESTING", selectedCategoryName)
                 _state.update {
                     it.copy(
                         currentCategoryId = selectedCategoryId,
                         currentCategoryName = selectedCategoryName,
                     )
                 }
-                Log.e("CATEGORY_TESTING", "CategoryName loaded$_state")
             } catch (e: Exception) {
                 _state.update { it.copy(error = e.message) }
-                Log.e("CATEGORY_TESTING", e.message.toString())
             } finally {
                 _state.update { it.copy(isLoading = false) }
-                Log.e("CATEGORY_TESTING", "Finally")
             }
         }
     }
 
+    /**
+     * Loads the list of points of interest for the category.
+     */
     private fun loadPOIs(categoryId: Long = selectedCategoryId) {
         viewModelScope.launch {
             try {

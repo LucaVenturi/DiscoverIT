@@ -10,6 +10,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string
+
+/**
+ * Composable for displaying a username field.
+ *
+ * @param username The current username value.
+ * @param onUsernameChanged The callback to be invoked when the username changes.
+ * @param modifier The modifier to be applied to the username field.
+ * @param isError Whether the username field is in an error state.
+ */
 @Composable
 fun UsernameField(
     username: String,

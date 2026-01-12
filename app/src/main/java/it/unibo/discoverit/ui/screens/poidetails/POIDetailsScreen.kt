@@ -47,17 +47,20 @@ fun POIDetailsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val ctx = LocalContext.current
 
+    // Location Permissions manager. Asks for coarse and fine location permissions.
     val locationPermissions = rememberMultiplePermissions(
-        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+        permissions = listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
     ) { statuses ->
         when {
             statuses.any { it.value == PermissionStatus.Granted } -> {
-                /*
-                    Uno tra FINE e COARSE è stato garantito, per quanto sarebbe meglio FINE
-                    lascio comunque che funzioni, ma al prossimo click verrà
-                    chiesto di aumentare la precisione
-                 */
-                Log.d("POIDetailsScreen", "Location permissions granted")
+            /*
+                Uno tra FINE e COARSE è stato garantito, per quanto sarebbe meglio FINE
+                lascio comunque che funzioni, ma al prossimo click verrà
+                chiesto di aumentare la precisione
+             */
             }
 
             statuses.all { it.value == PermissionStatus.PermanentlyDenied } -> {
@@ -65,7 +68,6 @@ fun POIDetailsScreen(
                     Entrambi negati permanentemente, chiamo la funzione di gestione
                  */
                 actions.onPermanentlyDenied()
-                Log.d("POIDetailsScreen", "Location permissions permanently denied")
             }
 
             else -> {
@@ -73,13 +75,11 @@ fun POIDetailsScreen(
                     Entrambi negati temporaneamente, chiamo la funzione di gestione
                  */
                 actions.onDenied()
-
-            Log.d("POIDetailsScreen", "Location permissions denied")
             }
         }
     }
 
-    // Gestione errori
+    // In case of error, show the error message with a snackbar and dismiss it.
     state.errorMsg?.let { error ->
         LaunchedEffect(error) {
             snackbarHostState.showSnackbar(message = error)
@@ -87,6 +87,7 @@ fun POIDetailsScreen(
         }
     }
 
+    // In case of location error, show the error message with a snackbar and dismiss it.
     state.locationError?.let { locationError ->
         val errorMessage = stringResource(R.string.gps_is_off_error)
         val actionLabel = stringResource(R.string.go_to_settings)
@@ -109,11 +110,14 @@ fun POIDetailsScreen(
         }
     }
 
+    // In case of permission error, show the error message with a snackbar and dismiss it.
     state.permissionError?.let { permissionError ->
         val errorMessage = stringResource(R.string.permissions_permanently_negated_error)
         val actionLabel = stringResource(R.string.go_to_settings)
         LaunchedEffect(permissionError) {
             when (permissionError) {
+                // If the permission is permanently denied,
+                // show a snackbar with the action to go to settings.
                 PermissionError.PermanentlyDenied -> {
                     val res = snackbarHostState.showSnackbar(
                         message = errorMessage,
@@ -124,6 +128,7 @@ fun POIDetailsScreen(
                         openAppSettings(ctx)
                 }
 
+                // If the permission is denied, show a snackbar to notify the user.
                 PermissionError.Denied -> {
                     snackbarHostState.showSnackbar(
                         "Permessi negati.",
@@ -164,6 +169,7 @@ fun POIDetailsScreen(
                     )
                 }
                 else -> {
+                    // If the POI is loaded, show the POI details.
                     state.currentPoi?.let { poi ->
                         POIDetailsContent(
                             poi = poi,
@@ -180,20 +186,16 @@ fun POIDetailsScreen(
                                 )
                             },
                             onUseGPS = {
-                                val fineLocationPermissionStatus = locationPermissions.statuses[Manifest.permission.ACCESS_FINE_LOCATION]
-                                if (fineLocationPermissionStatus != PermissionStatus.Granted && fineLocationPermissionStatus != PermissionStatus.PermanentlyDenied) {
-                                    /*
-                                        Se non ho il permesso ACCESS_FINE_LOCATION,
-                                        lancio la richiesta di permesso
-                                        (Quindi anche se ho solo ACCESS_COARSE_LOCATION)
-                                     */
-                                    Log.d("POIDetailsScreen", "Requesting permission")
+                                val fineLocationPermissionStatus =
+                                    locationPermissions.statuses[Manifest.permission.ACCESS_FINE_LOCATION]
+                                if (fineLocationPermissionStatus != PermissionStatus.Granted &&
+                                    fineLocationPermissionStatus != PermissionStatus.PermanentlyDenied) {
+                                    // If the user didnt grant the fine location permission,
+                                    // and the permission is not permanently denied,
+                                    // request the fine location permission.
                                     locationPermissions.launchPermissionRequest()
-                                    Log.d("POIDetailsScreen", "Permission requested")
                                 } else {
-                                    Log.d("POIDetailsScreen", "Permission already granted")
                                     actions.onGPSUse()
-                                    Log.d("POIDetailsScreen", "onGPSUse called")
                                 }
                             },
                             isButtonLoading = state.isLocationLoading
@@ -205,41 +207,73 @@ fun POIDetailsScreen(
     }
 }
 
+/**
+ * Opens the POI in Google Maps.
+ * Launches an intent to open the Google Maps app with the given location.
+ * If Google Maps is not installed, launches an intent to open the location on the OSM website.
+ *
+ * @param context The context of the activity.
+ * @param latitude The latitude of the location.
+ * @param longitude The longitude of the location.
+ * @param locationName The name of the location.
+ */
 private fun openInMaps(
     context: Context,
     latitude: Double,
     longitude: Double,
     locationName: String
 ) {
+    // Create the URI for the location on Google Maps
     val uri = "geo:$latitude,$longitude?q=$latitude,$longitude($locationName)".toUri()
+
+    // Create the intent to open Google Maps
     val openInMapsIntent = Intent(Intent.ACTION_VIEW).apply {
         data = uri
     }
 
+    // If the intent can be handled, start the activity.
+    // Otherwise, open the location on the OSM website.
     if (openInMapsIntent.resolveActivity(context.packageManager) != null) {
         context.startActivity(openInMapsIntent)
     } else {
-        // Se non dovessero esserci app per le mappe (crazy) lo apre sul browser da osm
+        // No app can handle the intent, open the location on the OSM website.
         val webUri = "https://www.openstreetmap.org/?mlat=$latitude&mlon=$longitude&zoom=16".toUri()
         val webIntent = Intent(Intent.ACTION_VIEW, webUri)
         context.startActivity(webIntent)
+        // se non ha nemmeno un broswer... unlucky
     }
 }
 
+/**
+ * Opens the location settings of the device.
+ * Launches an intent to open the location settings of the device.
+ *
+ * @param ctx The context of the activity.
+ */
 private fun openLocationSettings(ctx: Context) {
+    // Create the intent to open the correct settings.
     val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
+    // If the intent can be handled, start the activity.
     if (intent.resolveActivity(ctx.packageManager) != null) {
         ctx.startActivity(intent)
     }
 }
 
+/**
+ * Opens the app settings of the device.
+ * Launches an intent to open the app settings.
+ *
+ * @param ctx The context of the activity.
+ */
 private fun openAppSettings(ctx: Context) {
+    // Create the intent to open the settings of the App.
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         data = Uri.fromParts("package", ctx.packageName, null)
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
+    // If the intent can be handled, start the activity.
     if (intent.resolveActivity(ctx.packageManager) != null) {
         ctx.startActivity(intent)
     }

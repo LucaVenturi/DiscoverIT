@@ -10,6 +10,24 @@ import it.unibo.discoverit.data.database.daos.UserDAO
 import it.unibo.discoverit.data.database.daos.VisitDAO
 import it.unibo.discoverit.data.database.entities.*
 
+/**
+ * It's the Room database for the DiscoverIt application.
+ * It contains the following entities:
+ * - [Achievement]
+ * - [Category]
+ * - [Friendship]
+ * - [PointOfInterest]
+ * - [User]
+ * - [Visit]
+ * - [UserAchievementProgress]
+ *
+ * @property achievementsDao the [DAO][AchievementDAO] for the [Achievement] entity.
+ * @property categoriesDAO the [DAO][CategoryDAO] for the [Category] entity.
+ * @property pointsOfInterestDAO the [DAO][PointOfInterestDAO] for the [PointOfInterest] entity.
+ * @property usersDAO the [DAO][UserDAO] for the [User] entity.
+ * @property visitsDao the [DAO][VisitDAO] for the [Visit] entity.
+ * @property friendshipsDao the [DAO][FriendshipDAO] for the [Friendship] entity.
+ */
 @Database(
     entities = [
         Achievement::class,

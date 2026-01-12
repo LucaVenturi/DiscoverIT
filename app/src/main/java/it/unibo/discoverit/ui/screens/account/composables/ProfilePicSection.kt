@@ -20,13 +20,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import it.unibo.discoverit.R
 
+/**
+ * Composable for displaying the profile picture section.
+ *
+ * @param profilePicPath The path to the profile picture.
+ * @param onChangeProfilePicClick The action to perform when the user clicks on the
+ * change profile picture button.
+ */
 @Composable
-fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Unit) {
+fun ProfilePicSection(
+    profilePicPath: String?,
+    onChangeProfilePicClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .size(120.dp)
@@ -34,6 +44,7 @@ fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Un
             .background(MaterialTheme.colorScheme.secondaryContainer),
         contentAlignment = Alignment.Center
     ) {
+        // Show the profile picture using the Coil library
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(profilePicPath)
@@ -53,7 +64,7 @@ fun ProfilePicSection(profilePicPath: String?, onChangeProfilePicClick: () -> Un
     Spacer(Modifier.height(8.dp))
 
     TextButton(
-        onClick = dropUnlessResumed { onChangeProfilePicClick() }
+        onClick = dropUnlessStarted { onChangeProfilePicClick() }
     ) {
         Text(stringResource(R.string.change_profile_pic))
     }

@@ -6,6 +6,12 @@ import it.unibo.discoverit.data.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
+/**
+ * Implementation of the [AccountService] interface.
+ * Uses the [UserRepository] and [SessionRepository] to handle user accounts.
+ * @property userRepository The repository for user data.
+ * @property sessionRepository The repository for session data.
+ */
 class AccountServiceImpl(
     private val userRepository: UserRepository,
     private val sessionRepository: SessionRepository

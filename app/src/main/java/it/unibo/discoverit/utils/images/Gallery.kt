@@ -9,6 +9,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
+/**
+ * Creates and remembers a gallery launcher for picking images.
+ *
+ * @param onPicturePicked Callback invoked when an image is successfully picked,
+ * receiving the URI of the selected image.
+ * @return An [ImageSourceLauncher] that can be used to launch the gallery picker.
+ */
 @Composable
 fun rememberGalleryLauncher(
     onPicturePicked: (imageUri: Uri) -> Unit = {}

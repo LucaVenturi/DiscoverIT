@@ -4,6 +4,11 @@ import it.unibo.discoverit.data.database.daos.CategoryDAO
 import it.unibo.discoverit.data.database.entities.CategoryStats
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Implementation of [CategoryRepository] that retrieves data from a Room database.
+ *
+ * @property categoryDAO DAO for category-related database operations.
+ */
 class CategoryRepositoryImpl(
     private val categoryDAO: CategoryDAO
 ): CategoryRepository {

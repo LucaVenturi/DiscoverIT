@@ -13,6 +13,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Enum class representing the different phases of the session check process.
+ *
+ * @property CHECKING Indicates that the session check is currently in progress.
+ * @property USER_LOGGED_IN Indicates that the user is logged in.
+ * @property USER_NOT_LOGGED_IN Indicates that the user is not logged in.
+ * @property ERROR Indicates that an error occurred during the session check.
+ * @property BIOMETRIC_REQUIRED Indicates that biometric authentication is required.
+ */
 enum class SessionCheckPhase {
     CHECKING,
     USER_LOGGED_IN,
@@ -21,16 +30,37 @@ enum class SessionCheckPhase {
     BIOMETRIC_REQUIRED
 }
 
+/**
+ * Data class representing the state of the session check screen.
+ *
+ * @property currentPhase The current phase of the session check process.
+ * @property user The user that is currently logged in.
+ * @property errorMsg The error message to be displayed, if any.
+ */
 data class SessionCheckState(
     val currentPhase: SessionCheckPhase = SessionCheckPhase.CHECKING,
     val user: User? = null,
     val errorMsg: String? = null
 )
 
+/**
+ * Interface for the actions that can be performed on the session check screen.
+ *
+ * @property onBiometricSuccess Called when biometric authentication is successful.
+ */
 interface SessionCheckActions {
     fun onBiometricSuccess()
 }
 
+/**
+ * ViewModel for the session check screen.
+ *
+ * @property accountService The service for managing user accounts.
+ * @property userViewModel The view model saving the state of the logged-in user.
+ * @property settingsRepository The repository for the settings data.
+ * @property state The state of the screen.
+ * @property actions The actions that can be performed on the screen.
+ */
 class SessionCheckViewModel(
     private val accountService: AccountService,
     private val userViewModel: UserViewModel,
@@ -40,8 +70,12 @@ class SessionCheckViewModel(
     private val _state = MutableStateFlow(SessionCheckState())
     val state: StateFlow<SessionCheckState> = _state
 
-    // Action chiamata dalla View per notificare al ViewModel che l'utente ha completato l'autenticazione biometrica
     val actions = object : SessionCheckActions {
+        /**
+         * Called when biometric authentication is successful.
+         * Sets the user in the view model and updates the state to indicate
+         * that the user is logged in.
+         */
         override fun onBiometricSuccess() {
             _state.update { current ->
                 current.user?.let { user ->
@@ -52,33 +86,39 @@ class SessionCheckViewModel(
         }
     }
 
+    // Check the session when the ViewModel is created.
     init {
         checkSession()
     }
 
+    /**
+     * Checks the session of the user.
+     * If the user is not logged in, navigates to the login screen.
+     * If the user is logged in, checks if biometric authentication is enabled.
+     * If it is, asks for biometric authentication.
+     * If it is not, logs the user in.
+     */
     private fun checkSession() {
         viewModelScope.launch {
             _state.update { it.copy(currentPhase = SessionCheckPhase.CHECKING) }
 
             try {
+                // Retrive the user and the biometric login status from the account service.
                 val user = accountService.getCurrentUser()
                 val biometricEnabled = settingsRepository.biometricLoginEnabled.first()
-                Log.e("SessionCheckViewModel", "User: $user, Biometric: $biometricEnabled")
 
+                // Set the new phase based on the user and the biometric login status.
                 val newPhase = when {
                     user == null -> SessionCheckPhase.USER_NOT_LOGGED_IN
                     biometricEnabled -> SessionCheckPhase.BIOMETRIC_REQUIRED
                     else -> {
-                        // Imposta subito lo user nel ViewModel se non serve biometria
+                        // If biometric authentication is not enabled, log the user in.
                         userViewModel.setUser(user)
                         SessionCheckPhase.USER_LOGGED_IN
                     }
                 }
 
-                Log.e("SessionCheckViewModel", "New phase: $newPhase")
-
-
-                // Aggiorna lo state con l'user e la fase
+                // Update the state with the new phase and the user.
                 _state.update { it.copy(currentPhase = newPhase, user = user) }
 
             } catch (e: Exception) {

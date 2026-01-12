@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.data.database.entities.CategoryStats
 
 @Composable
@@ -41,10 +41,10 @@ fun CategoryCard(
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,  // ← surface per card
-            contentColor = MaterialTheme.colorScheme.onSurface   // ← onSurface per testo
+            containerColor = MaterialTheme.colorScheme.surface, // Same color as background
+            contentColor = MaterialTheme.colorScheme.onSurface  // Can use surfaceVariant for contrast
         ),
-        onClick = dropUnlessResumed {
+        onClick = dropUnlessStarted {
             onCategoryClick(categoryWithStats.category.categoryId)
         }
     ) {
@@ -61,10 +61,9 @@ fun CategoryCard(
                 tint = MaterialTheme.colorScheme.primary
             )
 
-            // Spazio tra icona e testo
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Nome
+            // Name of the category
             Text(
                 categoryWithStats.category.name,
                 style = MaterialTheme.typography.bodyLarge,
@@ -75,7 +74,7 @@ fun CategoryCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Percentuale
+            // Completion percentage of the category
             Text(
                 "${(categoryWithStats.visitedCount.toDouble() / categoryWithStats.totalPOIs * 100).toLong()}%",
                 style = MaterialTheme.typography.bodyLarge,
@@ -88,6 +87,9 @@ fun CategoryCard(
     }
 }
 
+/**
+ * Helper function to get the icon from the iconName in the database.
+ */
 private fun getIconFromName(iconName: String?) :ImageVector {
     return when (iconName?.lowercase()) {
         "monument" -> Icons.Outlined.AccountBalance

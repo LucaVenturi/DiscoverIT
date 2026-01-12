@@ -26,6 +26,14 @@ import it.unibo.discoverit.ui.screens.settings.composables.NotificationsSection
 import it.unibo.discoverit.ui.screens.settings.composables.ThemeSection
 import it.unibo.discoverit.utils.biometric.BiometricAuthHelper
 
+/**
+ * Composable of the settings screen.
+ *
+ * @param navController The navigation controller, needed by the top app bar.
+ * @param state The state of the screen.
+ * @param actions The actions that can be performed on the screen.
+ * @param onNavigateTo The action to perform when the user clicks on a navigation item.
+ */
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
@@ -60,7 +68,7 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-
+            // Section to select the theme.
             ThemeSection(
                 selectedTheme = state.selectedTheme,
                 onThemeChange = actions::onThemeChange
@@ -68,6 +76,7 @@ fun SettingsScreen(
 
             SectionDivider()
 
+            // Section to enable/disable biometric authentication.
             BiometricSection(
                 biometricEnabled = state.biometricLoginEnabled,
                 onBiometricChange = actions::onBiometricLoginChange,
@@ -83,6 +92,7 @@ fun SettingsScreen(
 
             SectionDivider()
 
+            // Section to show the app version.
             InfoSection(appVersion = state.appVersion)
         }
     }

@@ -8,6 +8,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import it.unibo.discoverit.ui.screens.login.composables.LoginContent
 
+/**
+ * Composable for the login screen.
+ *
+ * Displays the login form and handles the login process.
+ *
+ * @param loginState The state of the login screen.
+ * @param loginActions The actions for the login screen.
+ */
 @Composable
 fun LoginScreen(
     loginState: LoginState,
@@ -28,7 +36,7 @@ fun LoginScreen(
         )
     }
 
-    // Naviga alla Home dopo il login riuscito
+    // When the login is successful, navigate to the home screen.
     LaunchedEffect(loginState.currentPhase) {
         if (loginState.currentPhase == LoginPhase.SUCCESS) {
             onLoginSuccess()

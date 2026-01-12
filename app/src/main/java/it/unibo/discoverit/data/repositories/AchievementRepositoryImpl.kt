@@ -6,33 +6,57 @@ import it.unibo.discoverit.data.database.entities.Achievement
 import it.unibo.discoverit.data.database.entities.UserAchievementProgress
 import kotlinx.coroutines.flow.Flow
 
-
+/**
+ * Implementation of [AchievementRepository] that uses DAOs to access achievement data.
+ *
+ * @property achievementDAO DAO for achievement-related database operations.
+ * @property userDAO DAO for user-related database operations.
+ */
 class AchievementRepositoryImpl(
     private val achievementDAO: AchievementDAO,
     private val userDAO: UserDAO
 ): AchievementRepository {
+
     override fun getAchievementsWithProgress(userId: Long): Flow<Map<Achievement, UserAchievementProgress?>> {
         return achievementDAO.getAchievementsWithProgress(userId)
     }
 
     override suspend fun updateAchievementsProgressForUser(userId: Long, categoryId: Long) {
+        // Recupera tutti gli achievement associati alla categoria
         val achievements = achievementDAO.getAchievementsByCategory(categoryId)
+
         achievements.forEach { achievement ->
+            // Conta le visite dell'utente per la categoria specifica o in totale
             val count = if (achievement.targetCategory != null) {
                 userDAO.countVisitsForCategory(userId, achievement.targetCategory)
             } else {
                 userDAO.countVisits(userId)
             }
 
+            // Verifica se l'achievement è stato completato
             val isCompleted = count >= achievement.targetCount
 
+            // Recupera il progresso esistente per preservare la data di completamento originale
+            val existingProgress = achievementDAO.getUserAchievementProgress(
+                userId,
+                achievement.achievementId
+            )
+
+            // Determina la data di completamento
+            val completionDate = when {
+                !isCompleted -> null  // Non ancora completato
+                existingProgress?.isCompleted == true -> existingProgress.completionDate  // Già completato, mantieni data originale
+                else -> System.currentTimeMillis()  // Appena completato, salva data attuale
+            }
+
+            // Aggiorna o inserisce il progresso dell'achievement
             achievementDAO.upsertUserAchievementProgress(
                 UserAchievementProgress(
                     userId = userId,
                     achievementId = achievement.achievementId,
                     progress = count,
                     isCompleted = isCompleted,
-                    completionDate = if (isCompleted) System.currentTimeMillis() else null
+                    completionDate = completionDate
                 )
             )
         }

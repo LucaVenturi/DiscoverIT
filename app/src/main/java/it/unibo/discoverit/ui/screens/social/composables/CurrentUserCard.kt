@@ -25,7 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import it.unibo.discoverit.R
@@ -38,7 +38,7 @@ fun CurrentUserCard(currentUser: User, countCompleted: Long, onClick: (Long) -> 
             .fillMaxWidth()
             .padding(bottom = 16.dp)
             .clickable(
-                onClick = dropUnlessResumed { onClick(currentUser.userId) }
+                onClick = dropUnlessStarted { onClick(currentUser.userId) }
             ),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)

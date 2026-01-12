@@ -14,13 +14,22 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string.arrowback_description
 
+/**
+ * Top app bar composable with dynamic navigation controls.
+ *
+ * Shows a back button when not in bottom navigation destinations,
+ * and a profile button when not already on the account screen.
+ *
+ * @param navController The [NavHostController] for navigation actions.
+ * @param title The text to display as the app bar title. Defaults to app name.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscoverItTopAppBar(
@@ -54,7 +63,7 @@ fun DiscoverItTopAppBar(
             // 1. Non siamo in una destinazione della bottom navigation
             // 2. E c'è effettivamente una destinazione precedente
             if (!isBottomNavDestination && navController.previousBackStackEntry != null) {
-                IconButton(onClick = dropUnlessResumed { navController.navigateUp() }) {
+                IconButton(onClick = dropUnlessStarted { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(arrowback_description)
@@ -63,11 +72,15 @@ fun DiscoverItTopAppBar(
             }
         },
         actions = {
-            if(navController.currentBackStackEntry?.destination?.route != Destination.Account::class.qualifiedName) {
-                IconButton(onClick = dropUnlessResumed { navController.navigate(Destination.Account) }) {
+            val isOnAccountScreen = navController.currentBackStackEntry?.destination?.route != Destination.Account::class.qualifiedName
+
+            if(!isOnAccountScreen) {
+                IconButton(onClick = dropUnlessStarted {
+                    navController.navigate(Destination.Account)
+                }) {
                     Icon(
                         imageVector = Icons.Outlined.AccountCircle,
-                        contentDescription = stringResource(arrowback_description)
+                        contentDescription = "Account icon."
                     )
                 }
             }

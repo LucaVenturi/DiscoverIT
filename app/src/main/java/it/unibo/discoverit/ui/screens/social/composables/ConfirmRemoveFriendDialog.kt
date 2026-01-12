@@ -1,4 +1,4 @@
-package it.unibo.discoverit.ui.screens.home.composables
+package it.unibo.discoverit.ui.screens.social.composables
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.R
 
 @Composable
@@ -24,7 +24,7 @@ fun ConfirmRemoveFriendDialog(
         },
         confirmButton = {
             Button(
-                onClick = dropUnlessResumed { onConfirm },
+                onClick = dropUnlessStarted { onConfirm },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 )
@@ -33,7 +33,7 @@ fun ConfirmRemoveFriendDialog(
             }
         },
         dismissButton = {
-            Button(onClick = dropUnlessResumed { onDismiss() }) {
+            Button(onClick = dropUnlessStarted { onDismiss() }) {
                 Text(stringResource(R.string.dismiss))
             }
         }

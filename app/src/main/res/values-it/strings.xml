@@ -25,7 +25,7 @@
     <string name="select_profile_pic_source">Da dove vuoi prendere la foto profilo?</string>
     <string name="from_gallery">Dalla Galleria</string>
     <string name="from_camera">Scatta una foto con la Camera</string>
-    <string name="warning">Attenzione, stai per uscire dal tuo acount</string>
+    <string name="warning">Attenzione</string>
     <string name="confirm">Conferma</string>
     <string name="dismiss">Annulla</string>
     <string name="no_poi_found">Nessun punto di interesse trovato</string>

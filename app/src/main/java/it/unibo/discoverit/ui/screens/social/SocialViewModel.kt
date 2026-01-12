@@ -13,6 +13,20 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Represents the state of the social screen.
+ *
+ * @property friendsAndCountCompleted A map of friends and the number of completed achievements.
+ * @property currentUserCountCompleted The number of completed achievements of the current user.
+ * @property isLoading Whether the screen is currently loading.
+ * @property errorMsg The error message to be displayed, if any.
+ * @property isAddFriendDialogVisible Whether the add friend dialog is visible.
+ * @property usernameToAdd The username of the friend to be added.
+ * @property showSnackbar Whether a snackbar should be shown.
+ * @property snackbarMessage The message to be displayed in the snackbar, if any.
+ * @property selectedFriendForRemoval The friend to be removed, if any.
+ * @property showRemoveFriendDialog Whether the remove friend dialog is visible.
+ */
 data class SocialState(
     val friendsAndCountCompleted: Map<User, Long> = emptyMap(),
     val currentUserCountCompleted: Long = 0,
@@ -37,6 +51,14 @@ interface SocialActions{
     fun onConfirmRemoveFriend()         // Conferma rimozione
 }
 
+/**
+ * ViewModel for the social screen.
+ *
+ * @property userRepository The repository for the user data.
+ * @property currentUserId The ID of the current user.
+ * @property state The state of the screen.
+ * @property actions The actions that can be performed on the screen.
+ */
 class SocialViewModel(
     private val userRepository: UserRepository,
     private val currentUserId: Long
@@ -44,28 +66,30 @@ class SocialViewModel(
     private val _state = MutableStateFlow(SocialState())
     val state: StateFlow<SocialState> = _state.asStateFlow()
 
+    // Load data when the ViewModel is created
     init {
-        Log.d("SocialViewModel", "Initializing with currentUserId: $currentUserId")
         loadData()
     }
 
+    /**
+     * Loads the data for the screen.
+     */
     private fun loadData() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             try {
-                // Usa combine per raccogliere entrambi i Flow
+                // Uses combine to combine the two flows and update the state accordingly.
                 combine(
                     userRepository.getCountCompletedAchievements(currentUserId),
                     userRepository.getFriendsAndCountCompletedAchievements(currentUserId)
                 ) { count, friendsMap ->
-                    Log.d("SocialViewModel", "Data updated - count: $count, friends: ${friendsMap.size}")
                     SocialState(
                         currentUserCountCompleted = count,
                         friendsAndCountCompleted = friendsMap,
                         isLoading = false
                     )
                 }.collect { newData ->
-                    // Aggiorna lo stato mantenendo i valori degli altri campi
+                    // Update the state with the new data.
                     _state.update { currentState ->
                         currentState.copy(
                             currentUserCountCompleted = newData.currentUserCountCompleted,
@@ -75,7 +99,6 @@ class SocialViewModel(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("SocialViewModel", "Error fetching data", e)
                 _state.update {
                     it.copy(
                         errorMsg = e.message,
@@ -107,7 +130,7 @@ class SocialViewModel(
                             usernameToAdd = ""
                         )
                     }
-                    // Chiudi automaticamente dopo 3 secondi
+                    // Delay before hiding the snackbar
                     delay(3000)
                     _state.update { it.copy(showSnackbar = false) }
                 } catch (e: Exception) {

@@ -24,6 +24,15 @@ import androidx.fragment.app.FragmentActivity
 import it.unibo.discoverit.R
 import it.unibo.discoverit.utils.biometric.BiometricAuthHelper
 
+/**
+ * Composable of a screen that checks the session of the user.
+ * It's basically empty and check if there is a user logged in.
+ *
+ * @param state The state of the screen.
+ * @param actions The actions that can be performed on the screen.
+ * @param onNavigateToLogin The action to perform when the user is not logged in.
+ * @param onNavigateToHome The action to perform when the user is logged in.
+ */
 @Composable
 fun SessionCheckScreen(
     state: SessionCheckState,
@@ -32,44 +41,55 @@ fun SessionCheckScreen(
     onNavigateToHome: () -> Unit,
 ) {
     val context = LocalContext.current
+    // Activity per il login biometrico.
     val activity = context as FragmentActivity
+    // Helper per la gestione della biometria.
     val biometricHelper = remember { BiometricAuthHelper(context) }
 
-    // Gestione navigazione basata sullo stato
+    // Get the strings for the biometric login.
+    val biometricTitle = stringResource(R.string.biometric_login_title)
+    val biometricSubtitle = stringResource(R.string.use_fingerprint)
+    val biometricNegativeText = stringResource(R.string.use_password)
+
+    // Depending on the state, navigate to the appropriate screen.
     LaunchedEffect(state.currentPhase) {
         when (state.currentPhase) {
+            // User not logged in, navigate to the login screen.
             SessionCheckPhase.USER_NOT_LOGGED_IN -> {
                 onNavigateToLogin()
             }
+            // User logged in, navigate to the home screen.
             SessionCheckPhase.USER_LOGGED_IN -> {
                 onNavigateToHome()
             }
+            // User is logged in but biometric authentication is required.
             SessionCheckPhase.BIOMETRIC_REQUIRED -> {
                 if (biometricHelper.isBiometricAvailable()) {
                     biometricHelper.authenticate(
                         activity = activity,
-                        title = context.getString(R.string.biometric_login_title),
-                        subtitle = context.getString(R.string.use_fingerprint),
-                        negativeText = context.getString(R.string.use_password),
+                        title = biometricTitle,
+                        subtitle = biometricSubtitle,
+                        negativeText = biometricNegativeText,
                         onSuccess = {
-                            // SOLO l'azione, la navigazione sarà gestita dallo stato
+                            // Biometric authentication succeeded, update the state.
                             actions.onBiometricSuccess()
                         },
                         onError = { msg ->
+                            // Biometric authentication failed, navigate to the login screen.
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                            // In caso di errore biometrico, manda al login
                             onNavigateToLogin()
                         }
                     )
                 } else {
-                    // Biometria non disponibile, manda al login
+                    // Biometric authentication is not available, navigate to the login screen.
                     onNavigateToLogin()
                 }
             }
             SessionCheckPhase.CHECKING -> {
-                // Resta in attesa, niente navigazione
+                // Waiting...
             }
             SessionCheckPhase.ERROR -> {
+                // Error, navigate to the login screen.
                 onNavigateToLogin()
             }
         }

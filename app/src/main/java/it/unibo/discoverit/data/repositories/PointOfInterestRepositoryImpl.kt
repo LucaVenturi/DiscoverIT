@@ -5,6 +5,9 @@ import it.unibo.discoverit.data.database.daos.VisitDAO
 import it.unibo.discoverit.data.database.entities.PointOfInterest
 import it.unibo.discoverit.data.database.entities.Visit
 
+/**
+ * Room-based implementation of [PointOfInterestRepository].
+ */
 class PointOfInterestRepositoryImpl(
     private val poiDAO: PointOfInterestDAO,
     private val visitDAO: VisitDAO

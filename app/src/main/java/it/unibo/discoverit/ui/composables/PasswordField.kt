@@ -18,6 +18,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
+/**
+ * Composable for displaying a password field with visibility toggle.
+ *
+ * @param password The current password value.
+ * @param onPasswordChanged The callback to be invoked when the password changes.
+ * @param label The label for the password field.
+ * @param modifier The modifier to be applied to the password field.
+ * @param isError Whether the password field is in an error state.
+ */
 @Composable
 fun PasswordField(
     password: String,

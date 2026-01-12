@@ -13,10 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string
 
+/**
+ * Composable for displaying an empty state UI with a message and an optional refresh button.
+ *
+ * @param message The message to display in the UI.
+ * @param onRefresh The action to perform when the refresh button is clicked.
+ */
 @Composable
 fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
     Column(
@@ -29,7 +35,9 @@ fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = dropUnlessResumed { onRefresh() }) {
+        TextButton(onClick = dropUnlessStarted {
+            onRefresh()
+        }) {
             Text(stringResource(R.string.reload))
         }
     }

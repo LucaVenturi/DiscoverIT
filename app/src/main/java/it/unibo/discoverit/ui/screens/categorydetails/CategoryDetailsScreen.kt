@@ -23,7 +23,17 @@ import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.composables.EmptyStateUI
 import it.unibo.discoverit.ui.screens.categorydetails.composables.POIList
 
-
+/**
+ * Composable for displaying the details of a category.
+ * Shows a list of the POIs in the category.
+ * Each is a card and can be clicked to navigate to its details.
+ *
+ * @param navController The navigation controller needed by the top app bar.
+ * @param categoryDetailsState The state of the category details screen.
+ * @param categoryDetailsActions The actions for the category details screen.
+ * @param onNavigateTo The callback to navigate to a destination of the bottom navigation.
+ * @param onPOIClick The callback to navigate to the details of a POI
+ */
 @Composable
 fun CategoryDetailsScreen(
     navController: NavHostController,
@@ -34,7 +44,7 @@ fun CategoryDetailsScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Gestione errori
+    // If there is an error, show a snackbar with the error message.
     categoryDetailsState.error?.let { error ->
         LaunchedEffect(error) {
             snackbarHostState.showSnackbar(message = error)
@@ -57,18 +67,21 @@ fun CategoryDetailsScreen(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when {
-                // Gestisce lo stato di caricamento.
+                // If it's loading, show a circular progress indicator.
                 categoryDetailsState.isLoading -> {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .align(Alignment.Center)
                     )
                 }
-                // Gestisce il caso in cui la lista dei punti di interesse sia vuota.
+                // In case of empty state, show an empty state UI.
                 categoryDetailsState.poiList.isEmpty() && !categoryDetailsState.isLoading -> {
-                    EmptyStateUI(stringResource(R.string.no_poi_found), categoryDetailsActions::onRefresh)
+                    EmptyStateUI(
+                        stringResource(R.string.no_poi_found),
+                        categoryDetailsActions::onRefresh
+                    )
                 }
-                // Gestisce lo stato di successo mostrando la lista dei punti di interesse.
+                // If everything is fine, show the list of POIs.
                 else -> {
                     POIList(
                         poiList = categoryDetailsState.poiList,

@@ -22,12 +22,24 @@ import it.unibo.discoverit.Destination
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.screens.social.composables.AddFriendDialog
-import it.unibo.discoverit.ui.screens.home.composables.ConfirmRemoveFriendDialog
+import it.unibo.discoverit.ui.screens.social.composables.ConfirmRemoveFriendDialog
 import it.unibo.discoverit.ui.screens.login.UserState
 import it.unibo.discoverit.ui.screens.social.composables.AddFriendFab
 import it.unibo.discoverit.ui.screens.social.composables.CurrentUserSection
 import it.unibo.discoverit.ui.screens.social.composables.FriendsSection
 
+/**
+ * Composable of the social screen.
+ * Shows the current user and the friends of the user.
+ * Allows to add friends and remove friends.
+ *
+ * @param navController The navigation controller, needed by the top app bar.
+ * @param state The state of the screen.
+ * @param actions The actions that can be performed on the screen.
+ * @param userState The state of the user.
+ * @param onNavigateTo The action to perform when the user clicks on a navigation item.
+ * @param onUserClick The action to perform when the user clicks on a user.
+ */
 @Composable
 fun SocialScreen(
     navController: NavHostController,
@@ -37,17 +49,15 @@ fun SocialScreen(
     onNavigateTo: (BottomNavDestination) -> Unit,
     onUserClick: (Long) -> Unit,
 ) {
-    // Crea e gestisci lo stato della Snackbar
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Mostra la Snackbar quando lo stato cambia
+    // Show snackbar when the state changes.
     LaunchedEffect(state.showSnackbar, state.snackbarMessage) {
         if (state.showSnackbar && state.snackbarMessage != null) {
             snackbarHostState.showSnackbar(
                 message = state.snackbarMessage,
                 actionLabel = "OK"
             )
-            // Resetta lo stato dopo la visualizzazione
             actions.onSnackbarDismiss()
         }
     }
@@ -86,7 +96,8 @@ fun SocialScreen(
             ) {
 
                 CurrentUserSection(
-                    currentUser = userState.user ?: throw IllegalStateException("User is null"),
+                    currentUser = userState.user
+                        ?: throw IllegalStateException("User is null"),
                     currentUserCountCompleted = state.currentUserCountCompleted,
                     onUserClick = onUserClick
                 )

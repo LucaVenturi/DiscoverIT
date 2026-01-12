@@ -18,7 +18,7 @@
     <string name="settings">Settings</string>
     <string name="logout_confirm_dialog">Are you sure you want to logout?</string>
     <string name="delete_account_confirm_dialog">Are you sure you want to delete your account?\nThis action cannot be undone.</string>
-    <string name="warning">Warning, you are about to logout</string>
+    <string name="warning">Warning</string>
     <string name="confirm">Confirm</string>
     <string name="dismiss">Dismiss</string>
     <string name="no_poi_found">No point of interest was found</string>

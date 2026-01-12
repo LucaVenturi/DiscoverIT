@@ -20,6 +20,17 @@ import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.screens.home.composables.CategoryCard
 
+/**
+ * Composable for displaying the home screen.
+ * Shows the list of categories.
+ * Each is a card and can be clicked to navigate to its details,
+ * revealing the points of interest in it.
+ *
+ * @param navController The navigation controller needed by the top app bar.
+ * @param homeState The state of the home screen.
+ * @param onCategoryClick The callback to navigate to the details of a category.
+ * @param onNavigateTo The callback to navigate to a destination of the bottom navigation.
+ */
 @Composable
 fun HomeScreen(
     navController: NavHostController,
