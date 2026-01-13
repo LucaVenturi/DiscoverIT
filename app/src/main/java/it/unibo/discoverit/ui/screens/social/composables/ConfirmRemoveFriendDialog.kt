@@ -24,7 +24,7 @@ fun ConfirmRemoveFriendDialog(
         },
         confirmButton = {
             Button(
-                onClick = dropUnlessStarted { onConfirm },
+                onClick = dropUnlessStarted { onConfirm() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 )

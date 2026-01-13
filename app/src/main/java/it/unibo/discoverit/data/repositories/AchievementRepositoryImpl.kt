@@ -25,12 +25,16 @@ class AchievementRepositoryImpl(
         // Recupera tutti gli achievement associati alla categoria
         val achievements = achievementDAO.getAchievementsByCategory(categoryId)
 
+        // Calcola le visite totali dell'utente
+        val userTotalVisits = userDAO.countVisits(userId)
+
         achievements.forEach { achievement ->
-            // Conta le visite dell'utente per la categoria specifica o in totale
+            // Se è un achievement specifico, conta le visite dell'utente per la
+            // categoria target.
             val count = if (achievement.targetCategory != null) {
                 userDAO.countVisitsForCategory(userId, achievement.targetCategory)
             } else {
-                userDAO.countVisits(userId)
+                userTotalVisits
             }
 
             // Verifica se l'achievement è stato completato
@@ -38,8 +42,8 @@ class AchievementRepositoryImpl(
 
             // Recupera il progresso esistente per preservare la data di completamento originale
             val existingProgress = achievementDAO.getUserAchievementProgress(
-                userId,
-                achievement.achievementId
+                userId = userId,
+                achievementId = achievement.achievementId
             )
 
             // Determina la data di completamento
