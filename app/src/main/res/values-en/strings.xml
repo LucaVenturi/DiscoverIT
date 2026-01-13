@@ -67,4 +67,10 @@
     <string name="to_be_completed">Work in progress</string>
     <string name="all_achievements_completed">All achievements completed!</string>
     <string name="logout_confirm_dialog">Are you sure you want to logout?</string>
+    <string name="friend_add_success">Friend added with success!</string>
+    <string name="friend_remove_success">Friend removed with success!</string>
+    <string name="friend_add_error">Error during the adding</string>
+    <string name="friend_remove_error">Error during the removal</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="user_not_found">User not found</string>
 </resources>

@@ -67,4 +67,10 @@
     <string name="no_completed_achievement">Nessun achievement completato</string>
     <string name="to_be_completed">Da completare</string>
     <string name="all_achievements_completed">Tutti gli achievement completati!</string>
+    <string name="friend_add_success">Amico aggiunto con successo!</string>
+    <string name="friend_remove_success">Amico rimosso con successo!</string>
+    <string name="friend_add_error">Errore durante l\'aggiunta dell\'amico</string>
+    <string name="friend_remove_error">Errore durante la rimozione dell\'amico</string>
+    <string name="invalid_credentials">Credenziali non valide</string>
+    <string name="user_not_found">Utente non trovato</string>
 </resources>
