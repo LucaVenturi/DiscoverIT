@@ -22,7 +22,6 @@ import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.screens.settings.composables.BiometricSection
 import it.unibo.discoverit.ui.screens.settings.composables.InfoSection
-import it.unibo.discoverit.ui.screens.settings.composables.NotificationsSection
 import it.unibo.discoverit.ui.screens.settings.composables.ThemeSection
 import it.unibo.discoverit.utils.biometric.BiometricAuthHelper
 

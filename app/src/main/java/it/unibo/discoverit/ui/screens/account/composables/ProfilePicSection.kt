@@ -57,7 +57,7 @@ fun ProfilePicSection(
             fallback = rememberVectorPainter(Icons.Default.AccountCircle),
             modifier = Modifier
                 .size(110.dp)
-                .clip(CircleShape)
+                .clip(CircleShape),
         )
     }
 

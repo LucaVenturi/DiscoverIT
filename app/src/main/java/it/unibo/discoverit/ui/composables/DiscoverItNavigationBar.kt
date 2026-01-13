@@ -8,7 +8,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.dropUnlessStarted
-import androidx.lifecycle.compose.dropUnlessStarted
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 

@@ -1,4 +1,4 @@
-package it.unibo.discoverit.ui.screens.login.composables
+package it.unibo.discoverit.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

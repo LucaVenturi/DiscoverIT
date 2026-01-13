@@ -81,7 +81,7 @@ class LoginViewModel(
                     _loginState.update {
                         it.copy(
                             currentPhase = LoginPhase.IDLE,
-                            errorMsg = e.message ?: "Login failed"
+                            errorMsg = e.message ?: "Error during login"
                         )
                     }
                 }

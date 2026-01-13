@@ -217,9 +217,12 @@ fun NavGraphBuilder.mainGraph(
             val homeViewModel: HomeViewModel = koinViewModel()
             val homeState by homeViewModel.homeState.collectAsStateWithLifecycle()
 
+            val homeActions = homeViewModel.actions
+
             HomeScreen(
                 navController = navController,
                 homeState = homeState,
+                homeActions = homeActions,
                 onCategoryClick = { categoryId ->
                     navController.navigate(Destination.CategoryDetails(categoryId))
                 },

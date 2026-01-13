@@ -1,6 +1,5 @@
 package it.unibo.discoverit.ui.screens.sessioncheck
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

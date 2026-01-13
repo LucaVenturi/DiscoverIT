@@ -1,7 +1,6 @@
 package it.unibo.discoverit.ui.screens.poidetails
 
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.PointOfInterest
@@ -106,7 +105,7 @@ class POIDetailsViewModel(
                 try {
                     // Check if the user is logged in.
                     val userId = userViewModel.userState.value.user?.userId
-                        ?: throw Exception("Utente non loggato")
+                        ?: throw Exception("User not logged in")
 
                     // Toggle the visit status of the POI for the user.
                     poiRepository.toggleVisit(userId, selectedPoiId)
@@ -114,7 +113,8 @@ class POIDetailsViewModel(
                     // Get the complete POI.
                     val poi = poiRepository.getPOIDetails(selectedPoiId)
                     // Get the category ID of the POI.
-                    val categoryId = poi?.categoryId ?: return@launch
+                    val categoryId = poi?.categoryId ?: throw Exception("POI not found")
+
                     // Update the achievements progress for the user.
                     achievementRepository.updateAchievementsProgressForUser(userId, categoryId)
                     _state.update { currentState ->
@@ -201,25 +201,23 @@ class POIDetailsViewModel(
         viewModelScope.launch {
             try {
                 val poi = poiRepository.getPOIDetails(selectedPoiId)
-                    ?: throw Exception("POI non trovato")
+                    ?: throw Exception("POI not found")
                 val userId = userViewModel.userState.value.user?.userId
-                    ?: throw Exception("Utente non loggato")
+                    ?: throw Exception("User not logged in")
                 val isVisited = poiRepository.isVisited(userId, selectedPoiId)
 
                 _state.update {
                     it.copy(
                         currentPoi = poi,
                         isVisited = isVisited,
-                        isLoading = false
                     )
                 }
             } catch (e: Exception) {
                 _state.update {
-                    it.copy(
-                        errorMsg = e.message ?: "Errore di caricamento",
-                        isLoading = false
-                    )
+                    it.copy(errorMsg = e.message ?: "Error loading POI")
                 }
+            } finally {
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }
