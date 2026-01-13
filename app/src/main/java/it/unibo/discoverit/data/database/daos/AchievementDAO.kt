@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RoomWarnings
 import androidx.room.Update
 import androidx.room.Upsert
 import it.unibo.discoverit.data.database.entities.Achievement
@@ -99,7 +100,15 @@ interface AchievementDAO {
      * [userId] from the database.
      * @param userId the id of the user to retrieve the [Achievement] for.
      * @return a [Flow] emitting a [Map] of [Achievement] associated with their [UserAchievementProgress].
+     * @suppress False positive:
+     * This warning is misleading and looks like a bug, it should have only been emitted if the
+     * value type argument of the map is a collection with a nullable type arg, such as
+     * List<String?>, because in that case, Room will never put a null value in the list,
+     * instead it will be empty. But a Map<Long, String?> that possibly represents a one-to-one
+     * relation is allowed to have nullable value types since a LEFT JOIN would produce null values
+     * for the map.
      */
+    @Suppress(RoomWarnings.UNNECESSARY_NULLABILITY_IN_DAO_RETURN_TYPE)
     @Query("""
         SELECT a.*, uap.*
         FROM achievements AS a
@@ -107,5 +116,5 @@ interface AchievementDAO {
         ON a.achievementId = uap.achievementId
             AND uap.userId = :userId
     """)
-    fun getAchievementsWithProgress(userId: Long): Flow<Map<Achievement, UserAchievementProgress>>
+    fun getAchievementsWithProgress(userId: Long): Flow<Map<Achievement, UserAchievementProgress?>>
 }

@@ -56,7 +56,7 @@ class UserDetailViewModel(
                     _state.update { it.copy(achievementsWithProgress = achievements) }
                 }
             } catch (e: Exception) {
-                _state.update { it.copy(errorMsg = "Error loading completed: ${e.message}") }
+                _state.update { it.copy(errorMsg = "Error loading achievements: ${e.message}") }
             }
         }
     }
