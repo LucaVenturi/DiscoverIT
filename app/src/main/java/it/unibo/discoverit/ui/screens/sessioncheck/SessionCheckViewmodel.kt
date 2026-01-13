@@ -34,12 +34,10 @@ enum class SessionCheckPhase {
  *
  * @property currentPhase The current phase of the session check process.
  * @property user The user that is currently logged in.
- * @property errorMsg The error message to be displayed, if any.
  */
 data class SessionCheckState(
     val currentPhase: SessionCheckPhase = SessionCheckPhase.CHECKING,
-    val user: User? = null,
-    val errorMsg: String? = null
+    val user: User? = null
 )
 
 /**
@@ -123,8 +121,7 @@ class SessionCheckViewModel(
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
-                        currentPhase = SessionCheckPhase.ERROR,
-                        errorMsg = "Errore nel recupero della sessione"
+                        currentPhase = SessionCheckPhase.ERROR
                     )
                 }
             }

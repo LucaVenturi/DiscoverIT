@@ -19,6 +19,7 @@ import it.unibo.discoverit.ui.composables.ErrorMessage
 import it.unibo.discoverit.ui.composables.PasswordField
 import it.unibo.discoverit.ui.composables.UsernameField
 import it.unibo.discoverit.ui.screens.login.LoginActions
+import it.unibo.discoverit.ui.screens.login.LoginError
 import it.unibo.discoverit.ui.screens.login.LoginPhase
 import it.unibo.discoverit.ui.screens.login.LoginState
 
@@ -38,7 +39,7 @@ fun LoginContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val isError = loginState.errorMsg != null
+        val isError = loginState.error != null
 
         // Login Header.
         Text(
@@ -80,9 +81,13 @@ fun LoginContent(
         RegisterPrompt(onNavigateToRegister)
 
         // In case of error, show the error message.
-        loginState.errorMsg?.let { error ->
+        loginState.error?.let { error ->
             ErrorMessage(
-                error = error
+                error = when (error) {
+                    LoginError.InvalidCredentials -> stringResource(R.string.invalid_credentials)
+                    LoginError.UserNotFound -> stringResource(R.string.user_not_found)
+                    is LoginError.Other -> error.errMsg
+                }
             )
         }
     }

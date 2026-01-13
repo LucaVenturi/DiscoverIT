@@ -72,4 +72,6 @@
     <string name="friend_remove_success">Amico rimosso con successo!</string>
     <string name="friend_add_error">Errore durante l\'aggiunta dell\'amico</string>
     <string name="friend_remove_error">Errore durante la rimozione dell\'amico</string>
+    <string name="invalid_credentials">Credenziali non valide</string>
+    <string name="user_not_found">Utente non trovato</string>
 </resources>

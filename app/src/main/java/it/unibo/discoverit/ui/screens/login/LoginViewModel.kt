@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.login
 
+import android.accounts.AuthenticatorException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.utils.accountservice.AccountService
@@ -26,14 +27,20 @@ enum class LoginPhase {
  * @property username The username entered by the user.
  * @property password The password entered by the user.
  * @property currentPhase The current phase of the login process.
- * @property errorMsg The error message to be displayed, if any.
+ * @property error The error that occurred during the login process, if any.
  */
 data class LoginState(
     val username: String = "",
     val password: String = "",
     val currentPhase: LoginPhase = LoginPhase.IDLE,
-    val errorMsg: String? = null,
+    val error: LoginError? = null
 )
+
+sealed class LoginError {
+    data object InvalidCredentials : LoginError()
+    data object UserNotFound : LoginError()
+    data class Other(val errMsg: String) : LoginError()
+}
 
 /**
  * Represents the actions that can be performed on the login screen.
@@ -66,7 +73,7 @@ class LoginViewModel(
 
         override fun onLoginClicked() {
             viewModelScope.launch {
-                _loginState.update { it.copy(currentPhase = LoginPhase.LOADING, errorMsg = null) }
+                _loginState.update { it.copy(currentPhase = LoginPhase.LOADING, error = null) }
                 try {
                     // Perform the login
                     val user = accountService.login(
@@ -76,12 +83,26 @@ class LoginViewModel(
                     // Set the user in the view model
                     userViewModel.setUser(user)
                     // Update the state
-                    _loginState.update { it.copy(currentPhase = LoginPhase.SUCCESS, errorMsg = null) }
+                    _loginState.update { it.copy(currentPhase = LoginPhase.SUCCESS, error = null) }
+                } catch (e: IllegalArgumentException) {
+                    _loginState.update {
+                        it.copy(
+                            currentPhase = LoginPhase.IDLE,
+                            error = LoginError.UserNotFound
+                        )
+                    }
+                } catch (e: AuthenticatorException) {
+                    _loginState.update {
+                        it.copy(
+                            currentPhase = LoginPhase.IDLE,
+                            error = LoginError.InvalidCredentials
+                        )
+                    }
                 } catch (e: Exception) {
                     _loginState.update {
                         it.copy(
                             currentPhase = LoginPhase.IDLE,
-                            errorMsg = e.message ?: "Error during login"
+                            error = LoginError.Other(e.message ?: "Unknown error")
                         )
                     }
                 }

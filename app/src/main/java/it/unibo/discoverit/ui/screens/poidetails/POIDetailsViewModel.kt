@@ -50,7 +50,7 @@ interface POIDetailsActions {
     fun toggleVisit()
     fun dismissError()
     fun onRefresh()
-    fun onGPSUse()
+    fun onGPSUse(usePreciseLocation: Boolean = false)
     fun onPermanentlyDenied()
     fun onDenied()
     fun onDismissLocationError()
@@ -138,17 +138,17 @@ class POIDetailsViewModel(
             loadPOI()
         }
 
-        override fun onGPSUse() {
+        override fun onGPSUse(usePreciseLocation: Boolean) {
             _state.update { it.copy(isLocationLoading = true) }
             viewModelScope.launch {
                 try {
                     // Get the current location.
-                    val location = locationService.getCurrentLocation(usePreciseLocation = false)
-                        ?: throw Exception("Impossibile ottenere la posizione")
+                    val location = locationService.getCurrentLocation(usePreciseLocation)
+                        ?: throw Exception("Error getting location")
 
                     // get the current POI.
                     val currentPoi = state.value.currentPoi
-                        ?: throw Exception("POI non trovato")
+                        ?: throw Exception("Error getting POI")
 
                     // Calculate the distance between the current location and the POI.
                     val distanceArray = FloatArray(1)

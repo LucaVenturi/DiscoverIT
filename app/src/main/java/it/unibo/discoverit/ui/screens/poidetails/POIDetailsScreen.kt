@@ -35,6 +35,7 @@ import it.unibo.discoverit.utils.permissions.rememberMultiplePermissions
 import androidx.core.net.toUri
 import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string.poi_details
+import it.unibo.discoverit.ui.composables.LoadingScreen
 
 @Composable
 fun POIDetailsScreen(
@@ -159,7 +160,7 @@ fun POIDetailsScreen(
         ) {
             when {
                 state.isLoading -> {
-                    CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    LoadingScreen()
                 }
                 state.currentPoi == null && !state.isLoading -> {
                     EmptyStateUI(
@@ -185,16 +186,30 @@ fun POIDetailsScreen(
                                 )
                             },
                             onUseGPS = {
-                                val fineLocationPermissionStatus =
-                                    locationPermissions.statuses[Manifest.permission.ACCESS_FINE_LOCATION]
-                                if (fineLocationPermissionStatus != PermissionStatus.Granted &&
-                                    fineLocationPermissionStatus != PermissionStatus.PermanentlyDenied) {
-                                    // If the user didnt grant the fine location permission,
-                                    // and the permission is not permanently denied,
-                                    // request the fine location permission.
-                                    locationPermissions.launchPermissionRequest()
-                                } else {
-                                    actions.onGPSUse()
+                                val fineLocationStatus = locationPermissions.statuses[Manifest.permission.ACCESS_FINE_LOCATION]
+                                val coarseLocationStatus = locationPermissions.statuses[Manifest.permission.ACCESS_COARSE_LOCATION]
+
+                                when {
+                                    // If FINE_LOCATION is granted, use it.
+                                    fineLocationStatus == PermissionStatus.Granted -> {
+                                        actions.onGPSUse(usePreciseLocation = true)
+                                    }
+
+                                    // If only COARSE_LOCATION is granted, use it.
+                                    coarseLocationStatus == PermissionStatus.Granted -> {
+                                        actions.onGPSUse(usePreciseLocation = false)
+                                    }
+
+                                    // If none are granted, request both.
+                                    fineLocationStatus != PermissionStatus.PermanentlyDenied ||
+                                            coarseLocationStatus != PermissionStatus.PermanentlyDenied -> {
+                                        locationPermissions.launchPermissionRequest()
+                                    }
+
+                                    // If both are permanently denied.
+                                    else -> {
+                                        actions.onPermanentlyDenied()
+                                    }
                                 }
                             },
                             isButtonLoading = state.isLocationLoading

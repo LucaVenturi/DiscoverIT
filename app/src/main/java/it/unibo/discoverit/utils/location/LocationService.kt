@@ -51,25 +51,35 @@ class LocationService(private val ctx: Context) {
         val locationEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!locationEnabled) throw IllegalStateException("Location is disabled")
 
-        val permissionGranted = ContextCompat.checkSelfPermission(
-            ctx,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+        // Check for location permissions
+        val fineLocationGranted = ContextCompat.checkSelfPermission(
+            ctx, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
-        if (!permissionGranted) throw SecurityException("Location permission not granted")
+
+        val coarseLocationGranted = ContextCompat.checkSelfPermission(
+            ctx, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // If both permissions are not granted, throw an exception
+        if (!fineLocationGranted && !coarseLocationGranted) {
+            throw SecurityException("Location permission not granted")
+        }
+
+        // To use the precise location provider, fine location permission is required.
+        // usePreciseLocation parameter is not enough.
+        val actualUsePrecise = usePreciseLocation && fineLocationGranted
 
         _isLoadingLocation.value = true
         val location = withContext(Dispatchers.IO) {
             fusedLocationClient.getCurrentLocation(
-                if (usePreciseLocation) Priority.PRIORITY_HIGH_ACCURACY
+                if (actualUsePrecise) Priority.PRIORITY_HIGH_ACCURACY
                 else Priority.PRIORITY_BALANCED_POWER_ACCURACY,
                 CancellationTokenSource().token
             ).await()
         }
         _isLoadingLocation.value = false
 
-        _coordinates.value =
-            if (location != null) Coordinates(location.latitude, location.longitude)
-            else null
+        _coordinates.value = location?.let { Coordinates(it.latitude, it.longitude) }
         return coordinates.value
     }
 }
