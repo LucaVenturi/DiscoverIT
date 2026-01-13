@@ -124,7 +124,7 @@ fun AccountSettingsScreen(
 
             // Show the section to change the profile picture
             ProfilePicSection(
-                profilePicPath = userState.user?.profilePicPath,
+                profilePicPath = userState.user?.profilePicUri,
                 onChangeProfilePicClick = actions::onChangeProfilePicClick
             )
 

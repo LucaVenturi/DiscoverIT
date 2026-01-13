@@ -1,5 +1,6 @@
 package it.unibo.discoverit.ui.screens.account.composables
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -34,7 +35,7 @@ import it.unibo.discoverit.R
  */
 @Composable
 fun ProfilePicSection(
-    profilePicPath: String?,
+    profilePicPath: Uri?,
     onChangeProfilePicClick: () -> Unit
 ) {
     Box(
