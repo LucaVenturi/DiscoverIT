@@ -55,9 +55,9 @@ class BiometricAuthHelper(private val context: Context) {
                     onSuccess()
                 }
 
-                override fun onAuthenticationFailed() {
-                    onError("Autenticazione fallita")
-                }
+//                override fun onAuthenticationFailed() {
+//                    onError("Autenticazione fallita")
+//                }
             }
         )
         biometricPrompt.authenticate(promptInfo)
