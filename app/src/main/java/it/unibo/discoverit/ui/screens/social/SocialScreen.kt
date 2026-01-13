@@ -96,49 +96,44 @@ fun SocialScreen(
         },
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
 
-                CurrentUserSection(
-                    currentUser = userState.user
-                        ?: throw IllegalStateException("User is null"),
-                    currentUserCountCompleted = state.currentUserCountCompleted,
-                    onUserClick = onUserClick
+            CurrentUserSection(
+                currentUser = userState.user
+                    ?: throw IllegalStateException("User is null"),
+                currentUserCountCompleted = state.currentUserCountCompleted,
+                onUserClick = onUserClick
+            )
+
+            FriendsSection(
+                friendsAndCountCompleted = state.friendsAndCountCompleted,
+                onUserClick = onUserClick,
+                onFriendLongPress = actions::onFriendLongPress,
+            )
+
+            if (state.isAddFriendDialogVisible) {
+                AddFriendDialog(
+                    usernameToAdd = state.usernameToAdd,
+                    onConfirm = { actions.onConfirmAddFriendDialog(it) },
+                    onDismiss = { actions.onDismissAddFriendDialog() },
+                    onUsernameChange = { actions.onUsernameChange(it) }
                 )
+            }
 
-                FriendsSection(
-                    friendsAndCountCompleted = state.friendsAndCountCompleted,
-                    onUserClick = onUserClick,
-                    onFriendLongPress = actions::onFriendLongPress,
+            if (state.showRemoveFriendDialog && state.selectedFriendForRemoval != null) {
+                ConfirmRemoveFriendDialog(
+                    username = state.selectedFriendForRemoval.username,
+                    onDismiss = { actions.onDismissRemoveFriendDialog() },
+                    onConfirm = { actions.onConfirmRemoveFriend() }
                 )
-
-                if (state.isAddFriendDialogVisible) {
-                    AddFriendDialog(
-                        usernameToAdd = state.usernameToAdd,
-                        onConfirm = { actions.onConfirmAddFriendDialog(it) },
-                        onDismiss = { actions.onDismissAddFriendDialog() },
-                        onUsernameChange = { actions.onUsernameChange(it) }
-                    )
-                }
-
-                if (state.showRemoveFriendDialog && state.selectedFriendForRemoval != null) {
-                    ConfirmRemoveFriendDialog(
-                        username = state.selectedFriendForRemoval.username,
-                        onDismiss = { actions.onDismissRemoveFriendDialog() },
-                        onConfirm = { actions.onConfirmRemoveFriend() }
-                    )
-                }
             }
         }
     }
