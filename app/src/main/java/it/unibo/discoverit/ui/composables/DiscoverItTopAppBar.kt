@@ -72,7 +72,8 @@ fun DiscoverItTopAppBar(
             }
         },
         actions = {
-            val isOnAccountScreen = navController.currentBackStackEntry?.destination?.route != Destination.Account::class.qualifiedName
+            val isOnAccountScreen =
+                navController.currentBackStackEntry?.destination?.route == Destination.Account::class.qualifiedName
 
             if(!isOnAccountScreen) {
                 IconButton(onClick = dropUnlessStarted {
