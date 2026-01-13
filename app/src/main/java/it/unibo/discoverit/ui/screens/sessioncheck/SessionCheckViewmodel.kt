@@ -78,7 +78,7 @@ class SessionCheckViewModel(
                 current.user?.let { user ->
                     userViewModel.setUser(user) // solo dopo biometria
                     current.copy(currentPhase = SessionCheckPhase.USER_LOGGED_IN)
-                } ?: current
+                } ?: throw IllegalStateException("No user logged in but biometric authentication was successful")
             }
         }
     }
