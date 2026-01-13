@@ -10,10 +10,8 @@ import java.io.IOException
 /**
  * Helper class for managing profile picture storage in the app's private directory.
  *
- * Handles saving, loading, and deletion of profile picture files stored as JPEG.
- * All operations are performed within a dedicated `profilePictures` subdirectory.
- *
- * @property context The application context for accessing files directory.
+ * NOTE: Currently only save() is used. load() and delete() are implemented
+ * for potential future features (e.g., cache management, account deletion cleanup).
  */
 class ProfilePicStorageHelper(context: Context) {
     /**
