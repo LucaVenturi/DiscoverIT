@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
+import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.screens.social.composables.AddFriendDialog
@@ -27,6 +29,7 @@ import it.unibo.discoverit.ui.screens.login.UserState
 import it.unibo.discoverit.ui.screens.social.composables.AddFriendFab
 import it.unibo.discoverit.ui.screens.social.composables.CurrentUserSection
 import it.unibo.discoverit.ui.screens.social.composables.FriendsSection
+import androidx.compose.ui.res.stringResource
 
 /**
  * Composable of the social screen.
@@ -51,12 +54,24 @@ fun SocialScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Show snackbar when the state changes.
-    LaunchedEffect(state.showSnackbar, state.snackbarMessage) {
-        if (state.showSnackbar && state.snackbarMessage != null) {
+    // Get the strings from the resources.
+    val addSuccess = stringResource(R.string.friend_add_success)
+    val removeSuccess = stringResource(R.string.friend_remove_success)
+    val addError = stringResource(R.string.friend_add_error)
+    val removeError = stringResource(R.string.friend_remove_error)
+
+    // Show snackbar when the state changes and has a message.
+    state.currentMessage?.let { message ->
+        LaunchedEffect(message) {
             snackbarHostState.showSnackbar(
-                message = state.snackbarMessage,
-                actionLabel = "OK"
+                message = when (message) {
+                    SocialMessage.AddSuccess -> addSuccess
+                    SocialMessage.RemoveSuccess -> removeSuccess
+                    is SocialMessage.AddError -> addError + "\n" + message.errMsg
+                    is SocialMessage.RemoveError -> removeError + "\n" + message.errMsg
+                    is SocialMessage.GenericError -> message.errMsg
+                },
+                actionLabel = "OK",
             )
             actions.onSnackbarDismiss()
         }

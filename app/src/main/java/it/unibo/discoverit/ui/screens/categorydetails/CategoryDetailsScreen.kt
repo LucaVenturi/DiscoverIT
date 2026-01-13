@@ -21,6 +21,7 @@ import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.composables.EmptyStateUI
+import it.unibo.discoverit.ui.composables.LoadingScreen
 import it.unibo.discoverit.ui.screens.categorydetails.composables.POIList
 
 /**
@@ -72,19 +73,15 @@ fun CategoryDetailsScreen(
         Box(modifier = Modifier.padding(innerPadding)) {
             when {
                 // If it's loading, show a circular progress indicator.
-                categoryDetailsState.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                }
+                categoryDetailsState.isLoading -> LoadingScreen()
+
                 // In case of empty state, show an empty state UI.
-                categoryDetailsState.poiList.isEmpty() && !categoryDetailsState.isLoading -> {
+                categoryDetailsState.poiList.isEmpty() && !categoryDetailsState.isLoading ->
                     EmptyStateUI(
-                        stringResource(R.string.no_poi_found),
-                        categoryDetailsActions::onRefresh
+                        message = stringResource(id = R.string.no_poi_found),
+                        onRefresh = categoryDetailsActions::onRefresh
                     )
-                }
+
                 // If everything is fine, show the list of POIs.
                 else -> {
                     POIList(

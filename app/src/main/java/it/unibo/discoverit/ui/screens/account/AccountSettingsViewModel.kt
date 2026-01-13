@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 data class AccountSettingsState(
     val userId: Long? = null,
     val username: String,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = false, // Not used by the UI right now, might need 2 different loading indicators, one for profile pic and one for username.
     val errorMsg: String? = null,
     val isUsernameChanged: Boolean = false,
     val showImageSourceDialog: Boolean = false,

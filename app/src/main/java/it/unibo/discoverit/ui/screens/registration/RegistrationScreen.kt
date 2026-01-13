@@ -21,7 +21,6 @@ import it.unibo.discoverit.ui.composables.ErrorMessage
 import it.unibo.discoverit.ui.screens.registration.composables.LoginPrompt
 import it.unibo.discoverit.ui.screens.registration.composables.RegisterButton
 import it.unibo.discoverit.ui.screens.registration.composables.RegistrationForm
-import it.unibo.discoverit.ui.screens.registration.composables.RegistrationHeader
 
 @Composable
 fun RegistrationScreen(

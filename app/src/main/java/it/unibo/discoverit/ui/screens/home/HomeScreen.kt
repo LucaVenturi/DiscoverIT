@@ -1,7 +1,6 @@
 package it.unibo.discoverit.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,8 @@ import it.unibo.discoverit.BottomNavDestination
 import it.unibo.discoverit.Destination
 import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
-import it.unibo.discoverit.ui.composables.ErrorMessage
+import it.unibo.discoverit.ui.composables.EmptyStateUI
+import it.unibo.discoverit.ui.composables.LoadingScreen
 import it.unibo.discoverit.ui.screens.home.composables.CategoryCard
 
 /**
@@ -42,6 +42,7 @@ import it.unibo.discoverit.ui.screens.home.composables.CategoryCard
 fun HomeScreen(
     navController: NavHostController,
     homeState: HomeState,
+    homeActions: HomeActions,
     onCategoryClick: (Long) -> Unit,
     onNavigateTo: (BottomNavDestination) -> Unit
 ) {
@@ -74,8 +75,12 @@ fun HomeScreen(
     ) { innerPadding ->
         when {
             homeState.isLoading -> {
-                CircularProgressIndicator()
+                LoadingScreen()
             }
+            homeState.categories.isEmpty() -> EmptyStateUI(
+                message = "No categories were found, probably an error.",
+                onRefresh = homeActions::onRefresh
+            )
             else -> {
                 val categories = homeState.categories
 

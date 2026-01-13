@@ -14,7 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.BottomNavDestination
@@ -26,6 +25,7 @@ import it.unibo.discoverit.ui.composables.DiscoverItNavigationBar
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
 import it.unibo.discoverit.ui.composables.ErrorMessage
 import it.unibo.discoverit.ui.screens.userdetail.composables.AchievementCard
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun UserDetailScreen(
@@ -54,11 +54,15 @@ fun UserDetailScreen(
 }
 
 @Composable
-private fun UserDetailContent(
+fun UserDetailContent(
     state: UserDetailState,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
+    val titleCompleted = stringResource(R.string.completed)
+    val titleToBeCompleted = stringResource(R.string.to_be_completed)
+    val emptyMessage = stringResource(R.string.no_completed_achievement)
+    val fullMessage = stringResource(R.string.all_achievements_completed)
+
     LazyColumn(
         modifier = modifier
             .padding(16.dp)
@@ -66,17 +70,17 @@ private fun UserDetailContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         achievementsSection(
-            title = context.getString(R.string.completed),
+            title = titleCompleted,
             achievements = state.achievementsWithProgress.filterValues { it?.isCompleted ?: false },
-            emptyMessage = context.getString(R.string.no_completed_achievement)
+            emptyMessage = emptyMessage
         )
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
 
         achievementsSection(
-            title = context.getString(R.string.to_be_completed),
+            title = titleToBeCompleted,
             achievements = state.achievementsWithProgress.filterValues { !(it?.isCompleted ?: false) },
-            emptyMessage = context.getString(R.string.all_achievements_completed)
+            emptyMessage = fullMessage
         )
 
         state.errorMsg?.let { errorMsg ->

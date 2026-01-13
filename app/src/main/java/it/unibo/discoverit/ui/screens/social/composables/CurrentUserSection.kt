@@ -9,7 +9,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import it.unibo.discoverit.R
 import it.unibo.discoverit.data.database.entities.User
-import it.unibo.discoverit.R.string
 
 @Composable
 fun CurrentUserSection(

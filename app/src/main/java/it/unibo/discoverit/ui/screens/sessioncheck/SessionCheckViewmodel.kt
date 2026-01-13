@@ -1,6 +1,5 @@
 package it.unibo.discoverit.ui.screens.sessioncheck
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.User

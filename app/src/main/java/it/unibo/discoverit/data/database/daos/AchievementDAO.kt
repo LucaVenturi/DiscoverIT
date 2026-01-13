@@ -107,5 +107,5 @@ interface AchievementDAO {
         ON a.achievementId = uap.achievementId
             AND uap.userId = :userId
     """)
-    fun getAchievementsWithProgress(userId: Long): Flow<Map<Achievement, UserAchievementProgress?>>
+    fun getAchievementsWithProgress(userId: Long): Flow<Map<Achievement, UserAchievementProgress>>
 }

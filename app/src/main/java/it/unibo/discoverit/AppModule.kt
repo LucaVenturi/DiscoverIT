@@ -1,7 +1,6 @@
 package it.unibo.discoverit
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import androidx.room.RoomDatabase

@@ -1,6 +1,5 @@
 package it.unibo.discoverit.ui.screens.social
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.User
@@ -14,6 +13,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
+ * Represents a message that can be displayed in the social screen.
+ */
+sealed class SocialMessage {
+    object AddSuccess : SocialMessage()
+    object RemoveSuccess : SocialMessage()
+    data class AddError(val errMsg: String) : SocialMessage()
+    data class RemoveError(val errMsg: String) : SocialMessage()
+    data class GenericError(val errMsg: String) : SocialMessage()
+}
+
+/**
  * Represents the state of the social screen.
  *
  * @property friendsAndCountCompleted A map of friends and the number of completed achievements.
@@ -22,8 +32,8 @@ import kotlinx.coroutines.launch
  * @property errorMsg The error message to be displayed, if any.
  * @property isAddFriendDialogVisible Whether the add friend dialog is visible.
  * @property usernameToAdd The username of the friend to be added.
- * @property showSnackbar Whether a snackbar should be shown.
- * @property snackbarMessage The message to be displayed in the snackbar, if any.
+// * @property showSnackbar Whether a snackbar should be shown.
+// * @property snackbarMessage The message to be displayed in the snackbar, if any.
  * @property selectedFriendForRemoval The friend to be removed, if any.
  * @property showRemoveFriendDialog Whether the remove friend dialog is visible.
  */
@@ -31,13 +41,14 @@ data class SocialState(
     val friendsAndCountCompleted: Map<User, Long> = emptyMap(),
     val currentUserCountCompleted: Long = 0,
     val isLoading: Boolean = false,
-    val errorMsg: String? = null,
+//    val errorMsg: String? = null,
     val isAddFriendDialogVisible: Boolean = false,
     val usernameToAdd: String = "",
-    val showSnackbar: Boolean = false,
-    val snackbarMessage: String? = null,    //This shouldnt be here, should create message/event system and let the UI handle it.
+//    val showSnackbar: Boolean = false,
+//    val snackbarMessage: String? = null,    //This shouldnt be here, should create message/event system and let the UI handle it.
     val selectedFriendForRemoval: User? = null,
-    val showRemoveFriendDialog: Boolean = false
+    val showRemoveFriendDialog: Boolean = false,
+    val currentMessage: SocialMessage? = null
 )
 
 interface SocialActions{
@@ -101,7 +112,8 @@ class SocialViewModel(
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
-                        errorMsg = e.message,
+//                        errorMsg = e.message ?: "Error loading data",
+                        currentMessage = SocialMessage.GenericError(e.message ?: "Unknown error"),
                         isLoading = false
                     )
                 }
@@ -125,24 +137,21 @@ class SocialViewModel(
                     userRepository.addFriendship(currentUserId, username)
                     _state.update {
                         it.copy(
-                            snackbarMessage = "Amico aggiunto con successo!",
-                            showSnackbar = true,
+//                            snackbarMessage = "Amico aggiunto con successo!",
+//                            showSnackbar = true,
+                            currentMessage = SocialMessage.AddSuccess,
                             usernameToAdd = ""
                         )
                     }
-                    // Delay before hiding the snackbar
-                    delay(3000)
-                    _state.update { it.copy(showSnackbar = false) }
                 } catch (e: Exception) {
                     _state.update {
                         it.copy(
-                            snackbarMessage = "Errore: ${e.message}",
-                            showSnackbar = true,
+//                            snackbarMessage = "Errore: ${e.message}",
+//                            showSnackbar = true,
+                            currentMessage = SocialMessage.AddError(e.message ?: "Unknown error"),
                             usernameToAdd = ""
                         )
                     }
-                    delay(3000)
-                    _state.update { it.copy(showSnackbar = false) }
                 }
             }
         }
@@ -152,7 +161,7 @@ class SocialViewModel(
         }
 
         override fun onSnackbarDismiss() {
-            _state.update { it.copy(showSnackbar = false, snackbarMessage = null) }
+            _state.update { it.copy(currentMessage = null) }
         }
 
         override fun onFriendLongPress(friend: User) {
@@ -172,15 +181,17 @@ class SocialViewModel(
                         it.copy(
                             showRemoveFriendDialog = false,
                             selectedFriendForRemoval = null,
-                            snackbarMessage = "${friend.username} rimosso dagli amici",
-                            showSnackbar = true
+//                            snackbarMessage = "${friend.username} rimosso dagli amici",
+//                            showSnackbar = true
+                            currentMessage = SocialMessage.RemoveSuccess
                         )
                     }
                 } catch (e: Exception) {
                     _state.update {
                         it.copy(
-                            snackbarMessage = "Errore: ${e.message}",
-                            showSnackbar = true
+//                            snackbarMessage = "Errore: ${e.message}",
+//                            showSnackbar = true
+                            currentMessage = SocialMessage.RemoveError(e.message ?: "Unknown error")
                         )
                     }
                 }

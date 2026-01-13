@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessStarted
-import it.unibo.discoverit.R
 import it.unibo.discoverit.R.string
 
 /**
@@ -38,7 +37,7 @@ fun EmptyStateUI(message: String, onRefresh: () -> Unit = {}) {
         TextButton(onClick = dropUnlessStarted {
             onRefresh()
         }) {
-            Text(stringResource(R.string.reload))
+            Text(stringResource(string.reload))
         }
     }
 }

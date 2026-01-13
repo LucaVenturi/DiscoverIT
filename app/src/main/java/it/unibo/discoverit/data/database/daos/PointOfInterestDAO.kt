@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import it.unibo.discoverit.data.database.entities.PointOfInterest
 import it.unibo.discoverit.data.database.entities.Category
-import it.unibo.discoverit.data.database.entities.User
 
 
 /**

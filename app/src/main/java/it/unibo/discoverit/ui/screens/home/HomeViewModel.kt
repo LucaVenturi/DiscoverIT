@@ -1,6 +1,5 @@
 package it.unibo.discoverit.ui.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unibo.discoverit.data.database.entities.CategoryStats
@@ -25,6 +24,10 @@ data class HomeState(
     val errorMsg: String? = null
 )
 
+interface HomeActions {
+    fun onRefresh()
+}
+
 /**
  * ViewModel for the home screen.
  *
@@ -38,6 +41,12 @@ class HomeViewModel(
     private val _homeState = MutableStateFlow(HomeState(emptyList()))
     val homeState: StateFlow<HomeState> = _homeState.asStateFlow()
 
+    val actions = object : HomeActions {
+        override fun onRefresh() {
+            loadCategories(userViewModel.userState.value.user?.userId ?: -1)
+        }
+
+    }
     /**
      * Initialize the state by loading the categories with the stats of the logged-in user.
      */
