@@ -192,7 +192,7 @@ class AccountSettingsViewModel(
                     userViewModel.setUser(updatedUser)
                 } catch (e: Exception) {
                     _state.update {
-                        it.copy(errorMsg = e.message ?: "Errore durante l'aggiornamento della foto")
+                        it.copy(errorMsg = e.message ?: "Unknown error")
                     }
                 } finally {
                     _state.update { it.copy(isLoading = false) }
@@ -205,12 +205,14 @@ class AccountSettingsViewModel(
                 _state.update { it.copy(isLoading = true) }
                 try {
                     // Get the user from the database and update its username
-                    val user = userRepository.getUserById(_state.value.userId
-                        ?: throw IllegalStateException("No logged-in user"))
+                    val user = userRepository.getUserById(
+                        userId = _state.value.userId
+                            ?: throw IllegalStateException("No logged-in user"),
+                    )
                     val newUser = user.copy(username = _state.value.username)
                     accountSettingsRepository.changeUsername(
-                        newUser.userId,
-                        newUser.username
+                        userId = newUser.userId,
+                        newUsername = newUser.username
                     )
 
                     // Update the user in the viewmodel
@@ -225,8 +227,9 @@ class AccountSettingsViewModel(
                     }
                 } catch (e: Exception) {
                     _state.update { it.copy(errorMsg = e.message ?: "Unknown error") }
+                } finally {
+                    _state.update { it.copy(isLoading = false) }
                 }
-                _state.update { it.copy(isLoading = false) }
             }
         }
 
@@ -251,12 +254,14 @@ class AccountSettingsViewModel(
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true, showDeleteAccountDialog = false) }
                 try {
-                    userRepository.delete(userViewModel.userState.value.user
-                        ?: throw IllegalStateException("No logged-in user"))
+                    userRepository.delete(
+                        userViewModel.userState.value.user
+                            ?: throw IllegalStateException("No logged-in user"),
+                    )
                     // Also clear the user from the viewmodel
                     userViewModel.logout()
                 } catch (e: Exception) {
-                    _state.update { it.copy(errorMsg = e.message ?: "Unknown error") }
+                    _state.update { it.copy(errorMsg = e.message) }
                 } finally {
                     _state.update { it.copy(isLoading = false) }
                 }

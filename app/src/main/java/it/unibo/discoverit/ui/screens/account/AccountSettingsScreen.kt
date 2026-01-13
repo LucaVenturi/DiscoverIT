@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation.NavHostController
 import it.unibo.discoverit.R
 import it.unibo.discoverit.ui.composables.DiscoverItTopAppBar
+import it.unibo.discoverit.ui.composables.ErrorMessage
 import it.unibo.discoverit.ui.screens.account.composables.ChangeUsernameSection
 import it.unibo.discoverit.ui.screens.account.composables.LogoutAndDeleteAccountSection
 import it.unibo.discoverit.ui.screens.account.composables.ProfilePicSection
@@ -122,7 +123,10 @@ fun AccountSettingsScreen(
             }
 
             // Show the section to change the profile picture
-            ProfilePicSection(userState.user?.profilePicPath, actions::onChangeProfilePicClick)
+            ProfilePicSection(
+                profilePicPath = userState.user?.profilePicPath,
+                onChangeProfilePicClick = actions::onChangeProfilePicClick
+            )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
@@ -137,7 +141,14 @@ fun AccountSettingsScreen(
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             // Show the buttons to logout or delete the account.
-            LogoutAndDeleteAccountSection(actions::onLogoutClick, actions::onDeleteAccountClick)
+            LogoutAndDeleteAccountSection(
+                onLogoutClick = actions::onLogoutClick,
+                onDeleteAccountClick = actions::onDeleteAccountClick
+            )
+
+            state.errorMsg?.let {
+                ErrorMessage(it)
+            }
         }
     }
 }

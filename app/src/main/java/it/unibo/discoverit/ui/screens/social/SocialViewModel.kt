@@ -35,7 +35,7 @@ data class SocialState(
     val isAddFriendDialogVisible: Boolean = false,
     val usernameToAdd: String = "",
     val showSnackbar: Boolean = false,
-    val snackbarMessage: String? = null,
+    val snackbarMessage: String? = null,    //This shouldnt be here, should create message/event system and let the UI handle it.
     val selectedFriendForRemoval: User? = null,
     val showRemoveFriendDialog: Boolean = false
 )

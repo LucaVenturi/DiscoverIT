@@ -18,14 +18,14 @@ import kotlinx.coroutines.launch
  * @property currentCategoryName The name of the currently displayed category.
  * @property poiList The list of points of interest in the category.
  * @property isLoading Whether data is currently being loaded.
- * @property error An error message if something went wrong, null otherwise.
+ * @property errorMsg An error message if something went wrong, null otherwise.
  */
 data class CategoryDetailsState(
     val currentCategoryId: Long? = null,
     val currentCategoryName: String = "Category Details",
     val poiList: List<PointOfInterest> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val errorMsg: String? = null
 )
 
 /**
@@ -78,12 +78,16 @@ class CategoryDetailsViewModel(
                     it.copy(
                         currentCategoryId = selectedCategoryId,
                         currentCategoryName = selectedCategoryName,
+                        isLoading = false
                     )
                 }
             } catch (e: Exception) {
-                _state.update { it.copy(error = e.message) }
-            } finally {
-                _state.update { it.copy(isLoading = false) }
+                _state.update {
+                    it.copy(
+                        errorMsg = e.message ?: "Error loading category name",
+                        isLoading = false
+                    )
+                }
             }
         }
     }
@@ -98,7 +102,7 @@ class CategoryDetailsViewModel(
                 val poiList = poiRepository.getPOIsByCategory(categoryId)
                 _state.update { it.copy(poiList = poiList) }
             } catch (e: Exception) {
-                _state.update { it.copy(error = e.message) }
+                _state.update { it.copy(errorMsg = e.message ?: "Error loading POIs") }
             } finally {
                 _state.update { it.copy(isLoading = false) }
             }

@@ -72,7 +72,7 @@ class HomeViewModel(
                 }
             } catch (e: Exception) {
                 _homeState.update {
-                    it.copy(isLoading = false, errorMsg = e.message)
+                    it.copy(isLoading = false, errorMsg = e.message ?: "Error loading categories")
                 }
             }
         }
