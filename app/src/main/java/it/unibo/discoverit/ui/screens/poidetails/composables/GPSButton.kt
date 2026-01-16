@@ -18,12 +18,14 @@ import it.unibo.discoverit.ui.composables.LoadingButton
 fun GPSButton(
     onClick: () -> Unit,
     isLoading: Boolean,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     LoadingButton(
         isLoading = isLoading,
         onClick = onClick,
         modifier = modifier,
+        enabled = isEnabled,
         loadingIndicatorSize = 16.dp
     ) {
         Icon(

@@ -62,7 +62,8 @@ fun POIDetailsContent(
                 GPSButton(
                     onClick = onUseGPS,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    isLoading = isButtonLoading
+                    isLoading = isButtonLoading,
+                    isEnabled = !isVisited
                 )
 
                 OutOfRangeMessage(
@@ -101,7 +102,8 @@ fun POIDetailsContent(
             GPSButton(
                 onClick = onUseGPS,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                isLoading = isButtonLoading
+                isLoading = isButtonLoading,
+                isEnabled = !isVisited
             )
 
             OutOfRangeMessage(
