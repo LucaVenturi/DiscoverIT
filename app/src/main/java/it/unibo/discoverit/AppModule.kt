@@ -56,7 +56,7 @@ val appModule = module {
         Room.databaseBuilder(
             get(),
             DiscoverItDatabase::class.java,
-            "discoverit_database_v6",
+            "discoverit_database_v10",
         )
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {

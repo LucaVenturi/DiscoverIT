@@ -48,6 +48,19 @@
   ],
   "pointsOfInterest": [
     {
+      "name": "Unibo Cesena",
+      "description": "Dipartimento di informatica dell'università Unibo di Cesena.",
+      "latitude": 44.14813972700668,
+      "longitude": 12.235145634130935,
+      "imagePath": "poi_images/unibo_cesena.jpg",
+      "address": {
+        "street": "Via Cesare Pavese, 50",
+        "civicNumber": "50",
+        "province": "FC"
+      },
+      "categoryId": 6
+    },
+    {
       "name": "Abbazia di Santa Maria del Monte",
       "description": "Abbazia benedettina del XI secolo, su Colle Spaziano.",
       "latitude": 44.131957,

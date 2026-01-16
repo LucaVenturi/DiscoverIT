@@ -38,7 +38,7 @@ import it.unibo.discoverit.data.database.entities.*
         Visit::class,
         UserAchievementProgress::class
     ],
-    version = 7,
+    version = 10,
     exportSchema = false
 )
 abstract class DiscoverItDatabase : RoomDatabase() {

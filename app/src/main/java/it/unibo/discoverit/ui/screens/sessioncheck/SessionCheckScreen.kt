@@ -89,7 +89,7 @@ fun SessionCheckScreen(
             }
             SessionCheckPhase.ERROR -> {
                 // Error, navigate to the login screen.
-                //onNavigateToLogin()
+                onNavigateToLogin()
             }
         }
     }
